@@ -40,7 +40,7 @@ class Progress(QDialog):
         """
         Keyword arguments:
         files  -- list with dicts containing file names
-        tab -- instanseof AudioVideoTab, ImageTab or DocumentTab
+        tab -- instanseof AudioVideoTab, ImageTab, DocumentTab, MarkdownTab etc.
                indicating currently active tab
         delete -- boolean that shows if files must removed after conversion
         parent -- parent widget
@@ -242,6 +242,9 @@ class Progress(QDialog):
                 conv_func = self.convert_image
                 params = (from_file, to_file, self.size, self.mntaspect,
                           self.imgcmd)
+            elif self._type == 'Markdown':
+                conv_func = self.convert_markdown
+                params = (from_file, to_file)
             else:
                 conv_func = self.convert_document
                 params = (from_file, to_file)
@@ -397,6 +400,36 @@ class Progress(QDialog):
                 'command' : cmd,
                 'returncode' : return_code,
                 'type' : 'DOCUMENT'
+                }
+        log_lvl = logging.info if return_code == 0 else logging.error
+        log_lvl(final_output, extra=log_data)
+
+        return return_code == 0
+    
+    def convert_markdown(self, from_file, to_file):
+        """
+        Use pandoc to convert markdown files.
+        The syntax is 'pandoc -s <input> -o <output>'
+        """
+        cmd = 'pandoc -s {0} -o {1}'.format(from_file, to_file)
+        self.update_text_edit_signal.emit(cmd + '\n')
+        child = subprocess.Popen(
+                shlex.split(cmd),
+                stderr=subprocess.STDOUT,
+                stdout=subprocess.PIPE
+                )
+        child.wait()
+
+        reader = io.TextIOWrapper(child.stdout, encoding='utf8')
+        final_output = reader.read()
+        self.update_text_edit_signal.emit(final_output+'\n\n')
+
+        return_code = child.poll()
+
+        log_data = {
+                'command' : cmd,
+                'returncode' : return_code,
+                'type' : 'MARKDOWN'
                 }
         log_lvl = logging.info if return_code == 0 else logging.error
         log_lvl(final_output, extra=log_data)

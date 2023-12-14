@@ -42,6 +42,7 @@ from ffmulticonverter import qrc_resources
 from ffmulticonverter.audiovideotab import AudioVideoTab
 from ffmulticonverter.imagetab import ImageTab
 from ffmulticonverter.documenttab import DocumentTab
+from ffmulticonverter.markdowntab import MarkdownTab
 
 
 class ValidationError(Exception):
@@ -76,10 +77,11 @@ class MainWindow(QMainWindow):
         self.audiovideo_tab = AudioVideoTab(self)
         self.image_tab = ImageTab(self)
         self.document_tab = DocumentTab(self)
+        self.markdown_tab = MarkdownTab(self)
 
-        self.tabs = [self.audiovideo_tab, self.image_tab, self.document_tab]
+        self.tabs = [self.audiovideo_tab, self.image_tab, self.document_tab, self.markdown_tab]
         tab_names = [self.tr('Audio/Video'), self.tr('Images'),
-                     self.tr('Documents')]
+                     self.tr('Documents'), self.tr('Markdown')]
 
         self.tabWidget = QTabWidget()
         for num, tab in enumerate(tab_names):
@@ -206,7 +208,7 @@ class MainWindow(QMainWindow):
         del_shortcut.setKey(Qt.Key_Delete)
         del_shortcut.activated.connect(self.filesList_delete)
 
-        self.setWindowTitle('FF Multi Converter')
+        self.setWindowTitle('Multi-Converter')
 
         self.load_settings()
         self.check_for_dependencies()
@@ -270,11 +272,13 @@ class MainWindow(QMainWindow):
                 config.default_imagemagick_cmd)
         extraformats_image = (settings.value('extraformats_image') or [])
         extraformats_document = (settings.value('extraformats_document') or [])
+        extraformats_markdown = (settings.value('extraformats_markdown') or [])
 
         self.audiovideo_tab.fill_video_comboboxes(videocodecs,
                 audiocodecs, extraformats_video)
         self.image_tab.fill_extension_combobox(extraformats_image)
         self.document_tab.fill_extension_combobox(extraformats_document)
+        self.markdown_tab.fill_extension_combobox(extraformats_markdown)
 
     def get_current_tab(self):
         for i in self.tabs:
@@ -294,6 +298,8 @@ class MainWindow(QMainWindow):
                 ' *.'.join(self.image_tab.formats + self.image_tab.extra_img))
         filters += 'Document Files (*.{})'.format(
                 ' *.'.join(self.document_tab.formats))
+        filters += 'Markdown Files (*.{})'.format(
+                ' *.'.join(self.markdown_tab.formats))
 
         fnames = QFileDialog.getOpenFileNames(self, 'FF Multi Converter - ' +
                 self.tr('Choose File'), config.home, filters,

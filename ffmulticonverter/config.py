@@ -74,6 +74,16 @@ document_formats = [
         'pdf', 'ppt', 'pptx', 'rtf', 'sdc', 'sdw', 'txt', 'xls', 'xlsx', 'xml'
         ]
 
+#-----markdown data
+
+markdown_formats = [
+        'adoc', 'bib', 'bibtex', 'docbook', 'docbook4', 'docbook5', 'docx',
+        'dokuwiki', 'epub', 'epub2', 'epub3', 'fb2', 'gfm', 'haddock', 'html',
+        'html4', 'html5', 'icml', 'ipynb', 'jats', 'jira', 'json', 'ltx',
+        'man', 'md', 'markua', 'mediawiki', 'ms', 'muse', 'native', 'odt',
+        'odf', 'opml', 'org', 'pdf', 'txt', 'pptx', 'rst', 'rtf', 'tei',
+        'texinfo', 'textile', 'typst', 'xwiki', 'zim'
+    ]
 
 #-----misc
 translators = [
