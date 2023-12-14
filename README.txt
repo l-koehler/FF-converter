@@ -1,3 +1,7 @@
+This is a fork of the original https://github.com/ilstam/FF-Multi-Converter.  
+The goal of this fork is to add pandoc and several smaller converters as options.  
+Original README:  
+
 FF Multi Converter
 ====================
 
