@@ -40,15 +40,15 @@ class Progress(QDialog):
         """
         Keyword arguments:
         files  -- list with dicts containing file names
-        tab -- instanseof AudioVideoTab, ImageTab, DocumentTab, MarkdownTab etc.
+        tab -- instance of AudioVideoTab, ImageTab etc,
                indicating currently active tab
         delete -- boolean that shows if files must removed after conversion
         parent -- parent widget
 
         files:
-        Each dict have only one key and one corresponding value.
-        Key is a file to be converted and it's value is the name of the new
-        file that will be converted.
+        Each dict has only one key with one corresponding value.
+        The key is the file to be converted and its value is
+        the path of the file that will be created by conversion.
 
         Example list:
         [{"/foo/bar.png" : "/foo/bar.bmp"}, {"/f/bar2.png" : "/f/bar2.bmp"}]
@@ -69,7 +69,8 @@ class Progress(QDialog):
         self.nowQL = QLabel(self.tr('In progress: '))
         self.nowQPBar = QProgressBar()
         self.nowQPBar.setValue(0)
-        self.shutdownQCB = QCheckBox(self.tr('System shutdown after conversion'))
+        self.shutdownQCB = QCheckBox(
+            self.tr('System shutdown after conversion'))
         self.cancelQPB = QPushButton(self.tr('Cancel'))
 
         detailsQPB = QCommandLinkButton(self.tr('Details'))
