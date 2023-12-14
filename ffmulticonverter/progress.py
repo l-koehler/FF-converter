@@ -69,7 +69,7 @@ class Progress(QDialog):
         self.nowQL = QLabel(self.tr('In progress: '))
         self.nowQPBar = QProgressBar()
         self.nowQPBar.setValue(0)
-        self.shutdownQCB = QCheckBox(self.tr('Shutdown after conversion'))
+        self.shutdownQCB = QCheckBox(self.tr('System shutdown after conversion'))
         self.cancelQPB = QPushButton(self.tr('Cancel'))
 
         detailsQPB = QCommandLinkButton(self.tr('Details'))

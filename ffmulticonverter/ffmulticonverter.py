@@ -304,6 +304,10 @@ class MainWindow(QMainWindow):
                 if not i in self.fnames:
                     self.fnames.append(i)
             self.filesList_update()
+            # Set toQLE to the dir of the first file, if toQLE not set
+            if self.toQLE.text() == "":
+                dir_of_first_file = os.path.dirname(os.path.abspath(fnames[0]))
+                self.toQLE.setText(dir_of_first_file)
 
     def filesList_add_dragged(self, links):
         for path in links:
