@@ -2,5 +2,6 @@
 MANIFEST
 build/
 dist/
+ffmulticonverter.egg-info/
 locale/*.qm
 *.pyc

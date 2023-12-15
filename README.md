@@ -21,13 +21,16 @@ pandoc (Markdown)
 #### Installation
 From this directory:  
 ```sh
-sudo python3 setup.py install
+sudo pip install .
 ```  
+Arch Linux will complain that the system is externally managed, bypass  
+this by passing --break-system-packages.  
+pip will also complain about sudo, but it doesn't work properly without it.  
 
 #### Uninstall
 From this directory:  
 ```sh
-sudo uninstall.sh
+sudo pip uninstall ffmulticonverter
 ```
 
 #### Run without installing
