@@ -41,7 +41,7 @@ class MarkdownTab(QWidget):
 
     def ok_to_continue(self):
         """
-        Check if everything is ok with dmarkdowntab to continue conversion.
+        Check if everything is ok with markdowntab to continue conversion.
 
         Checks if:
         - Pandoc is missing.

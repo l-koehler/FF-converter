@@ -89,7 +89,7 @@ markdown_formats = [
 #-----compression data
 
 compression_formats = [
-        'ar', 'squashfs', 'tar', 'tgz'
+        'ar', 'squashfs', 'tar', 'tgz', 'zip'
     ]
 
 #-----misc

@@ -47,12 +47,13 @@ class CompressionTab(QWidget):
         - tar            is missing.
         - ar             is missing.
         - squashfs-tools is missing.
+        - zip            is missing.
 
         Return True if all tests pass, else False. TODO.
         """
         if not self.parent.pandoc:
             QMessageBox.warning(self, 'FF Multi Converter - ' +
                                 self.tr('Error!'),
-                                self.tr('Pandoc is not installed!'))
+                                self.tr('Part of tar/ar/zip/squashfs-tools is not installed!'))
             return False
         return True

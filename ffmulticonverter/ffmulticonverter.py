@@ -245,6 +245,11 @@ class MainWindow(QMainWindow):
         self.unoconv = utils.is_installed('unoconv')
         self.imagemagick = utils.is_installed('convert')
         self.pandoc = utils.is_installed('pandoc')
+        self.compresstools = utils.is_installed('tar') and
+                             utils.is_installed('ar') and
+                             utils.is_installed('zip') and
+                             utils.is_installed('unsquashfs') and
+                             utils.is_installed('mksquashfs')
 
         missing = []
         if not self.ffmpeg_path:
@@ -255,6 +260,8 @@ class MainWindow(QMainWindow):
             missing.append('imagemagick')
         if not self.pandoc:
             missing.append('pandoc')
+        if not self.compresstools:
+            missing.append('tar/ar/zip/squashfs-tools')
 
         if missing:
             missing = ', '.join(missing)
