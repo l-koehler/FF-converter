@@ -44,6 +44,7 @@ from ffmulticonverter.audiovideotab import AudioVideoTab
 from ffmulticonverter.imagetab import ImageTab
 from ffmulticonverter.documenttab import DocumentTab
 from ffmulticonverter.markdowntab import MarkdownTab
+from ffmulticonverter.compressiontab import CompressionTab
 
 
 class ValidationError(Exception):
@@ -79,10 +80,13 @@ class MainWindow(QMainWindow):
         self.image_tab = ImageTab(self)
         self.document_tab = DocumentTab(self)
         self.markdown_tab = MarkdownTab(self)
+        self.compression_tab = CompressionTab(self)
 
-        self.tabs = [self.audiovideo_tab, self.image_tab, self.document_tab, self.markdown_tab]
+        self.tabs = [self.audiovideo_tab, self.image_tab, self.document_tab,
+                     self.markdown_tab, self.compression_tab]
         tab_names = [self.tr('Audio/Video'), self.tr('Images'),
-                     self.tr('Documents'), self.tr('Markdown')]
+                     self.tr('Documents'), self.tr('Markdown'),
+                     self.tr('Compression')]
 
         self.tabWidget = QTabWidget()
         for num, tab in enumerate(tab_names):
@@ -240,6 +244,7 @@ class MainWindow(QMainWindow):
             QSettings().setValue('ffmpeg_path', self.ffmpeg_path)
         self.unoconv = utils.is_installed('unoconv')
         self.imagemagick = utils.is_installed('convert')
+        self.pandoc = utils.is_installed('pandoc')
 
         missing = []
         if not self.ffmpeg_path:
@@ -248,6 +253,8 @@ class MainWindow(QMainWindow):
             missing.append('unoconv')
         if not self.imagemagick:
             missing.append('imagemagick')
+        if not self.pandoc:
+            missing.append('pandoc')
 
         if missing:
             missing = ', '.join(missing)
@@ -274,12 +281,15 @@ class MainWindow(QMainWindow):
         extraformats_image = (settings.value('extraformats_image') or [])
         extraformats_document = (settings.value('extraformats_document') or [])
         extraformats_markdown = (settings.value('extraformats_markdown') or [])
+        extraformats_compression = (settings.value('extraformats_compression')
+                                    or [])
 
         self.audiovideo_tab.fill_video_comboboxes(videocodecs,
                 audiocodecs, extraformats_video)
         self.image_tab.fill_extension_combobox(extraformats_image)
         self.document_tab.fill_extension_combobox(extraformats_document)
         self.markdown_tab.fill_extension_combobox(extraformats_markdown)
+        self.compression_tab.fill_extension_combobox(extraformats_compression)
 
     def get_current_tab(self):
         for i in self.tabs:
@@ -301,6 +311,8 @@ class MainWindow(QMainWindow):
                 ' *.'.join(self.document_tab.formats))
         filters += 'Markdown Files (*.{})'.format(
                 ' *.'.join(self.markdown_tab.formats))
+        filters += 'Compressed Files (*.{})'.format(
+                ' *.'.join(self.compression_tab.formats))
 
         fnames = QFileDialog.getOpenFileNames(self, 'FF Multi Converter - ' +
                 self.tr('Choose File'), config.home, filters,

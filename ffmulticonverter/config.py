@@ -5,6 +5,7 @@ import os
 
 home = os.getenv("HOME")
 config_dir = os.path.join(home, '.config/ffmulticonverter/')
+tmp_dir = '/tmp/ffmulticonverter/'
 
 default_ffmpeg_cmd = ''
 default_imagemagick_cmd = ''
@@ -56,7 +57,7 @@ video_bitrate_values = [
 #-----image data
 
 image_formats = [
-        'bmp', 'cgm', 'dpx', 'emf', 'eps', 'fpx', 'gif', 'jbig', 'jng', 'jpeg',
+        'avif', 'bmp', 'cgm', 'dpx', 'emf', 'eps', 'fpx', 'gif', 'jbig', 'jng', 'jpeg',
         'mrsid', 'p7', 'pdf', 'picon', 'png', 'ppm', 'psd', 'rad', 'tga',
         'tif','webp', 'xpm'
         ]
@@ -83,6 +84,12 @@ markdown_formats = [
         'man', 'md', 'markua', 'mediawiki', 'ms', 'muse', 'native', 'odt',
         'odf', 'opml', 'org', 'pdf', 'txt', 'pptx', 'rst', 'rtf', 'tei',
         'texinfo', 'textile', 'typst', 'xwiki', 'zim'
+    ]
+
+#-----compression data
+
+compression_formats = [
+        'ar', 'squashfs', 'tar', 'tgz'
     ]
 
 #-----misc

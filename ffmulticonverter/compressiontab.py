@@ -23,13 +23,13 @@ class ValidationError(Exception):
     pass
 
 
-class MarkdownTab(QWidget):
+class CompressionTab(QWidget):
     def __init__(self, parent):
         self.parent = parent
-        super(MarkdownTab, self).__init__(parent)
-        self.name = 'Markdown'
-        self.formats = config.markdown_formats
-
+        super(CompressionTab, self).__init__(parent)
+        self.name = 'Compression'
+        self.formats = config.compression_formats
+        
         convertQL = QLabel(self.tr('Convert to:'))
         self.extQCB = QComboBox()
         final_layout = utils.add_to_layout('h', convertQL, self.extQCB, None)
@@ -41,15 +41,18 @@ class MarkdownTab(QWidget):
 
     def ok_to_continue(self):
         """
-        Check if everything is ok with dmarkdowntab to continue conversion.
+        Check if everything is ok with compressiontab to continue conversion.
 
         Checks if:
-        - Pandoc is missing.
+        - tar            is missing.
+        - ar             is missing.
+        - squashfs-tools is missing.
 
-        Return True if all tests pass, else False.
+        Return True if all tests pass, else False. TODO.
         """
         if not self.parent.pandoc:
-            QMessageBox.warning(self, 'FF Multi Converter - ' + self.tr('Error!'),
-                    self.tr('Pandoc is not installed!'))
+            QMessageBox.warning(self, 'FF Multi Converter - ' +
+                                self.tr('Error!'),
+                                self.tr('Pandoc is not installed!'))
             return False
         return True

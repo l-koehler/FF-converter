@@ -21,7 +21,9 @@ import signal
 import threading
 import subprocess
 import shlex
+import shutil
 import logging
+from pathlib import Path
 
 from PyQt5.QtCore import pyqtSignal, QTimer
 from PyQt5.QtGui import QTextCursor
@@ -31,6 +33,7 @@ from PyQt5.QtWidgets import (
         )
 
 from ffmulticonverter import utils
+from ffmulticonverter import config
 
 
 class Progress(QDialog):
@@ -247,6 +250,9 @@ class Progress(QDialog):
             elif self._type == 'Markdown':
                 conv_func = self.convert_markdown
                 params = (from_file, to_file)
+            elif self._type == "Compression":
+                conv_func = self.convert_compression
+                params = (from_file, to_file)
             else:
                 conv_func = self.convert_document
                 params = (from_file, to_file)
@@ -436,4 +442,114 @@ class Progress(QDialog):
         log_lvl = logging.info if return_code == 0 else logging.error
         log_lvl(final_output, extra=log_data)
 
+        return return_code == 0
+
+    def convert_compression(self, from_file, to_file):
+        """
+        Use tar/ar/squashfs-tools to convert compressed files.
+        """
+        # Start by decompressing
+        try:
+            os.mkdir(config.tmp_dir)
+        except FileExistsError:
+            # tmp_dir already exists, empty it
+            shutil.rmtree(config.tmp_dir)
+            os.mkdir(config.tmp_dir)
+            pass
+        
+        from_file_ext = os.path.splitext(from_file)[1]
+        from_file_ext = from_file_ext.replace(".","").replace("\"","")
+        if from_file_ext in ['deb', 'a', 'ar', 'o', 'so']:
+            cmd = 'ar -x {0} --output {1}'.format(from_file, config.tmp_dir)
+        elif from_file_ext in ['sqfs', 'squashfs', 'snap']:
+            cmd = 'unsquashfs -d {0} {1}'.format(config.tmp_dir, from_file)
+        else:
+            cmd = 'tar -xvf {0} -C {1}'.format(from_file, config.tmp_dir)
+        self.update_text_edit_signal.emit(cmd + '\n')
+        child = subprocess.Popen(
+                shlex.split(cmd),
+                stderr=subprocess.STDOUT,
+                stdout=subprocess.PIPE
+                )
+        child.wait()
+
+        reader = io.TextIOWrapper(child.stdout, encoding='utf8')
+        final_output = reader.read()
+        self.update_text_edit_signal.emit(final_output+'\n\n')
+
+        return_code = child.poll()
+
+        log_data = {
+                'command' : cmd,
+                'returncode' : return_code,
+                'type' : 'DECOMPRESS'
+                }
+        log_lvl = logging.info if return_code == 0 else logging.error
+        log_lvl(final_output, extra=log_data)
+
+        if return_code != 0:
+            shutil.rmtree(config.tmp_dir)
+            return False
+        # Now, recompress the files in config.tmp_dir
+        to_file_ext = os.path.splitext(to_file)[1]
+        to_file_ext = to_file_ext.replace(".","").replace("\"","")
+        if to_file_ext in ['ar', 'a']:
+            # ar can only 'add' single files to archives. so iterate over all
+            for fpath in Path(config.tmp_dir).rglob('*.*'):
+                if os.path.isfile(fpath):
+                    cmd = 'ar cr {0} \"{1}\"'.format(to_file, fpath)
+                    self.update_text_edit_signal.emit(cmd + '\n')
+                    child = subprocess.Popen(
+                            shlex.split(cmd),
+                            stderr=subprocess.STDOUT,
+                            stdout=subprocess.PIPE
+                            )
+                    child.wait()
+
+                    reader = io.TextIOWrapper(child.stdout, encoding='utf8')
+                    final_output = reader.read()
+                    self.update_text_edit_signal.emit(final_output+'\n\n')
+
+                    return_code = child.poll()
+
+                    log_data = {
+                            'command' : cmd,
+                            'returncode' : return_code,
+                            'type' : 'DECOMPRESS'
+                            }
+                    log_lvl = logging.info if return_code == 0 else logging.error
+                    log_lvl(final_output, extra=log_data)
+
+                    shutil.rmtree(config.tmp_dir)
+                    return return_code == 0
+        elif to_file_ext in ['sqfs', 'squashfs']:
+            cmd = 'mksquashfs {0} {1}'.format(config.tmp_dir, to_file)
+        elif to_file_ext in ['tgz', 'tar.gz']:
+            cmd = 'tar -czvf {0} {1}'.format(from_file, config.tmp_dir)
+        else:
+            cmd = 'tar -cvf {0} {1}'.format(from_file, config.tmp_dir)
+        
+        self.update_text_edit_signal.emit(cmd + '\n')
+        child = subprocess.Popen(
+                shlex.split(cmd),
+                stderr=subprocess.STDOUT,
+                stdout=subprocess.PIPE
+                )
+        child.wait()
+
+        reader = io.TextIOWrapper(child.stdout, encoding='utf8')
+        final_output = reader.read()
+        self.update_text_edit_signal.emit(final_output+'\n\n')
+
+        return_code = child.poll()
+
+        log_data = {
+                'command' : cmd,
+                'returncode' : return_code,
+                'type' : 'DECOMPRESS'
+                }
+        log_lvl = logging.info if return_code == 0 else logging.error
+        log_lvl(final_output, extra=log_data)
+        
+        shutil.rmtree(config.tmp_dir)
         return return_code == 0
