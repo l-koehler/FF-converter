@@ -5,3 +5,4 @@ dist/
 ffmulticonverter.egg-info/
 locale/*.qm
 *.pyc
+*.kate-swp
