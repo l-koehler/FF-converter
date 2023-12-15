@@ -1,3 +1,4 @@
+# Copyright (C) 2023 l-koehler
 # Copyright (C) 2011-2016 Ilias Stamatis <stamatis.iliass@gmail.com>
 #
 # This program is free software: you can redistribute it and/or modify
