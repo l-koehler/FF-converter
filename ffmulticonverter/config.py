@@ -91,7 +91,8 @@ translators = [
         ['[ca] Catalan', 'David Sabadell i Ximenes'
                   '\n     Toni Estévez'],
         ['[cs] Czech', 'Petr Simacek'],
-        ['[de_DE] German (Germany)', 'Stefan Wilhelm'],
+        ['[de_DE] German (Germany)', 'Stefan Wilhelm'
+                              '\n     l-koehler'],
         ['[el] Greek', 'Ilias Stamatis'],
         ['[es] Spanish', 'Miguel Ángel Rodríguez Muíños'
                   '\n     Toni Estévez'],

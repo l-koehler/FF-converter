@@ -27,12 +27,12 @@
     <message>
         <location filename="../ffmulticonverter/presets_dlgs.py" line="388"/>
         <source>Preset label</source>
-        <translation>Vorteingestellter Label</translation>
+        <translation>Voreingestelltes Label</translation>
     </message>
     <message>
         <location filename="../ffmulticonverter/presets_dlgs.py" line="390"/>
         <source>Preset command line parameters</source>
-        <translation>Voreingestellter Kommandozeilenparameter</translation>
+        <translation>Voreingestellter Befehlszeilenparameter</translation>
     </message>
     <message>
         <location filename="../ffmulticonverter/presets_dlgs.py" line="392"/>
@@ -57,22 +57,22 @@
     <message>
         <location filename="../ffmulticonverter/presets_dlgs.py" line="458"/>
         <source>Preset label can&apos;t be left blank.</source>
-        <translation>Voreingestellter Label darf nicht leer sein.</translation>
+        <translation>Voreingestelltes Label darf nicht leer sein.</translation>
     </message>
     <message>
         <location filename="../ffmulticonverter/presets_dlgs.py" line="465"/>
         <source>Command label can&apos;t be left blank.</source>
-        <translation>Kommando Label darf nicht leer sein.</translation>
+        <translation>Befehls-Label darf nicht leer sein.</translation>
     </message>
     <message>
         <location filename="../ffmulticonverter/presets_dlgs.py" line="472"/>
         <source>Extension label can&apos;t be left blank.</source>
-        <translation>Die Dateierweiterung muß angegeben sein.</translation>
+        <translation>Die Dateierweiterung muss angegeben sein.</translation>
     </message>
     <message>
         <location filename="../ffmulticonverter/presets_dlgs.py" line="416"/>
         <source>Edit {0}</source>
-        <translation>Bearbeite {0}</translation>
+        <translation>Bearbeiten {0}</translation>
     </message>
     <message>
         <location filename="../ffmulticonverter/presets_dlgs.py" line="479"/>

@@ -152,7 +152,7 @@ class MainWindow(QMainWindow):
         trackerAction = utils.create_action(
                 self, 'Issue tracker', None, None, None,
                 lambda: webbrowser.open(
-                    "https://github.com/Ilias95/FF-Multi-Converter/issues")
+                    "https://github.com/l-koehler/FF-converter/issues")
                 )
         wikiAction = utils.create_action(
                 self, 'Wiki', None, None, None,
