@@ -1,7 +1,6 @@
 #### What is this?  
 This is a fork of the original https://github.com/ilstam/FF-Multi-Converter.  
-The original seems abandoned, given that the last big change was 2016.  
-Since then, it has only gotten a few bugfixes.  
+The original is [no longer developed](https://github.com/ilstam/FF-Multi-Converter/issues/61#issuecomment-467869122).  
   
 This program is a simple graphical application which enables you to convert  
 between all popular formats, by utilizing and combining other programs.  
