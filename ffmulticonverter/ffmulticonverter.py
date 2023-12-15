@@ -243,7 +243,7 @@ class MainWindow(QMainWindow):
             self.ffmpeg_path = utils.is_installed('ffmpeg')
             QSettings().setValue('ffmpeg_path', self.ffmpeg_path)
         self.unoconv = utils.is_installed('unoconv')
-        self.imagemagick = utils.is_installed('convert')
+        self.imagemagick = utils.is_installed('magick')
         self.pandoc = utils.is_installed('pandoc')
         
         self.compresstools = utils.is_installed('tar') and\

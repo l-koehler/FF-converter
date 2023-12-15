@@ -352,7 +352,7 @@ class Progress(QDialog):
                 resize += '\!'
 
         imgcmd = ' ' + imgcmd.strip() + ' '
-        cmd = 'convert {0} {1}{2}{3}'.format(from_file, resize, imgcmd, to_file)
+        cmd = 'magick {0} {1}{2}{3}'.format(from_file, resize, imgcmd, to_file)
         self.update_text_edit_signal.emit(cmd + '\n')
         child = subprocess.Popen(
                 shlex.split(cmd),
