@@ -446,7 +446,7 @@ class Progress(QDialog):
 
     def convert_compression(self, from_file, to_file):
         """
-        Use tar/ar/squashfs-tools to convert compressed files.
+        Use tar/ar/squashfs-tools/zip to convert compressed files.
         """
         # Start by decompressing
         try:
@@ -525,9 +525,11 @@ class Progress(QDialog):
         elif to_file_ext in ['sqfs', 'squashfs']:
             cmd = 'mksquashfs {0} {1}'.format(config.tmp_dir, to_file)
         elif to_file_ext in ['tgz', 'tar.gz']:
-            cmd = 'tar -czvf {0} {1}'.format(from_file, config.tmp_dir)
+            cmd = 'tar -czvf {0} {1}'.format(to_file, config.tmp_dir)
+        elif to_file_ext in ['zip']:
+            cmd = 'zip -r -q {0} {1}'.format(to_file, config.tmp_dir)
         else:
-            cmd = 'tar -cvf {0} {1}'.format(from_file, config.tmp_dir)
+            cmd = 'tar -cvf {0} {1}'.format(to_file, config.tmp_dir)
         
         self.update_text_edit_signal.emit(cmd + '\n')
         child = subprocess.Popen(
