@@ -45,6 +45,7 @@ from ffmulticonverter.imagetab import ImageTab
 from ffmulticonverter.documenttab import DocumentTab
 from ffmulticonverter.markdowntab import MarkdownTab
 from ffmulticonverter.compressiontab import CompressionTab
+from ffmulticonverter.dynamictab import DynamicTab
 
 
 class ValidationError(Exception):
@@ -76,17 +77,18 @@ class MainWindow(QMainWindow):
         self.toQTB.setText('...')
         hlayout2 = utils.add_to_layout('h', outputQL, self.toQLE, self.toQTB)
 
+        self.dynamic_tab = DynamicTab(self)
         self.audiovideo_tab = AudioVideoTab(self)
         self.image_tab = ImageTab(self)
         self.document_tab = DocumentTab(self)
         self.markdown_tab = MarkdownTab(self)
         self.compression_tab = CompressionTab(self)
 
-        self.tabs = [self.audiovideo_tab, self.image_tab, self.document_tab,
-                     self.markdown_tab, self.compression_tab]
-        tab_names = [self.tr('Audio/Video'), self.tr('Images'),
-                     self.tr('Documents'), self.tr('Markdown'),
-                     self.tr('Compression')]
+        self.tabs = [self.dynamic_tab, self.audiovideo_tab, self.image_tab,
+                     self.document_tab, self.markdown_tab, self.compression_tab]
+        tab_names = [self.tr('All Formats'), self.tr('Audio/Video'),
+                     self.tr('Images'), self.tr('Documents'),
+                     self.tr('Markdown'), self.tr('Compression')]
 
         self.tabWidget = QTabWidget()
         for num, tab in enumerate(tab_names):
@@ -203,7 +205,8 @@ class MainWindow(QMainWindow):
         delQPB.clicked.connect(self.filesList_delete)
         clearQPB.clicked.connect(self.filesList_clear)
         self.tabWidget.currentChanged.connect(
-                lambda: self.tabs[0].moreQPB.setChecked(False))
+                #                 index of audio/video tab
+                lambda: self.tabs[1].moreQPB.setChecked(False))
         self.origQCB.toggled.connect(
                 lambda: self.toQLE.setEnabled(not self.origQCB.isChecked()))
         self.toQTB.clicked.connect(self.get_output_folder)
@@ -290,6 +293,8 @@ class MainWindow(QMainWindow):
         extraformats_compression = (settings.value('extraformats_compression')
                                     or [])
 
+        # dynamic tab sets extensions on file load
+        self.dynamic_tab.fill_extension_combobox("")
         self.audiovideo_tab.fill_video_comboboxes(videocodecs,
                 audiocodecs, extraformats_video)
         self.image_tab.fill_extension_combobox(extraformats_image)
@@ -306,6 +311,9 @@ class MainWindow(QMainWindow):
         self.filesList.clear()
         for i in self.fnames:
             self.filesList.addItem(i)
+        # update dynamic tab
+        # dynamic_tab takes not extra formats, but a list of all files added
+        self.dynamic_tab.fill_extension_combobox(self.fnames)
 
     def filesList_add(self):
         filters  = 'All Files (*);;'
