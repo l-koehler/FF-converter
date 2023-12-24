@@ -15,6 +15,7 @@
 
 from PyQt5.QtWidgets import QWidget, QLabel, QComboBox, QMessageBox
 
+import os
 from ffmulticonverter import utils
 from ffmulticonverter import config
 
@@ -40,13 +41,18 @@ class DynamicTab(QWidget):
     as it takes a list of all files in the file list and fills
     conversions into any supported type into the combobox.
     """
-    def fill_extension_combobox(self, list_of_files):
+    def fill_extension_combobox(self, list_of_files, all_supported_conversions):
         self.extQCB.clear()
-        supported_formats = []
+        possible_outputs = []
+        # TODO: inefficient, iterate convs and check for all files at same time
         for input_file in list_of_files:
-            # TODO: actually figure out what extensions are supported
-            supported_formats.append(input_file)
-        self.extQCB.addItems(sorted(supported_formats))
+            input_file_ext = os.path.splitext(input_file)[-1][1:] # .ext -> ext
+            for conv in all_supported_conversions:
+                if input_file_ext in conv[0]:
+                    possible_outputs += conv[1]
+        # dedupe list
+        possible_outputs = list(dict.fromkeys(possible_outputs))   
+        self.extQCB.addItems(sorted(possible_outputs))
 
     def ok_to_continue(self):
         return True

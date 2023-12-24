@@ -224,9 +224,8 @@ class MainWindow(QMainWindow):
         self.audiovideo_tab.set_default_command()
         self.image_tab.set_default_command()
         self.toQLE.setText(self.default_output)
-        print("scanning supported conversions")
         self.all_supported_conversions = utils.get_all_conversions()
-
+        
         self.filesList_update()
 
     def parse_cla(self):
@@ -294,8 +293,6 @@ class MainWindow(QMainWindow):
         extraformats_compression = (settings.value('extraformats_compression')
                                     or [])
 
-        # dynamic tab sets extensions on file load
-        self.dynamic_tab.fill_extension_combobox("")
         self.audiovideo_tab.fill_video_comboboxes(videocodecs,
                 audiocodecs, extraformats_video)
         self.image_tab.fill_extension_combobox(extraformats_image)
@@ -314,7 +311,7 @@ class MainWindow(QMainWindow):
             self.filesList.addItem(i)
         # update dynamic tab
         # dynamic_tab takes not extra formats, but a list of all files added
-        self.dynamic_tab.fill_extension_combobox(self.fnames)
+        self.dynamic_tab.fill_extension_combobox(self.fnames, self.all_supported_conversions)
 
     def filesList_add(self):
         filters  = 'All Files (*);;'
