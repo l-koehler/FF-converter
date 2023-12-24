@@ -55,7 +55,7 @@ def is_installed(program):
             return fpath
     return ''
 
-def get_supported_conversions():
+def get_all_conversions():
     """
     the temporary list generated is a 3-dimensional mess.
     supported_tmp[converter_index][in/out] = [types]
@@ -112,7 +112,6 @@ def get_supported_conversions():
         line_words = list(filter(None, line_words))
         if line_words == []:
             continue
-        print(line_words)
         if not set(line_words[0]) <= set('ABCDEFTGHIJKLMNOPQRSTUVWXYZ*-'):
             continue
         file_format = line_words[0].replace("*","").lower()
@@ -140,7 +139,16 @@ def get_supported_conversions():
     supported_tmp.append(img)
     supported_tmp.append(slide)
     supported_tmp.append(text)
-    return supported_conversions
+    return supported_tmp
+
+def get_ext_conversions(extension):
+    possible_conversions = []
+    # TODO: get_all_conversions is SLOW, run at start once
+    all_conversions = get_all_conversions()
+    for converter in all_conversions:
+        if extension in converter[0]:
+            possible_conversions.append(converter[0])
+    return possible_conversions
 
 def start_office_listener():
     """
