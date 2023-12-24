@@ -55,6 +55,93 @@ def is_installed(program):
             return fpath
     return ''
 
+def get_supported_conversions():
+    """
+    the temporary list generated is a 3-dimensional mess.
+    supported_tmp[converter_index][in/out] = [types]
+    supported_tmp = [
+    [[pandoc_in1, pandoc_in2], [pandoc_out1, pandoc_out2]],
+    [[ffmpeg_in1, ffmpeg_in2], [ffmpeg_out1, ffmpeg_out2]],
+    ]
+    """
+    supported_tmp = []
+    # poll ffmpeg
+    completed_process = subprocess.run(['ffmpeg', '-formats'],
+                                   capture_output=True, text=True)
+    ffmpeg_stdout = completed_process.stdout
+    ffmpeg_input, ffmpeg_output = [], []
+    ffmpeg_pattern = r'^\s*(DE|D|E)\s+(\S+)'    
+    ffmpeg_stdout_lines = ffmpeg_stdout.splitlines()
+    for line in ffmpeg_stdout_lines:
+                match = re.match(ffmpeg_pattern, line)
+                if match:
+                    action, file_extension = match.groups()
+                    if action == 'D' or action == 'DE':
+                        ffmpeg_input.append(file_extension)
+                    if action == 'E' or action == 'DE':
+                        ffmpeg_output.append(file_extension)
+    ffmpeg_conversions = [ffmpeg_input, ffmpeg_output]
+    supported_tmp.append(ffmpeg_conversions)
+    # poll pandoc
+    completed_process = subprocess.run(['pandoc', '--list-input-formats'],
+                                       capture_output=True, text=True)
+    in_formats = completed_process.stdout
+    in_format_list = in_formats.split('\n')
+    if 'markdown' in in_format_list:
+        in_format_list.append('md')
+    completed_process = subprocess.run(['pandoc', '--list-output-formats'],
+                                       capture_output=True, text=True)
+    out_formats = completed_process.stdout
+    out_format_list = out_formats.split('\n')
+    if 'markdown' in out_format_list:
+        out_format_list.append('md')
+        
+    pandoc_conversions = [in_format_list, out_format_list]
+    supported_tmp.append(pandoc_conversions)
+    # poll magick
+    # TODO: clean this mess (but it works)
+    completed_process = subprocess.run(['magick', 'identify', '-list', 'format'], capture_output=True, text=True)
+    magick_formats = completed_process.stdout
+    magick_format_list = magick_formats.split('\n')
+    in_formats = []
+    out_formats = []
+    for line in magick_format_list:
+        if '-'*len(line) == line:
+            continue
+        line_words = line.strip().split(' ')
+        line_words = list(filter(None, line_words))
+        if line_words == []:
+            continue
+        print(line_words)
+        if not set(line_words[0]) <= set('ABCDEFTGHIJKLMNOPQRSTUVWXYZ*-'):
+            continue
+        file_format = line_words[0].replace("*","").lower()
+        rw_status = line_words[2].replace("-","").replace("+","")
+        if rw_status == "rw":
+            in_formats.append(file_format)
+            out_formats.append(file_format)
+        elif rw_status == "r":
+            in_formats.append(file_format)
+        elif rw_status == "w":
+            out_formats.append(file_format)
+    magick_conversions = [in_formats, out_formats]
+    supported_tmp.append(magick_conversions)
+    # libreoffice exts
+    # cant actually get those right now, so have some predefined lists instead
+    calc  = [['csv', 'xls', 'xml', 'xlsx', 'ods', 'sdc'],
+             ['csv', 'html', 'xls', 'xml', 'ods', 'sdc', 'xhtml']]
+    img   = [['eps', 'emf', 'gif', 'jpg', 'odd', 'png', 'tiff', 'bmp', 'webp'],
+             ['eps', 'emf', 'gif', 'html', 'jpg', 'odd', 'pdf', 'png', 'svg', 'tiff', 'bmp', 'xhtml', 'webp']]
+    slide = [['odp', 'ppt', 'pptx', 'sda'],
+             ['eps', 'gif', 'html', 'swf', 'odp', 'ppt', 'pdf', 'svg', 'sda', 'xml']]
+    text  = [['xml', 'html', 'doc', 'docx', 'odt', 'txt', 'rtf', 'sdw'],
+             ['bib', 'xml', 'html', 'ltx', 'doc', 'odt', 'txt', 'pdf', 'rtf', 'sdw']]
+    supported_tmp.append(calc)
+    supported_tmp.append(img)
+    supported_tmp.append(slide)
+    supported_tmp.append(text)
+    return supported_conversions
+
 def start_office_listener():
     """
     Start a openoffice/libreoffice listener.
