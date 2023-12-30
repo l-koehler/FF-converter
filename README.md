@@ -4,6 +4,10 @@ The original is [no longer developed](https://github.com/ilstam/FF-Multi-Convert
   
 This program is a simple graphical application which enables you to convert  
 between all popular formats, by utilizing and combining other programs.  
+To simply convert files, just click the Add button, add your file(s) and  
+select a format in the dropdown list, then click Convert.  
+For Videos, Music and Images, there are additional  
+options, for example flipping the image or selecting codecs, in the tabs.  
 
 #### Dependencies:
 * python3  

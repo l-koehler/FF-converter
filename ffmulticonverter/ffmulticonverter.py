@@ -76,10 +76,6 @@ class MainWindow(QMainWindow):
         self.dynamic_tab = DynamicTab(self)
         self.audiovideo_tab = AudioVideoTab(self)
         self.image_tab = ImageTab(self)
-        
-        # self.document_tab = DocumentTab(self)
-        # self.markdown_tab = MarkdownTab(self)
-        # self.compression_tab = CompressionTab(self)
 
         self.tabs = [self.dynamic_tab, self.audiovideo_tab,
                      self.image_tab]
@@ -312,12 +308,6 @@ class MainWindow(QMainWindow):
                 ' *.'.join(self.audiovideo_tab.formats))
         filters += 'Image Files (*.{});;'.format(
                 ' *.'.join(self.image_tab.formats + self.image_tab.extra_img))
-        # filters += 'Document Files (*.{})'.format(
-        #         ' *.'.join(self.document_tab.formats))
-        # filters += 'Markdown Files (*.{})'.format(
-        #         ' *.'.join(self.markdown_tab.formats))
-        # filters += 'Compressed Files (*.{})'.format(
-        #         ' *.'.join(self.compression_tab.formats))
 
         fnames = QFileDialog.getOpenFileNames(self, 'FF Multi Converter - ' +
                 self.tr('Choose File'), config.home, filters,
