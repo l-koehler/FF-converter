@@ -144,6 +144,12 @@ def get_all_conversions(get_conv_for_ext = False, ext = ["",""]):
     supported_tmp.append(img)
     supported_tmp.append(slide)
     supported_tmp.append(text)
+    # compression exts
+    # same as above
+    compression_exts = [['deb', 'a', 'ar', 'o', 'so', 'sqfs', 'squashfs', 'snap', 'tgz', 'tar.gz', 'tar'],
+                        ['ar', 'squashfs', 'tar', 'tgz', 'zip']]
+    supported_tmp.append(compression_exts)
+    
     if get_conv_for_ext:
         if ext[0] in ffmpeg_conversions[0] and ext[1] in ffmpeg_conversions[1]:
             return "ffmpeg"
@@ -159,6 +165,8 @@ def get_all_conversions(get_conv_for_ext = False, ext = ["",""]):
             return "soffice"
         elif ext[0] in text[0] and ext[1] in text[1]:
             return "soffice"
+        elif ext[0] in compression_exts[0] and ext[1] in compression_exts[1]:
+            return "compression"
         else:
             return "unsupported"
     else:

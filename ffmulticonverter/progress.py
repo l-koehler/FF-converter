@@ -560,5 +560,20 @@ class Progress(QDialog):
         return return_code == 0
     
     def convert_dynamic(self, from_file, to_file):
-        
-        return True
+        from_file_ext = os.path.splitext(from_file)[1]
+        from_file_ext = from_file_ext.replace(".","").replace("\"","")
+        to_file_ext = os.path.splitext(to_file)[1]
+        to_file_ext = to_file_ext.replace(".","").replace("\"","")
+        converter = utils.get_all_conversions(get_conv_for_ext = True, ext = [from_file_ext, to_file_ext])
+        if converter == "ffmpeg":
+            return convert_video(from_file, to_file)
+        elif converter == "pandoc":
+            return convert_markdown(from_file, to_file)
+        elif converter == "magick":
+            return convert_image(from_file, to_file)
+        elif converter == "soffice":
+            return convert_document(from_file, to_file)
+        elif converter == "compression":
+            return convert_compression(from_file, to_file)
+        else:
+            return False
