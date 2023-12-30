@@ -253,8 +253,11 @@ class Progress(QDialog):
             elif self._type == "Compression":
                 conv_func = self.convert_compression
                 params = (from_file, to_file)
-            else:
+            elif self._type == "Documents":
                 conv_func = self.convert_document
+                params = (from_file, to_file)
+            else:
+                conv_func = self.convert_dynamic
                 params = (from_file, to_file)
 
             if conv_func(*params):
@@ -555,3 +558,7 @@ class Progress(QDialog):
         
         shutil.rmtree(config.tmp_dir)
         return return_code == 0
+    
+    def convert_dynamic(self, from_file, to_file):
+        
+        return True

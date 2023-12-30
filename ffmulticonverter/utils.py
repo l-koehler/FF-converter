@@ -55,7 +55,7 @@ def is_installed(program):
             return fpath
     return ''
 
-def get_all_conversions():
+def get_all_conversions(get_conv_for_ext = False, ext = ["",""]):
     """
     the temporary list generated is a 3-dimensional mess.
     supported_tmp[converter_index][in/out] = [types]
@@ -63,6 +63,11 @@ def get_all_conversions():
     [[pandoc_in1, pandoc_in2], [pandoc_out1, pandoc_out2]],
     [[ffmpeg_in1, ffmpeg_in2], [ffmpeg_out1, ffmpeg_out2]],
     ]
+    """
+    """
+    Defaults to returning all supported conversions, but can also return
+    the converter for a conversion given as:
+    ext =  [input_ext, output_ext]
     """
     supported_tmp = []
     # poll ffmpeg
@@ -139,7 +144,25 @@ def get_all_conversions():
     supported_tmp.append(img)
     supported_tmp.append(slide)
     supported_tmp.append(text)
-    return supported_tmp
+    if get_conv_for_ext:
+        if ext[0] in ffmpeg_conversions[0] and ext[1] in ffmpeg_conversions[1]:
+            return "ffmpeg"
+        elif ext[0] in pandoc_conversions[0] and ext[1] in pandoc_conversions[1]:
+            return "pandoc"
+        elif ext[0] in magick_conversions[0] and ext[1] in magick_conversions[1]:
+            return "magick"
+        elif ext[0] in calc[0] and ext[1] in calc[1]:
+            return "soffice"
+        elif ext[0] in img[0] and ext[1] in img[1]:
+            return "soffice"
+        elif ext[0] in slide[0] and ext[1] in slide[1]:
+            return "soffice"
+        elif ext[0] in text[0] and ext[1] in text[1]:
+            return "soffice"
+        else:
+            return "unsupported"
+    else:
+        return supported_tmp
 
 def get_ext_conversions(extension):
     possible_conversions = []

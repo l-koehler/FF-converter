@@ -45,6 +45,8 @@ class DynamicTab(QWidget):
         self.extQCB.clear()
         possible_outputs = []
         # TODO: inefficient, iterate convs and check for all files at same time
+        # TODO: this checks if any of the files can be converted,
+        # it should be ALL files
         for input_file in list_of_files:
             input_file_ext = os.path.splitext(input_file)[-1][1:] # .ext -> ext
             for conv in all_supported_conversions:
