@@ -42,9 +42,6 @@ from ffmulticonverter import progress
 from ffmulticonverter import qrc_resources
 from ffmulticonverter.audiovideotab import AudioVideoTab
 from ffmulticonverter.imagetab import ImageTab
-from ffmulticonverter.documenttab import DocumentTab
-from ffmulticonverter.markdowntab import MarkdownTab
-from ffmulticonverter.compressiontab import CompressionTab
 from ffmulticonverter.dynamictab import DynamicTab
 
 
@@ -60,7 +57,6 @@ class MainWindow(QMainWindow):
         self.office_listener_started = False
 
         self.parse_cla()
-
         addQPB = QPushButton(self.tr('Add'))
         delQPB = QPushButton(self.tr('Delete'))
         clearQPB = QPushButton(self.tr('Clear'))
@@ -80,9 +76,10 @@ class MainWindow(QMainWindow):
         self.dynamic_tab = DynamicTab(self)
         self.audiovideo_tab = AudioVideoTab(self)
         self.image_tab = ImageTab(self)
-        self.document_tab = DocumentTab(self)
-        self.markdown_tab = MarkdownTab(self)
-        self.compression_tab = CompressionTab(self)
+        
+        # self.document_tab = DocumentTab(self)
+        # self.markdown_tab = MarkdownTab(self)
+        # self.compression_tab = CompressionTab(self)
 
         self.tabs = [self.dynamic_tab, self.audiovideo_tab,
                      self.image_tab]
@@ -295,9 +292,6 @@ class MainWindow(QMainWindow):
         self.audiovideo_tab.fill_video_comboboxes(videocodecs,
                 audiocodecs, extraformats_video)
         self.image_tab.fill_extension_combobox(extraformats_image)
-        self.document_tab.fill_extension_combobox(extraformats_document)
-        self.markdown_tab.fill_extension_combobox(extraformats_markdown)
-        self.compression_tab.fill_extension_combobox(extraformats_compression)
 
     def get_current_tab(self):
         for i in self.tabs:
@@ -318,12 +312,12 @@ class MainWindow(QMainWindow):
                 ' *.'.join(self.audiovideo_tab.formats))
         filters += 'Image Files (*.{});;'.format(
                 ' *.'.join(self.image_tab.formats + self.image_tab.extra_img))
-        filters += 'Document Files (*.{})'.format(
-                ' *.'.join(self.document_tab.formats))
-        filters += 'Markdown Files (*.{})'.format(
-                ' *.'.join(self.markdown_tab.formats))
-        filters += 'Compressed Files (*.{})'.format(
-                ' *.'.join(self.compression_tab.formats))
+        # filters += 'Document Files (*.{})'.format(
+        #         ' *.'.join(self.document_tab.formats))
+        # filters += 'Markdown Files (*.{})'.format(
+        #         ' *.'.join(self.markdown_tab.formats))
+        # filters += 'Compressed Files (*.{})'.format(
+        #         ' *.'.join(self.compression_tab.formats))
 
         fnames = QFileDialog.getOpenFileNames(self, 'FF Multi Converter - ' +
                 self.tr('Choose File'), config.home, filters,
@@ -431,7 +425,7 @@ class MainWindow(QMainWindow):
         tab = self.get_current_tab()
         ext_to = '.' + tab.extQCB.currentText()
 
-        if tab.name == 'Documents' and not self.office_listener_started:
+        if tab.name == 'All Formats' and not self.office_listener_started:
             utils.start_office_listener()
             self.office_listener_started = True
 
