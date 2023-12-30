@@ -84,11 +84,10 @@ class MainWindow(QMainWindow):
         self.markdown_tab = MarkdownTab(self)
         self.compression_tab = CompressionTab(self)
 
-        self.tabs = [self.dynamic_tab, self.audiovideo_tab, self.image_tab,
-                     self.document_tab, self.markdown_tab, self.compression_tab]
-        tab_names = [self.tr('All Formats'), self.tr('Audio/Video'),
-                     self.tr('Images'), self.tr('Documents'),
-                     self.tr('Markdown'), self.tr('Compression')]
+        self.tabs = [self.dynamic_tab, self.audiovideo_tab,
+                     self.image_tab]
+        tab_names = [self.tr('All Formats'), self.tr('Audio/Video Settings'),
+                     self.tr('Image Settings')]
 
         self.tabWidget = QTabWidget()
         for num, tab in enumerate(tab_names):
