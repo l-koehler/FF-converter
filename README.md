@@ -4,18 +4,19 @@ The original is [no longer developed](https://github.com/ilstam/FF-Multi-Convert
   
 This program is a simple graphical application which enables you to convert  
 between all popular formats, by utilizing and combining other programs.  
-These programs are optional dependencies, as some conversions will not work  
-without them.  
 
 #### Dependencies:
-python3  
-pyqt5  
+* python3  
+* pyqt5  
 
 #### Optional dependencies:
-ffmpeg (Audio and Video)  
-imagemagick (Images)  
-unoconv (Office formats)  
-pandoc (Markdown)  
+(Without these some conversions will not work)  
+
+* ffmpeg (Audio and Video)  
+* imagemagick (Images)  
+* unoconv (Office formats)  
+* pandoc (Markdown)  
+* tar, ar, squashfs-tools, zip (Compressed files)  
 
 #### Installation
 From this directory:  
