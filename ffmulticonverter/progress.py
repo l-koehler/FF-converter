@@ -566,14 +566,14 @@ class Progress(QDialog):
         to_file_ext = to_file_ext.replace(".","").replace("\"","")
         converter = utils.get_all_conversions(get_conv_for_ext = True, ext = [from_file_ext, to_file_ext])
         if converter == "ffmpeg":
-            return convert_video(from_file, to_file)
+            return self.convert_video(from_file, to_file, "") # cmd empty
         elif converter == "pandoc":
-            return convert_markdown(from_file, to_file)
+            return self.convert_markdown(from_file, to_file)
         elif converter == "magick":
-            return convert_image(from_file, to_file)
+            return self.convert_image(from_file, to_file, "", "", "") # too many arguments qwq
         elif converter == "soffice":
-            return convert_document(from_file, to_file)
+            return self.convert_document(from_file, to_file)
         elif converter == "compression":
-            return convert_compression(from_file, to_file)
+            return self.convert_compression(from_file, to_file)
         else:
             return False
