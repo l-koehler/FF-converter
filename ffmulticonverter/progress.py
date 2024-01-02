@@ -338,7 +338,7 @@ class Progress(QDialog):
 
         return return_code == 0
 
-    def convert_image(self, from_file, to_file, size, mntaspect, imgcmd, cmd_name = 'magick'):
+    def convert_image(self, from_file, to_file, size, mntaspect, imgcmd):
         """
         Convert an image using ImageMagick.
         Create conversion info ("cmd") and emit the corresponding signal
@@ -355,14 +355,26 @@ class Progress(QDialog):
                 resize += '\!'
 
         imgcmd = ' ' + imgcmd.strip() + ' '
-        cmd = '{0} {1} {2}{3}{4}'.format(cmd_name, from_file, resize, imgcmd, to_file)
-        self.update_text_edit_signal.emit(cmd + '\n')
-        child = subprocess.Popen(
-                shlex.split(cmd),
-                stderr=subprocess.STDOUT,
-                stdout=subprocess.PIPE
-                )
-        child.wait()
+        try:
+            cmd = 'magick {0} {1}{2}{3}'.format(from_file, resize, imgcmd, to_file)
+            self.update_text_edit_signal.emit(cmd + '\n')
+            child = subprocess.Popen(
+                    shlex.split(cmd),
+                    stderr=subprocess.STDOUT,
+                    stdout=subprocess.PIPE
+                    )
+            child.wait()
+        except FileNotFoundError:
+            cmd = 'convert {0} {1}{2}{3}'.format(from_file, resize, imgcmd, to_file)
+            self.update_text_edit_signal.emit(cmd + '\n')
+            child = subprocess.Popen(
+                    shlex.split(cmd),
+                    stderr=subprocess.STDOUT,
+                    stdout=subprocess.PIPE
+                    )
+            child.wait()
+            
+        
 
         reader = io.TextIOWrapper(child.stdout, encoding='utf8')
         final_output = reader.read()
@@ -378,9 +390,6 @@ class Progress(QDialog):
         log_lvl = logging.info if return_code == 0 else logging.error
         log_lvl(final_output, extra=log_data)
         
-        # try again, but using 'convert' instead of 'magick'
-        if return_code != 0:
-            return convert_image(self, from_file, to_file, size, mntaspect, imgcmd, cmd_name = 'convert')
         return return_code == 0
 
     def convert_document(self, from_file, to_file):
