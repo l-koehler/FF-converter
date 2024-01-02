@@ -57,8 +57,9 @@ def is_installed(program):
 
 def get_all_conversions(get_conv_for_ext = False, ext = ["",""]):
     """
-    the temporary list generated is a 3-dimensional mess.
+    generates a nested list. how to access:
     supported_tmp[converter_index][in/out] = [types]
+    the list looks something like this
     supported_tmp = [
     [[pandoc_in1, pandoc_in2], [pandoc_out1, pandoc_out2]],
     [[ffmpeg_in1, ffmpeg_in2], [ffmpeg_out1, ffmpeg_out2]],
@@ -68,6 +69,7 @@ def get_all_conversions(get_conv_for_ext = False, ext = ["",""]):
     Defaults to returning all supported conversions, but can also return
     the converter for a conversion given as:
     ext =  [input_ext, output_ext]
+    if get_conv_for_ext is True.
     """
     supported_tmp = []
     # poll ffmpeg
@@ -75,18 +77,26 @@ def get_all_conversions(get_conv_for_ext = False, ext = ["",""]):
                                    capture_output=True, text=True)
     ffmpeg_stdout = completed_process.stdout
     ffmpeg_input, ffmpeg_output = [], []
-    ffmpeg_pattern = r'^\s*(DE|D|E)\s+(\S+)'    
     ffmpeg_stdout_lines = ffmpeg_stdout.splitlines()
     for line in ffmpeg_stdout_lines:
-                match = re.match(ffmpeg_pattern, line)
-                if match:
-                    action, file_extension = match.groups()
-                    if action == 'D' or action == 'DE':
-                        ffmpeg_input.append(file_extension)
-                    if action == 'E' or action == 'DE':
-                        ffmpeg_output.append(file_extension)
+        line_args = line.split()
+        action = line_args[0]
+        
+        # dont run on the header lines
+        pattern = r'^\s*(DE|D|E)\s+(\S+)'
+        match = re.match(pattern, line)
+        if not match:
+            continue
+        
+        # line_args[1] can be "ext" or "ext1,ext2", so a split is neccesary
+        extension = line_args[1].split(',')
+        if 'D' in action:
+            ffmpeg_input += extension
+        if 'E' in action:
+            ffmpeg_output += extension
     ffmpeg_conversions = [ffmpeg_input, ffmpeg_output]
     supported_tmp.append(ffmpeg_conversions)
+    
     # poll pandoc
     completed_process = subprocess.run(['pandoc', '--list-input-formats'],
                                        capture_output=True, text=True)
@@ -100,12 +110,13 @@ def get_all_conversions(get_conv_for_ext = False, ext = ["",""]):
     out_format_list = out_formats.split('\n')
     if 'markdown' in out_format_list:
         out_format_list.append('md')
-        
     pandoc_conversions = [in_format_list, out_format_list]
     supported_tmp.append(pandoc_conversions)
+    
     # poll magick
     # TODO: clean this mess (but it works)
-    completed_process = subprocess.run(['magick', 'identify', '-list', 'format'], capture_output=True, text=True)
+    completed_process = subprocess.run(['magick', 'identify', '-list', 'format'],
+                                       capture_output=True, text=True)
     magick_formats = completed_process.stdout
     magick_format_list = magick_formats.split('\n')
     in_formats = []
@@ -130,6 +141,7 @@ def get_all_conversions(get_conv_for_ext = False, ext = ["",""]):
             out_formats.append(file_format)
     magick_conversions = [in_formats, out_formats]
     supported_tmp.append(magick_conversions)
+    
     # libreoffice exts
     # cant actually get those right now, so have some predefined lists instead
     calc  = [['csv', 'xls', 'xml', 'xlsx', 'ods', 'sdc'],
@@ -144,12 +156,14 @@ def get_all_conversions(get_conv_for_ext = False, ext = ["",""]):
     supported_tmp.append(img)
     supported_tmp.append(slide)
     supported_tmp.append(text)
+    
     # compression exts
     # same as above
     compression_exts = [['deb', 'a', 'ar', 'o', 'so', 'sqfs', 'squashfs', 'snap', 'tgz', 'tar.gz', 'tar'],
                         ['ar', 'squashfs', 'tar', 'tgz', 'zip']]
     supported_tmp.append(compression_exts)
     
+    # if the function is meant to return a converter for a in/output pair
     if get_conv_for_ext:
         if ext[0] in ffmpeg_conversions[0] and ext[1] in ffmpeg_conversions[1]:
             return "ffmpeg"
@@ -174,7 +188,6 @@ def get_all_conversions(get_conv_for_ext = False, ext = ["",""]):
 
 def get_ext_conversions(extension):
     possible_conversions = []
-    # TODO: get_all_conversions is SLOW, run at start once
     all_conversions = get_all_conversions()
     for converter in all_conversions:
         if extension in converter[0]:

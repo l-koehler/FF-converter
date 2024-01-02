@@ -53,7 +53,8 @@ class DynamicTab(QWidget):
                 if input_file_ext in conv[0]:
                     possible_outputs += conv[1]
         # dedupe list
-        possible_outputs = list(dict.fromkeys(possible_outputs))   
+        possible_outputs = list(dict.fromkeys(possible_outputs))  
+        print(possible_outputs)
         self.extQCB.addItems(sorted(possible_outputs))
 
     def ok_to_continue(self):
