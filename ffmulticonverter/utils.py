@@ -100,6 +100,8 @@ def get_all_conversions(get_conv_for_ext = False, ext = ["",""], missing = []):
                 ffmpeg_output += extension
         ffmpeg_conversions = [ffmpeg_input, ffmpeg_output]
         supported_tmp.append(ffmpeg_conversions)
+    else:
+        ffmpeg_conversions = [[], []]
     
     # poll pandoc
     if 'pandoc' not in missing:
@@ -117,6 +119,8 @@ def get_all_conversions(get_conv_for_ext = False, ext = ["",""], missing = []):
             out_format_list.append('md')
         pandoc_conversions = [in_format_list, out_format_list]
         supported_tmp.append(pandoc_conversions)
+    else:
+        pandoc_conversions = [[], []]
     
     # poll magick
     # TODO: clean this mess (but it works)
@@ -147,6 +151,8 @@ def get_all_conversions(get_conv_for_ext = False, ext = ["",""], missing = []):
                 out_formats.append(file_format)
         magick_conversions = [in_formats, out_formats]
         supported_tmp.append(magick_conversions)
+    else:
+        magick_conversions = [[], []]
     
     # libreoffice exts
     # cant actually get those right now, so have some predefined lists instead
@@ -163,6 +169,11 @@ def get_all_conversions(get_conv_for_ext = False, ext = ["",""], missing = []):
         supported_tmp.append(img)
         supported_tmp.append(slide)
         supported_tmp.append(text)
+    else:
+        calc = [[], []]
+        img = [[], []]
+        slide = [[], []]
+        text = [[], []]
     
     # compression exts
     # same as above
@@ -170,9 +181,10 @@ def get_all_conversions(get_conv_for_ext = False, ext = ["",""], missing = []):
         compression_exts = [['deb', 'a', 'ar', 'o', 'so', 'sqfs', 'squashfs', 'snap', 'tgz', 'tar.gz', 'tar'],
                             ['ar', 'squashfs', 'tar', 'tgz', 'zip']]
         supported_tmp.append(compression_exts)
+    else:
+        compression_exts = [[], []]
     
     # if the function is meant to return a converter for a in/output pair
-    # TODO: This still assumes all dependencies are present
     if get_conv_for_ext:
         if ext[0] in ffmpeg_conversions[0] and ext[1] in ffmpeg_conversions[1]:
             return "ffmpeg"
