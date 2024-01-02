@@ -211,12 +211,14 @@ class MainWindow(QMainWindow):
         self.setWindowTitle('Multi-Converter')
 
         self.load_settings()
-        self.check_for_dependencies()
+        missing = self.check_for_dependencies()
 
         self.audiovideo_tab.set_default_command()
         self.image_tab.set_default_command()
         self.toQLE.setText(self.default_output)
-        self.all_supported_conversions = utils.get_all_conversions()
+        
+        if not missing:
+            self.all_supported_conversions = utils.get_all_conversions()
         
         self.filesList_update()
 
@@ -261,6 +263,7 @@ class MainWindow(QMainWindow):
             missing = ', '.join(missing)
             status = self.tr('Missing dependencies:') + ' ' + missing
             self.dependenciesQL.setText(status)
+        return missing
 
     def load_settings(self):
         settings = QSettings()

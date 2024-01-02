@@ -58,7 +58,7 @@ def is_installed(program):
         return is_installed('convert')
     return ''
 
-def get_all_conversions(get_conv_for_ext = False, ext = ["",""]):
+def get_all_conversions(get_conv_for_ext = False, ext = ["",""], missing = []):
     """
     generates a nested list. how to access:
     supported_tmp[converter_index][in/out] = [types]
@@ -76,97 +76,103 @@ def get_all_conversions(get_conv_for_ext = False, ext = ["",""]):
     """
     supported_tmp = []
     # poll ffmpeg
-    completed_process = subprocess.run(['ffmpeg', '-formats'],
-                                   capture_output=True, text=True)
-    ffmpeg_stdout = completed_process.stdout
-    ffmpeg_input, ffmpeg_output = [], []
-    ffmpeg_stdout_lines = ffmpeg_stdout.splitlines()
-    for line in ffmpeg_stdout_lines:
-        line_args = line.split()
-        action = line_args[0]
-        
-        # dont run on the header lines
-        pattern = r'^\s*(DE|D|E)\s+(\S+)'
-        match = re.match(pattern, line)
-        if not match:
-            continue
-        
-        # line_args[1] can be "ext" or "ext1,ext2", so a split is neccesary
-        extension = line_args[1].split(',')
-        if 'D' in action:
-            ffmpeg_input += extension
-        if 'E' in action:
-            ffmpeg_output += extension
-    ffmpeg_conversions = [ffmpeg_input, ffmpeg_output]
-    supported_tmp.append(ffmpeg_conversions)
+    if 'ffmpeg' not in missing:
+        completed_process = subprocess.run(['ffmpeg', '-formats'],
+                                    capture_output=True, text=True)
+        ffmpeg_stdout = completed_process.stdout
+        ffmpeg_input, ffmpeg_output = [], []
+        ffmpeg_stdout_lines = ffmpeg_stdout.splitlines()
+        for line in ffmpeg_stdout_lines:
+            line_args = line.split()
+            action = line_args[0]
+            
+            # dont run on the header lines
+            pattern = r'^\s*(DE|D|E)\s+(\S+)'
+            match = re.match(pattern, line)
+            if not match:
+                continue
+            
+            # line_args[1] can be "ext" or "ext1,ext2", so a split is neccesary
+            extension = line_args[1].split(',')
+            if 'D' in action:
+                ffmpeg_input += extension
+            if 'E' in action:
+                ffmpeg_output += extension
+        ffmpeg_conversions = [ffmpeg_input, ffmpeg_output]
+        supported_tmp.append(ffmpeg_conversions)
     
     # poll pandoc
-    completed_process = subprocess.run(['pandoc', '--list-input-formats'],
-                                       capture_output=True, text=True)
-    in_formats = completed_process.stdout
-    in_format_list = in_formats.split('\n')
-    if 'markdown' in in_format_list:
-        in_format_list.append('md')
-    completed_process = subprocess.run(['pandoc', '--list-output-formats'],
-                                       capture_output=True, text=True)
-    out_formats = completed_process.stdout
-    out_format_list = out_formats.split('\n')
-    if 'markdown' in out_format_list:
-        out_format_list.append('md')
-    pandoc_conversions = [in_format_list, out_format_list]
-    supported_tmp.append(pandoc_conversions)
+    if 'pandoc' not in missing:
+        completed_process = subprocess.run(['pandoc', '--list-input-formats'],
+                                        capture_output=True, text=True)
+        in_formats = completed_process.stdout
+        in_format_list = in_formats.split('\n')
+        if 'markdown' in in_format_list:
+            in_format_list.append('md')
+        completed_process = subprocess.run(['pandoc', '--list-output-formats'],
+                                        capture_output=True, text=True)
+        out_formats = completed_process.stdout
+        out_format_list = out_formats.split('\n')
+        if 'markdown' in out_format_list:
+            out_format_list.append('md')
+        pandoc_conversions = [in_format_list, out_format_list]
+        supported_tmp.append(pandoc_conversions)
     
     # poll magick
     # TODO: clean this mess (but it works)
-    completed_process = subprocess.run(['magick', 'identify', '-list', 'format'],
-                                       capture_output=True, text=True)
-    magick_formats = completed_process.stdout
-    magick_format_list = magick_formats.split('\n')
-    in_formats = []
-    out_formats = []
-    for line in magick_format_list:
-        if '-'*len(line) == line:
-            continue
-        line_words = line.strip().split(' ')
-        line_words = list(filter(None, line_words))
-        if line_words == []:
-            continue
-        if not set(line_words[0]) <= set('ABCDEFTGHIJKLMNOPQRSTUVWXYZ*-'):
-            continue
-        file_format = line_words[0].replace("*","").lower()
-        rw_status = line_words[2].replace("-","").replace("+","")
-        if rw_status == "rw":
-            in_formats.append(file_format)
-            out_formats.append(file_format)
-        elif rw_status == "r":
-            in_formats.append(file_format)
-        elif rw_status == "w":
-            out_formats.append(file_format)
-    magick_conversions = [in_formats, out_formats]
-    supported_tmp.append(magick_conversions)
+    if 'imagemagick' not in missing:
+        completed_process = subprocess.run(['magick', 'identify', '-list', 'format'],
+                                        capture_output=True, text=True)
+        magick_formats = completed_process.stdout
+        magick_format_list = magick_formats.split('\n')
+        in_formats = []
+        out_formats = []
+        for line in magick_format_list:
+            if '-'*len(line) == line:
+                continue
+            line_words = line.strip().split(' ')
+            line_words = list(filter(None, line_words))
+            if line_words == []:
+                continue
+            if not set(line_words[0]) <= set('ABCDEFTGHIJKLMNOPQRSTUVWXYZ*-'):
+                continue
+            file_format = line_words[0].replace("*","").lower()
+            rw_status = line_words[2].replace("-","").replace("+","")
+            if rw_status == "rw":
+                in_formats.append(file_format)
+                out_formats.append(file_format)
+            elif rw_status == "r":
+                in_formats.append(file_format)
+            elif rw_status == "w":
+                out_formats.append(file_format)
+        magick_conversions = [in_formats, out_formats]
+        supported_tmp.append(magick_conversions)
     
     # libreoffice exts
     # cant actually get those right now, so have some predefined lists instead
-    calc  = [['csv', 'xls', 'xml', 'xlsx', 'ods', 'sdc'],
-             ['csv', 'html', 'xls', 'xml', 'ods', 'sdc', 'xhtml']]
-    img   = [['eps', 'emf', 'gif', 'jpg', 'odd', 'png', 'tiff', 'bmp', 'webp'],
-             ['eps', 'emf', 'gif', 'html', 'jpg', 'odd', 'pdf', 'png', 'svg', 'tiff', 'bmp', 'xhtml', 'webp']]
-    slide = [['odp', 'ppt', 'pptx', 'sda'],
-             ['eps', 'gif', 'html', 'swf', 'odp', 'ppt', 'pdf', 'svg', 'sda', 'xml']]
-    text  = [['xml', 'html', 'doc', 'docx', 'odt', 'txt', 'rtf', 'sdw'],
-             ['bib', 'xml', 'html', 'ltx', 'doc', 'odt', 'txt', 'pdf', 'rtf', 'sdw']]
-    supported_tmp.append(calc)
-    supported_tmp.append(img)
-    supported_tmp.append(slide)
-    supported_tmp.append(text)
+    if 'unoconv' not in missing:
+        calc  = [['csv', 'xls', 'xml', 'xlsx', 'ods', 'sdc'],
+                ['csv', 'html', 'xls', 'xml', 'ods', 'sdc', 'xhtml']]
+        img   = [['eps', 'emf', 'gif', 'jpg', 'odd', 'png', 'tiff', 'bmp', 'webp'],
+                ['eps', 'emf', 'gif', 'html', 'jpg', 'odd', 'pdf', 'png', 'svg', 'tiff', 'bmp', 'xhtml', 'webp']]
+        slide = [['odp', 'ppt', 'pptx', 'sda'],
+                ['eps', 'gif', 'html', 'swf', 'odp', 'ppt', 'pdf', 'svg', 'sda', 'xml']]
+        text  = [['xml', 'html', 'doc', 'docx', 'odt', 'txt', 'rtf', 'sdw'],
+                ['bib', 'xml', 'html', 'ltx', 'doc', 'odt', 'txt', 'pdf', 'rtf', 'sdw']]
+        supported_tmp.append(calc)
+        supported_tmp.append(img)
+        supported_tmp.append(slide)
+        supported_tmp.append(text)
     
     # compression exts
     # same as above
-    compression_exts = [['deb', 'a', 'ar', 'o', 'so', 'sqfs', 'squashfs', 'snap', 'tgz', 'tar.gz', 'tar'],
-                        ['ar', 'squashfs', 'tar', 'tgz', 'zip']]
-    supported_tmp.append(compression_exts)
+    if 'tar/ar/zip/squashfs-tools' not in missing:
+        compression_exts = [['deb', 'a', 'ar', 'o', 'so', 'sqfs', 'squashfs', 'snap', 'tgz', 'tar.gz', 'tar'],
+                            ['ar', 'squashfs', 'tar', 'tgz', 'zip']]
+        supported_tmp.append(compression_exts)
     
     # if the function is meant to return a converter for a in/output pair
+    # TODO: This still assumes all dependencies are present
     if get_conv_for_ext:
         if ext[0] in ffmpeg_conversions[0] and ext[1] in ffmpeg_conversions[1]:
             return "ffmpeg"
