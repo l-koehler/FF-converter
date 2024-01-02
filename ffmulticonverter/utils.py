@@ -23,6 +23,7 @@ import sys
 import shlex
 import subprocess
 import time
+import string
 
 from PyQt5.QtCore import pyqtSignal, QSize, Qt
 from PyQt5.QtWidgets import (
@@ -123,7 +124,6 @@ def get_all_conversions(get_conv_for_ext = False, ext = ["",""], missing = []):
         pandoc_conversions = [[], []]
     
     # poll magick
-    # TODO: clean this mess (but it works)
     if 'imagemagick' not in missing:
         try:
             completed_process = subprocess.run(['magick', 'identify', '-list', 'format'],
@@ -137,22 +137,17 @@ def get_all_conversions(get_conv_for_ext = False, ext = ["",""], missing = []):
         in_formats = []
         out_formats = []
         for line in magick_format_list:
-            if '-'*len(line) == line:
+            line_args = line.split()
+            # if the line is empty or does not start with all-caps (EXTENSION)
+            if len(line_args) < 3 or set(line_args[0]) <= set(f'{string.ascii_uppercase}*-'):
                 continue
-            line_words = line.strip().split(' ')
-            line_words = list(filter(None, line_words))
-            if line_words == []:
+            file_format, module, rw_status = line_args[:3]
+            if module in ['BRAILLE', 'TXT', 'PDF']:
                 continue
-            if not set(line_words[0]) <= set('ABCDEFTGHIJKLMNOPQRSTUVWXYZ*-'):
-                continue
-            file_format = line_words[0].replace("*","").lower()
-            rw_status = line_words[2].replace("-","").replace("+","")
-            if rw_status == "rw":
+            
+            if "r" in rw_status:
                 in_formats.append(file_format)
-                out_formats.append(file_format)
-            elif rw_status == "r":
-                in_formats.append(file_format)
-            elif rw_status == "w":
+            if "w" in rw_status:
                 out_formats.append(file_format)
         magick_conversions = [in_formats, out_formats]
         supported_tmp.append(magick_conversions)
@@ -168,7 +163,7 @@ def get_all_conversions(get_conv_for_ext = False, ext = ["",""], missing = []):
                 ['eps', 'emf', 'gif', 'html', 'jpg', 'odd', 'pdf', 'png', 'svg', 'tiff', 'bmp', 'xhtml', 'webp']]
         slide = [['odp', 'ppt', 'pptx', 'sda'],
                 ['eps', 'gif', 'html', 'swf', 'odp', 'ppt', 'pdf', 'svg', 'sda', 'xml']]
-        text  = [['xml', 'html', 'doc', 'docx', 'odt', 'txt', 'rtf', 'sdw'],
+        text  = [['xml', 'html', 'doc', 'docx', 'odt', 'txt', 'rtf', 'sdw', 'pdf'],
                 ['bib', 'xml', 'html', 'ltx', 'doc', 'odt', 'txt', 'pdf', 'rtf', 'sdw']]
         supported_tmp.append(calc)
         supported_tmp.append(img)
