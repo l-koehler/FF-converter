@@ -53,6 +53,9 @@ def is_installed(program):
         fpath = os.path.join(path, program)
         if os.path.isfile(fpath) and os.access(fpath, os.X_OK):
             return fpath
+    # imagemagick 6 uses 'convert', version 7 uses 'magick'
+    if program == 'magick':
+        return is_installed('convert')
     return ''
 
 def get_all_conversions(get_conv_for_ext = False, ext = ["",""]):
