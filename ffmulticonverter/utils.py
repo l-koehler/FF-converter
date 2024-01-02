@@ -125,8 +125,13 @@ def get_all_conversions(get_conv_for_ext = False, ext = ["",""], missing = []):
     # poll magick
     # TODO: clean this mess (but it works)
     if 'imagemagick' not in missing:
-        completed_process = subprocess.run(['magick', 'identify', '-list', 'format'],
-                                        capture_output=True, text=True)
+        try:
+            completed_process = subprocess.run(['magick', 'identify', '-list', 'format'],
+                                            capture_output=True, text=True)
+        except FileNotFoundError:
+            # retry with convert
+            completed_process = subprocess.run(['convert', 'identify', '-list', 'format'],
+                                            capture_output=True, text=True)
         magick_formats = completed_process.stdout
         magick_format_list = magick_formats.split('\n')
         in_formats = []

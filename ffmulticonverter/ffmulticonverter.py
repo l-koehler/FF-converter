@@ -216,7 +216,7 @@ class MainWindow(QMainWindow):
         self.audiovideo_tab.set_default_command()
         self.image_tab.set_default_command()
         self.toQLE.setText(self.default_output)
-        
+
         self.all_supported_conversions = utils.get_all_conversions(missing=missing)
         
         self.filesList_update()
