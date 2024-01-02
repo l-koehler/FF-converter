@@ -68,6 +68,11 @@ image_extra_formats = [
         'ps3', 'sid', 'tiff'
         ]
 
+image_common_formats = [
+        'bmp', 'eps', 'gif', 'jpeg', 'jpg', 'pdf', 'png', 'tif', 'tiff', 'webp',
+        'ico'
+        ]
+
 #-----document data
 
 document_formats = [
@@ -85,12 +90,18 @@ markdown_formats = [
         'odf', 'opml', 'org', 'pdf', 'txt', 'pptx', 'rst', 'rtf', 'tei',
         'texinfo', 'textile', 'typst', 'xwiki', 'zim'
     ]
+common_markdown_formats = ['docx', 'dokuwiki', 'epub', 'epub2', 'epub3', 'html',
+                           'ipynb', 'json', 'ltx', 'man', 'md', 'odt', 'odf',
+                           'txt', 'pptx', 'rtf']
 
 #-----compression data
 
 compression_formats = [
         'ar', 'squashfs', 'tar', 'tgz', 'zip'
     ]
+
+#-----common formats (used for not displaying uncommon formats)
+common_formats = image_common_formats + document_formats + common_markdown_formats + video_formats
 
 #-----misc
 translators = [
