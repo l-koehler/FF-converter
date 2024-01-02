@@ -217,8 +217,7 @@ class MainWindow(QMainWindow):
         self.image_tab.set_default_command()
         self.toQLE.setText(self.default_output)
         
-        if not missing:
-            self.all_supported_conversions = utils.get_all_conversions()
+        self.all_supported_conversions = utils.get_all_conversions(missing=missing)
         
         self.filesList_update()
 
