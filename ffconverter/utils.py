@@ -143,11 +143,12 @@ def get_all_conversions(get_conv_for_ext = False, ext = ["",""], missing = []):
             if len(line_args) < 3 or set(line_args[0]) <= set(f'{string.ascii_uppercase}*-'):
                 continue
             file_format, module, rw_status = line_args[:3]
-            if module in ['BRAILLE', 'TXT', 'PDF']:
+            if module in ['BRAILLE', 'TXT']:
                 continue
             
             if "r" in rw_status:
-                in_formats.append(file_format)
+                if module not in ['PDF']: # the program will break trying to read some PDFs
+                    in_formats.append(file_format)
             if "w" in rw_status:
                 out_formats.append(file_format)
         magick_conversions = [in_formats, out_formats]

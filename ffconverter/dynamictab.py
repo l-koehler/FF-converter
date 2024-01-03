@@ -43,6 +43,7 @@ class DynamicTab(QWidget):
         
         # default to only common formats
         self.commonformatQChB.setChecked(True)
+        self.commonformatQChB.stateChanged.connect(parent.filesList_update)
 
     """
     This function is different from the other fill_extension_combobox functions,
