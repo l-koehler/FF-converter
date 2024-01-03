@@ -1,3 +1,15 @@
+Version 2.0.0
+-------------
+
+* Added pandoc, zip, tar, ar, squashfs-tools
+
+* Added "All Formats" tab
+
+* Removed "Documents" tab
+
+* Renamed all "ffmulticonverter" to "ffconverter" to allow having both the fork
+  and the original installed
+
 Version 1.8.0
 --------------
 

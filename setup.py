@@ -1,29 +1,31 @@
 #!/usr/bin/env python3
 
-import ffmulticonverter
+import ffconverter
 from distutils.core import setup
 
 
-data_files = [('share/applications/', ['share/ffmulticonverter.desktop']),
-              ('share/pixmaps/', ['share/ffmulticonverter.png']),
-              ('share/ffmulticonverter', ['share/presets.xml']),
-              ('share/man/man1', ['man/ffmulticonverter.1.gz'])]
+data_files = [('share/applications/', ['share/ffconverter.desktop']),
+              ('share/pixmaps/', ['share/ffconverter.png']),
+              ('share/ffconverter', ['share/presets.xml']),
+              ('share/man/man1', ['man/ffconverter.1.gz'])]
 
 setup(
-    name = ffmulticonverter.__name__,
-    packages = [ffmulticonverter.__name__],
-    scripts = ['bin/ffmulticonverter'],
+    name = ffconverter.__name__,
+    packages = [ffconverter.__name__],
+    scripts = ['bin/ffconverter'],
     data_files = data_files,
-    version = ffmulticonverter.__version__,
-    description = ffmulticonverter.__description__,
-    author = ffmulticonverter.__author__,
-    author_email = ffmulticonverter.__author_email__,
-    license = ffmulticonverter.__license__,
-    platforms = ffmulticonverter.__platforms__,
-    url = ffmulticonverter.__url__,
-    download_url = ffmulticonverter.__download_url__,
+    version = ffconverter.__version__,
+    description = ffconverter.__description__,
+    author = ffconverter.__author__,
+    author_email = ffconverter.__author_email__,
+    maintainer = ffconverter.__maintainer__,
+    maintainer_email = ffconverter.__maintainer_email__,
+    license = ffconverter.__license__,
+    platforms = ffconverter.__platforms__,
+    url = ffconverter.__url__,
     keywords = ['convert', 'file format', 'extension', 'audio', 'video',
-                'images', 'documents', 'ffmpeg', 'imagemagick', 'unoconv'],
+                'images', 'documents', 'ffmpeg', 'imagemagick', 'unoconv',
+                'pandoc'],
     classifiers = [
         'Programming Language :: Python',
         'Programming Language :: Python :: 3 :: Only',
@@ -57,7 +59,7 @@ setup(
         'Topic :: Multimedia :: Sound/Audio :: Conversion',
         'Topic :: Utilities'],
     long_description = """
-FF Multi Converter
+FF Converter
 -------------------
 
 Graphical application which enables you to convert audio, video, image and
@@ -72,6 +74,6 @@ Features:
  - Multilingual - over 20 languages.
 
 Requires: python3, pyqt5
-Optionally requires: ffmpeg, imagemagick, unoconv
+Optionally requires: ffmpeg, imagemagick, unoconv, pandoc, tar, ar, zip, squashfs-tools
 """
 )

@@ -1,0 +1,63 @@
+Metadata-Version: 2.1
+Name: ffconverter
+Version: 2.0.0
+Summary: File Format Converter with Qt GUI
+Home-page: https://github.com/l-koehler/FF-converter
+Author: Ilias Stamatis
+Author-email: stamatis.iliass@gmail.com
+Maintainer: l-koehler
+Maintainer-email: lorenz.koehler@posteo.de
+License: GNU GPL3
+Keywords: convert,file format,extension,audio,video,images,documents,ffmpeg,imagemagick,unoconv,pandoc
+Platform: Linux
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: License :: OSI Approved :: GNU General Public License (GPL)
+Classifier: License :: OSI Approved :: GNU General Public License v3 (GPLv3)
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Environment :: X11 Applications :: Qt
+Classifier: Natural Language :: English
+Classifier: Natural Language :: Bulgarian
+Classifier: Natural Language :: Catalan
+Classifier: Natural Language :: Chinese (Simplified)
+Classifier: Natural Language :: Czech
+Classifier: Natural Language :: French
+Classifier: Natural Language :: Italian
+Classifier: Natural Language :: Galician
+Classifier: Natural Language :: German
+Classifier: Natural Language :: Greek
+Classifier: Natural Language :: Hungarian
+Classifier: Natural Language :: Malay
+Classifier: Natural Language :: Polish
+Classifier: Natural Language :: Portuguese
+Classifier: Natural Language :: Portuguese (Brazilian)
+Classifier: Natural Language :: Romanian
+Classifier: Natural Language :: Russian
+Classifier: Natural Language :: Spanish
+Classifier: Natural Language :: Turkish
+Classifier: Natural Language :: Vietnamese
+Classifier: Intended Audience :: End Users/Desktop
+Classifier: Topic :: Multimedia :: Video :: Conversion
+Classifier: Topic :: Multimedia :: Sound/Audio :: Conversion
+Classifier: Topic :: Utilities
+License-File: COPYING
+License-File: AUTHORS
+
+
+FF Converter
+-------------------
+
+Graphical application which enables you to convert audio, video, image and
+document files between all popular formats using ffmpeg, unoconv, and ImageMagick.
+
+Features:
+ - Conversions for several file formats.
+ - Very easy to use interface.
+ - Access to common conversion options.
+ - Audio/video ffmpeg-presets management.
+ - Options for saving and naming files.
+ - Multilingual - over 20 languages.
+
+Requires: python3, pyqt5
+Optionally requires: ffmpeg, imagemagick, unoconv, pandoc, tar, ar, zip, squashfs-tools
