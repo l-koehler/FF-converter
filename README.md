@@ -23,13 +23,13 @@ options, for example flipping the image or selecting codecs, in the tabs.
 * tar, ar, squashfs-tools, zip (Compressed files)  
 
 #### Installation
-From this directory:  
+Install the 'ffconverter' package from PyPI.
+You can use 'pip' for that, but if using Debian or Arch (or if you prefer isolated packages in general), you
+should use 'pipx'.
 ```sh
-sudo pip install .
-```  
-Arch Linux will complain that the system is externally managed, bypass  
-this by passing --break-system-packages.  
-pip will also complain about sudo, but it doesn't work properly without it.  
+pipx install ffconverter
+```
+
 
 #### Uninstall
 From this directory:  
