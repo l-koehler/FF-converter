@@ -23,19 +23,20 @@ options, for example flipping the image or selecting codecs, in the tabs.
 * tar, ar, squashfs-tools, zip (Compressed files)  
 
 #### Installation
-Install the 'ffconverter' package from PyPI.
-You can use 'pip' for that, but if using Debian or Arch (or if you prefer isolated packages in general), you
-should use 'pipx'.
+Install the `ffconverter` package from PyPI.
+`pip` works, I did not test it with all the other options. Maybe its an issue on
+my device, but `pipx` does not seem to work at the moment.
 ```sh
-pipx install ffconverter
+pip install ffconverter
 ```
 
 
 #### Uninstall
-From this directory:  
+Simply run:
 ```sh
-sudo pip uninstall ffmulticonverter
+pip uninstall ffmulticonverter
 ```
+Adjust this command if you used something other than `pip` to install.
 
 #### Run without installing
 You can launch the application without installing it  
