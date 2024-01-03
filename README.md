@@ -23,20 +23,32 @@ options, for example flipping the image or selecting codecs, in the tabs.
 * tar, ar, squashfs-tools, zip (Compressed files)  
 
 #### Installation
-Install the `ffconverter` package from PyPI.
-`pip` works, I did not test it with all the other options. Maybe its an issue on
-my device, but `pipx` does not seem to work at the moment.
+Install the `ffconverter` package from PyPI.  
+`pip` works on most distros and should be the simplest choice.
 ```sh
 pip install ffconverter
 ```
 
+#### Troubleshooting
+On some distros (externally managed environments, Arch, Debian),  
+`pip` will not work. In this case, you should use `pipx`.  
+```sh
+sudo PIPX_HOME=/usr/local/pipx PIPX_BIN_DIR=/usr/local/bin pipx install --system-site-packages ffconverter
+```
+In some cases, the program might not appear in your installed applications, but  
+the `ffconverter` command will be available. In this case, run:
+```sh
+wget https://raw.githubusercontent.com/l-koehler/FF-converter/master/share/ffconverter.desktop -O ~/.local/share/applications/ffconverter.desktop
+```
+This command should add ffconverter to your installed applications, so you can  
+access the program without the terminal.
 
 #### Uninstall
-Simply run:
+Simply run:  
 ```sh
 pip uninstall ffmulticonverter
 ```
-Adjust this command if you used something other than `pip` to install.
+Adjust this command if you used something other than `pip` to install.  
 
 #### Run without installing
 You can launch the application without installing it  
