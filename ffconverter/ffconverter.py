@@ -475,6 +475,7 @@ def main():
     app.setWindowIcon(QIcon(':/ffconverter.png'))
 
     locale = QLocale.system().name()
+
     qtTranslator = QTranslator()
     if qtTranslator.load('qt_' + locale, ':/'):
         app.installTranslator(qtTranslator)
