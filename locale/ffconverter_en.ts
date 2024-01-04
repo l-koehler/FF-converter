@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1">
+<TS version="2.1" language="en">
 <context>
     <name>AboutDialog</name>
     <message>
         <location filename="../ffconverter/about_dlg.py" line="41"/>
         <source>&amp;Close</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Close</translation>
     </message>
     <message>
         <location filename="../ffconverter/about_dlg.py" line="54"/>
         <source>About FF Multi Converter</source>
-        <translation type="unfinished"></translation>
+        <translation>About FF Multi Converter</translation>
     </message>
     <message>
         <location filename="../ffconverter/about_dlg.py" line="40"/>
         <source>C&amp;redits</source>
-        <translation type="unfinished"></translation>
+        <translation>C&amp;redits</translation>
     </message>
 </context>
 <context>
@@ -24,67 +24,67 @@
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="387"/>
         <source>Preset name (one word, A-z, 0-9)</source>
-        <translation type="unfinished"></translation>
+        <translation>Preset name (one word, A-z, 0-9)</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="389"/>
         <source>Preset label</source>
-        <translation type="unfinished"></translation>
+        <translation>Preset label</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="391"/>
         <source>Preset command line parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Preset command line parameters</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="393"/>
         <source>Output file extension</source>
-        <translation type="unfinished"></translation>
+        <translation>Output file extension</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="419"/>
         <source>Add preset</source>
-        <translation type="unfinished"></translation>
+        <translation>Add preset</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="480"/>
         <source>Error!</source>
-        <translation type="unfinished"></translation>
+        <translation>Error!</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="440"/>
         <source>Preset name can&apos;t be left blank.</source>
-        <translation type="unfinished"></translation>
+        <translation>Preset name can&apos;t be left blank.</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="459"/>
         <source>Preset label can&apos;t be left blank.</source>
-        <translation type="unfinished"></translation>
+        <translation>Preset label can&apos;t be left blank.</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="466"/>
         <source>Command label can&apos;t be left blank.</source>
-        <translation type="unfinished"></translation>
+        <translation>Command label can&apos;t be left blank.</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="473"/>
         <source>Extension label can&apos;t be left blank.</source>
-        <translation type="unfinished"></translation>
+        <translation>Extension label can&apos;t be left blank.</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="417"/>
         <source>Edit {0}</source>
-        <translation type="unfinished"></translation>
+        <translation>Edit {0}</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="480"/>
         <source>Extension must be one word and must not start with a  dot.</source>
-        <translation type="unfinished"></translation>
+        <translation>Extension must be one word and must not start with a dot.</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="448"/>
         <source>Preset name must be one word, start with a letter and contain only letters, digits, underscores, hyphens, colons and periods. It cannot also start with xml.</source>
-        <translation type="unfinished"></translation>
+        <translation>Preset name must be one word, start with a letter and contain only letters, digits, underscores, hyphens, colons and periods. It cannot also start with xml.</translation>
     </message>
 </context>
 <context>
@@ -92,137 +92,137 @@
     <message>
         <location filename="../ffconverter/audiovideotab.py" line="63"/>
         <source>Convert to:</source>
-        <translation type="unfinished"></translation>
+        <translation>Convert to:</translation>
     </message>
     <message>
         <location filename="../ffconverter/audiovideotab.py" line="77"/>
         <source>Command:</source>
-        <translation type="unfinished"></translation>
+        <translation>Command:</translation>
     </message>
     <message>
         <location filename="../ffconverter/audiovideotab.py" line="79"/>
         <source>Preset</source>
-        <translation type="unfinished"></translation>
+        <translation>Preset</translation>
     </message>
     <message>
         <location filename="../ffconverter/audiovideotab.py" line="38"/>
         <source>Default</source>
-        <translation type="unfinished"></translation>
+        <translation>Default</translation>
     </message>
     <message>
         <location filename="../ffconverter/audiovideotab.py" line="85"/>
         <source>Video Size:</source>
-        <translation type="unfinished"></translation>
+        <translation>Video Size:</translation>
     </message>
     <message>
         <location filename="../ffconverter/audiovideotab.py" line="86"/>
         <source>Aspect:</source>
-        <translation type="unfinished"></translation>
+        <translation>Aspect:</translation>
     </message>
     <message>
         <location filename="../ffconverter/audiovideotab.py" line="87"/>
         <source>Frame Rate (fps):</source>
-        <translation type="unfinished"></translation>
+        <translation>Frame Rate (fps):</translation>
     </message>
     <message>
         <location filename="../ffconverter/audiovideotab.py" line="88"/>
         <source>Video Bitrate (kbps):</source>
-        <translation type="unfinished"></translation>
+        <translation>Video Bitrate (kbps):</translation>
     </message>
     <message>
         <location filename="../ffconverter/audiovideotab.py" line="126"/>
         <source>Frequency (Hz):</source>
-        <translation type="unfinished"></translation>
+        <translation>Frequency (Hz):</translation>
     </message>
     <message>
         <location filename="../ffconverter/audiovideotab.py" line="128"/>
         <source>Audio Bitrate (kbps):</source>
-        <translation type="unfinished"></translation>
+        <translation>Audio Bitrate (kbps):</translation>
     </message>
     <message>
         <location filename="../ffconverter/audiovideotab.py" line="281"/>
         <source>Error!</source>
-        <translation type="unfinished"></translation>
+        <translation>Error!</translation>
     </message>
     <message>
         <location filename="../ffconverter/audiovideotab.py" line="111"/>
         <source>Preserve aspect ratio</source>
-        <translation type="unfinished"></translation>
+        <translation>Preserve aspect ratio</translation>
     </message>
     <message>
         <location filename="../ffconverter/audiovideotab.py" line="112"/>
         <source>Preserve video size</source>
-        <translation type="unfinished"></translation>
+        <translation>Preserve video size</translation>
     </message>
     <message>
         <location filename="../ffconverter/audiovideotab.py" line="127"/>
         <source>Audio Channels:</source>
-        <translation type="unfinished"></translation>
+        <translation>Audio Channels:</translation>
     </message>
     <message>
         <location filename="../ffconverter/audiovideotab.py" line="159"/>
         <source>Split file. Begin time</source>
-        <translation type="unfinished"></translation>
+        <translation>Split file. Begin time</translation>
     </message>
     <message>
         <location filename="../ffconverter/audiovideotab.py" line="161"/>
         <source>Duration</source>
-        <translation type="unfinished"></translation>
+        <translation>Duration</translation>
     </message>
     <message>
         <location filename="../ffconverter/audiovideotab.py" line="167"/>
         <source>Embed subtitle:</source>
-        <translation type="unfinished"></translation>
+        <translation>Embed subtitle:</translation>
     </message>
     <message>
         <location filename="../ffconverter/audiovideotab.py" line="172"/>
         <source>Rotate:</source>
-        <translation type="unfinished"></translation>
+        <translation>Rotate:</translation>
     </message>
     <message>
         <location filename="../ffconverter/audiovideotab.py" line="287"/>
         <source>Choose File</source>
-        <translation type="unfinished"></translation>
+        <translation>Choose File</translation>
     </message>
     <message>
         <location filename="../ffconverter/audiovideotab.py" line="46"/>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>None</translation>
     </message>
     <message>
         <location filename="../ffconverter/audiovideotab.py" line="48"/>
         <source>clockwise</source>
-        <translation type="unfinished"></translation>
+        <translation>clockwise</translation>
     </message>
     <message>
         <location filename="../ffconverter/audiovideotab.py" line="54"/>
         <source>vertical flip</source>
-        <translation type="unfinished"></translation>
+        <translation>vertical flip</translation>
     </message>
     <message>
         <location filename="../ffconverter/audiovideotab.py" line="50"/>
         <source>counter clockwise</source>
-        <translation type="unfinished"></translation>
+        <translation>counter clockwise</translation>
     </message>
     <message>
         <location filename="../ffconverter/audiovideotab.py" line="53"/>
         <source>horizontal flip</source>
-        <translation type="unfinished"></translation>
+        <translation>horizontal flip</translation>
     </message>
     <message>
         <location filename="../ffconverter/audiovideotab.py" line="129"/>
         <source>Threads:</source>
-        <translation type="unfinished"></translation>
+        <translation>Threads:</translation>
     </message>
     <message>
         <location filename="../ffconverter/audiovideotab.py" line="39"/>
         <source>Disable</source>
-        <translation type="unfinished"></translation>
+        <translation>Disable</translation>
     </message>
     <message>
         <location filename="../ffconverter/audiovideotab.py" line="281"/>
         <source>FFmpeg is not installed!</source>
-        <translation type="unfinished"></translation>
+        <translation>FFmpeg is not installed!</translation>
     </message>
 </context>
 <context>
@@ -230,22 +230,22 @@
     <message>
         <location filename="../ffconverter/about_dlg.py" line="72"/>
         <source>Written by</source>
-        <translation type="unfinished"></translation>
+        <translation>Written by</translation>
     </message>
     <message>
         <location filename="../ffconverter/about_dlg.py" line="73"/>
         <source>Translated by</source>
-        <translation type="unfinished"></translation>
+        <translation>Translated by</translation>
     </message>
     <message>
         <location filename="../ffconverter/about_dlg.py" line="74"/>
         <source>&amp;Close</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Close</translation>
     </message>
     <message>
         <location filename="../ffconverter/about_dlg.py" line="84"/>
         <source>Credits</source>
-        <translation type="unfinished"></translation>
+        <translation>Credits</translation>
     </message>
 </context>
 <context>
@@ -253,12 +253,12 @@
     <message>
         <location filename="../ffconverter/dynamictab.py" line="34"/>
         <source>Only show common formats</source>
-        <translation type="unfinished"></translation>
+        <translation>Only show common formats</translation>
     </message>
     <message>
         <location filename="../ffconverter/dynamictab.py" line="35"/>
         <source>Convert to:</source>
-        <translation type="unfinished"></translation>
+        <translation>Convert to:</translation>
     </message>
 </context>
 <context>
@@ -266,62 +266,62 @@
     <message>
         <location filename="../ffconverter/imagetab.py" line="38"/>
         <source>Convert to:</source>
-        <translation type="unfinished"></translation>
+        <translation>Convert to:</translation>
     </message>
     <message>
         <location filename="../ffconverter/imagetab.py" line="46"/>
         <source>Image Size:</source>
-        <translation type="unfinished"></translation>
+        <translation>Image Size:</translation>
     </message>
     <message>
         <location filename="../ffconverter/imagetab.py" line="110"/>
         <source>Error!</source>
-        <translation type="unfinished"></translation>
+        <translation>Error!</translation>
     </message>
     <message>
         <location filename="../ffconverter/imagetab.py" line="110"/>
         <source>The size LineEdit may not be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>The size LineEdit may not be empty.</translation>
     </message>
     <message>
         <location filename="../ffconverter/imagetab.py" line="57"/>
         <source>Maintain aspect ratio</source>
-        <translation type="unfinished"></translation>
+        <translation>Maintain aspect ratio</translation>
     </message>
     <message>
         <location filename="../ffconverter/imagetab.py" line="40"/>
         <source>Extra options:</source>
-        <translation type="unfinished"></translation>
+        <translation>Extra options:</translation>
     </message>
     <message>
         <location filename="../ffconverter/imagetab.py" line="58"/>
         <source>Auto-crop</source>
-        <translation type="unfinished"></translation>
+        <translation>Auto-crop</translation>
     </message>
     <message>
         <location filename="../ffconverter/imagetab.py" line="62"/>
         <source>Rotate</source>
-        <translation type="unfinished"></translation>
+        <translation>Rotate</translation>
     </message>
     <message>
         <location filename="../ffconverter/imagetab.py" line="62"/>
         <source>degrees - clockwise</source>
-        <translation type="unfinished"></translation>
+        <translation>degrees - clockwise</translation>
     </message>
     <message>
         <location filename="../ffconverter/imagetab.py" line="66"/>
         <source>Vertical flip</source>
-        <translation type="unfinished"></translation>
+        <translation>Vertical flip</translation>
     </message>
     <message>
         <location filename="../ffconverter/imagetab.py" line="67"/>
         <source>Horizontal flip</source>
-        <translation type="unfinished"></translation>
+        <translation>Horizontal flip</translation>
     </message>
     <message>
         <location filename="../ffconverter/imagetab.py" line="106"/>
         <source>ImageMagick is not installed!</source>
-        <translation type="unfinished"></translation>
+        <translation>ImageMagick is not installed!</translation>
     </message>
 </context>
 <context>
@@ -329,218 +329,219 @@
     <message>
         <location filename="../ffconverter/ffconverter.py" line="69"/>
         <source>Output folder:</source>
-        <translation type="unfinished"></translation>
+        <translation>Output folder:</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="92"/>
         <source>Delete original</source>
-        <translation type="unfinished"></translation>
+        <translation>Delete original</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="93"/>
         <source>&amp;Convert</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Convert</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="107"/>
         <source>Open</source>
-        <translation type="unfinished"></translation>
+        <translation>Open</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="107"/>
         <source>Open a file</source>
-        <translation type="unfinished"></translation>
+        <translation>Open a file</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="111"/>
         <source>Convert</source>
-        <translation type="unfinished"></translation>
+        <translation>Convert</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="111"/>
         <source>Convert files</source>
-        <translation type="unfinished"></translation>
+        <translation>Convert files</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="115"/>
         <source>Quit</source>
-        <translation type="unfinished"></translation>
+        <translation>Quit</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="119"/>
         <source>Edit Presets</source>
-        <translation type="unfinished"></translation>
+        <translation>Edit Presets</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="123"/>
         <source>Import</source>
-        <translation type="unfinished"></translation>
+        <translation>Import</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="123"/>
         <source>Import presets</source>
-        <translation type="unfinished"></translation>
+        <translation>Import presets</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="127"/>
         <source>Export</source>
-        <translation type="unfinished"></translation>
+        <translation>Export</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="127"/>
         <source>Export presets</source>
-        <translation type="unfinished"></translation>
+        <translation>Export presets</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="131"/>
         <source>Reset</source>
-        <translation type="unfinished"></translation>
+        <translation>Reset</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="131"/>
         <source>Reset presets</source>
-        <translation type="unfinished"></translation>
+        <translation>Reset presets</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="62"/>
         <source>Clear</source>
-        <translation type="unfinished"></translation>
+        <translation>Clear</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="143"/>
         <source>Clear form</source>
-        <translation type="unfinished"></translation>
+        <translation>Clear form</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="147"/>
         <source>Preferences</source>
-        <translation type="unfinished"></translation>
+        <translation>Preferences</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="171"/>
         <source>About</source>
-        <translation type="unfinished"></translation>
+        <translation>About</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="176"/>
         <source>File</source>
-        <translation type="unfinished"></translation>
+        <translation>File</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="177"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Edit</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="178"/>
         <source>Presets</source>
-        <translation type="unfinished"></translation>
+        <translation>Presets</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="179"/>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Help</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="314"/>
         <source>Choose File</source>
-        <translation type="unfinished"></translation>
+        <translation>Choose File</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="357"/>
         <source>Choose output destination</source>
-        <translation type="unfinished"></translation>
+        <translation>Choose output destination</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="395"/>
         <source>You must choose an output folder!</source>
-        <translation type="unfinished"></translation>
+        <translation>You must choose an output folder!</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="399"/>
         <source>Output folder does not exists!</source>
-        <translation type="unfinished"></translation>
+        <translation>Output folder does not exists!</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="405"/>
         <source>Error!</source>
-        <translation type="unfinished"></translation>
+        <translation>Error!</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="263"/>
         <source>Missing dependencies:</source>
-        <translation type="unfinished"></translation>
+        <translation>Missing dependencies:</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="60"/>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation>Add</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="61"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Delete</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="143"/>
         <source>Clear All</source>
-        <translation type="unfinished"></translation>
+        <translation>Clear All</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="392"/>
         <source>You must add at least one file to convert!</source>
-        <translation type="unfinished"></translation>
+        <translation>You must add at least one file to convert!</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="90"/>
         <source>Save each file in the same
 folder as input file</source>
-        <translation type="unfinished"></translation>
+        <translation>Save each file in the same
+folder as input file</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="135"/>
         <source>Synchronize</source>
-        <translation type="unfinished"></translation>
+        <translation>Synchronize</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="135"/>
         <source>Synchronize presets</source>
-        <translation type="unfinished"></translation>
+        <translation>Synchronize presets</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="139"/>
         <source>Remove old</source>
-        <translation type="unfinished"></translation>
+        <translation>Remove old</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="139"/>
         <source>Remove old presets</source>
-        <translation type="unfinished"></translation>
+        <translation>Remove old presets</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="166"/>
         <source>documentation</source>
-        <translation type="unfinished"></translation>
+        <translation>documentation</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="447"/>
         <source>Convert among several file types to other formats</source>
-        <translation type="unfinished"></translation>
+        <translation>Convert among several file types to other formats</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="82"/>
         <source>All Formats</source>
-        <translation type="unfinished"></translation>
+        <translation>All Formats</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="82"/>
         <source>Audio/Video Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Audio/Video Settings</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="83"/>
         <source>Image Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Image Settings</translation>
     </message>
 </context>
 <context>
@@ -548,112 +549,112 @@ folder as input file</source>
     <message>
         <location filename="../ffconverter/preferences_dlg.py" line="36"/>
         <source>Save files</source>
-        <translation type="unfinished"></translation>
+        <translation>Save files</translation>
     </message>
     <message>
         <location filename="../ffconverter/preferences_dlg.py" line="37"/>
         <source>Existing files:</source>
-        <translation type="unfinished"></translation>
+        <translation>Existing files:</translation>
     </message>
     <message>
         <location filename="../ffconverter/preferences_dlg.py" line="38"/>
         <source>Add &apos;~&apos; prefix</source>
-        <translation type="unfinished"></translation>
+        <translation>Add &apos;~&apos; prefix</translation>
     </message>
     <message>
         <location filename="../ffconverter/preferences_dlg.py" line="39"/>
         <source>Overwrite</source>
-        <translation type="unfinished"></translation>
+        <translation>Overwrite</translation>
     </message>
     <message>
         <location filename="../ffconverter/preferences_dlg.py" line="43"/>
         <source>Default output destination:</source>
-        <translation type="unfinished"></translation>
+        <translation>Default output destination:</translation>
     </message>
     <message>
         <location filename="../ffconverter/preferences_dlg.py" line="49"/>
         <source>Name files</source>
-        <translation type="unfinished"></translation>
+        <translation>Name files</translation>
     </message>
     <message>
         <location filename="../ffconverter/preferences_dlg.py" line="50"/>
         <source>Prefix:</source>
-        <translation type="unfinished"></translation>
+        <translation>Prefix:</translation>
     </message>
     <message>
         <location filename="../ffconverter/preferences_dlg.py" line="51"/>
         <source>Suffix:</source>
-        <translation type="unfinished"></translation>
+        <translation>Suffix:</translation>
     </message>
     <message>
         <location filename="../ffconverter/preferences_dlg.py" line="70"/>
         <source>Default command:</source>
-        <translation type="unfinished"></translation>
+        <translation>Default command:</translation>
     </message>
     <message>
         <location filename="../ffconverter/preferences_dlg.py" line="137"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>General</translation>
     </message>
     <message>
         <location filename="../ffconverter/preferences_dlg.py" line="138"/>
         <source>Audio/Video</source>
-        <translation type="unfinished"></translation>
+        <translation>Audio/Video</translation>
     </message>
     <message>
         <location filename="../ffconverter/preferences_dlg.py" line="157"/>
         <source>Preferences</source>
-        <translation type="unfinished"></translation>
+        <translation>Preferences</translation>
     </message>
     <message>
         <location filename="../ffconverter/preferences_dlg.py" line="208"/>
         <source>Choose default output destination</source>
-        <translation type="unfinished"></translation>
+        <translation>Choose default output destination</translation>
     </message>
     <message>
         <location filename="../ffconverter/preferences_dlg.py" line="73"/>
         <source>Video codecs</source>
-        <translation type="unfinished"></translation>
+        <translation>Video codecs</translation>
     </message>
     <message>
         <location filename="../ffconverter/preferences_dlg.py" line="76"/>
         <source>Audio codecs</source>
-        <translation type="unfinished"></translation>
+        <translation>Audio codecs</translation>
     </message>
     <message>
         <location filename="../ffconverter/preferences_dlg.py" line="118"/>
         <source>Extra formats</source>
-        <translation type="unfinished"></translation>
+        <translation>Extra formats</translation>
     </message>
     <message>
         <location filename="../ffconverter/preferences_dlg.py" line="89"/>
         <source>Default video codecs</source>
-        <translation type="unfinished"></translation>
+        <translation>Default video codecs</translation>
     </message>
     <message>
         <location filename="../ffconverter/preferences_dlg.py" line="90"/>
         <source>Default audio codecs</source>
-        <translation type="unfinished"></translation>
+        <translation>Default audio codecs</translation>
     </message>
     <message>
         <location filename="../ffconverter/preferences_dlg.py" line="102"/>
         <source>Default options:</source>
-        <translation type="unfinished"></translation>
+        <translation>Default options:</translation>
     </message>
     <message>
         <location filename="../ffconverter/preferences_dlg.py" line="139"/>
         <source>Images</source>
-        <translation type="unfinished"></translation>
+        <translation>Images</translation>
     </message>
     <message>
         <location filename="../ffconverter/preferences_dlg.py" line="67"/>
         <source>Path to executable:</source>
-        <translation type="unfinished"></translation>
+        <translation>Path to executable:</translation>
     </message>
     <message>
         <location filename="../ffconverter/preferences_dlg.py" line="140"/>
         <source>Documents</source>
-        <translation type="unfinished"></translation>
+        <translation>Documents</translation>
     </message>
 </context>
 <context>
@@ -661,57 +662,57 @@ folder as input file</source>
     <message>
         <location filename="../ffconverter/progress.py" line="73"/>
         <source>In progress: </source>
-        <translation type="unfinished"></translation>
+        <translation>In progress: </translation>
     </message>
     <message>
         <location filename="../ffconverter/progress.py" line="78"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Cancel</translation>
     </message>
     <message>
         <location filename="../ffconverter/progress.py" line="80"/>
         <source>Details</source>
-        <translation type="unfinished"></translation>
+        <translation>Details</translation>
     </message>
     <message>
         <location filename="../ffconverter/progress.py" line="111"/>
         <source>Conversion</source>
-        <translation type="unfinished"></translation>
+        <translation>Conversion</translation>
     </message>
     <message>
         <location filename="../ffconverter/progress.py" line="200"/>
         <source>Cancel Conversion</source>
-        <translation type="unfinished"></translation>
+        <translation>Cancel Conversion</translation>
     </message>
     <message>
         <location filename="../ffconverter/progress.py" line="200"/>
         <source>Are you sure you want to cancel conversion?</source>
-        <translation type="unfinished"></translation>
+        <translation>Are you sure you want to cancel conversion?</translation>
     </message>
     <message>
         <location filename="../ffconverter/progress.py" line="234"/>
         <source>In progress:</source>
-        <translation type="unfinished"></translation>
+        <translation>In progress:</translation>
     </message>
     <message>
         <location filename="../ffconverter/progress.py" line="163"/>
         <source>Report</source>
-        <translation type="unfinished"></translation>
+        <translation>Report</translation>
     </message>
     <message>
         <location filename="../ffconverter/progress.py" line="168"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Close</translation>
     </message>
     <message>
         <location filename="../ffconverter/progress.py" line="164"/>
         <source>Converted: {0}/{1}</source>
-        <translation type="unfinished"></translation>
+        <translation>Converted: {0}/{1}</translation>
     </message>
     <message>
         <location filename="../ffconverter/progress.py" line="76"/>
         <source>System shutdown after conversion</source>
-        <translation type="unfinished"></translation>
+        <translation>System shutdown after conversion</translation>
     </message>
 </context>
 <context>
@@ -719,129 +720,131 @@ folder as input file</source>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="44"/>
         <source>Preset label</source>
-        <translation type="unfinished"></translation>
+        <translation>Preset label</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="47"/>
         <source>Preset command line parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Preset command line parameters</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="50"/>
         <source>Output file extension</source>
-        <translation type="unfinished"></translation>
+        <translation>Output file extension</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="53"/>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation>Add</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="54"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Delete</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="55"/>
         <source>Delete all</source>
-        <translation type="unfinished"></translation>
+        <translation>Delete all</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="56"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Edit</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="59"/>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="96"/>
         <source>Edit Presets</source>
-        <translation type="unfinished"></translation>
+        <translation>Edit Presets</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="282"/>
         <source>Delete Preset</source>
-        <translation type="unfinished"></translation>
+        <translation>Delete Preset</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="193"/>
         <source>Are you sure that you want to delete all presets?</source>
-        <translation type="unfinished"></translation>
+        <translation>Are you sure that you want to delete all presets?</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="250"/>
         <source>All current presets will be deleted.
 Are you sure that you want to continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>All current presets will be deleted.
+Are you sure that you want to continue?</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="282"/>
         <source>Are you sure that you want to restore the default presets?</source>
-        <translation type="unfinished"></translation>
+        <translation>Are you sure that you want to restore the default presets?</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="260"/>
         <source>Import failed!</source>
-        <translation type="unfinished"></translation>
+        <translation>Import failed!</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="57"/>
         <source>Search</source>
-        <translation type="unfinished"></translation>
+        <translation>Search</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="302"/>
         <source>Presets Synchronization</source>
-        <translation type="unfinished"></translation>
+        <translation>Presets Synchronization</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="302"/>
         <source>Current presets and default presets will be merged. Are you sure that you want to continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Current presets and default presets will be merged. Are you sure that you want to continue?</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="351"/>
         <source>Remove old presets</source>
-        <translation type="unfinished"></translation>
+        <translation>Remove old presets</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="179"/>
         <source>Are you sure that you want to delete the {0} preset?</source>
-        <translation type="unfinished"></translation>
+        <translation>Are you sure that you want to delete the {0} preset?</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="268"/>
         <source>Export presets</source>
-        <translation type="unfinished"></translation>
+        <translation>Export presets</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="351"/>
         <source>All presets with an __OLD suffix will be deleted. Are you sure that you want to continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>All presets with an __OLD suffix will be deleted. Are you sure that you want to continue?</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="256"/>
         <source>Successful import!</source>
-        <translation type="unfinished"></translation>
+        <translation>Successful import!</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="289"/>
         <source>Default presets restored successfully.</source>
-        <translation type="unfinished"></translation>
+        <translation>Default presets restored successfully.</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="345"/>
         <source>Synchronization completed.
 Your presets are up to date!</source>
-        <translation type="unfinished"></translation>
+        <translation>Synchronization completed.
+Your presets are up to date!</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="366"/>
         <source>Old presets successfully removed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Old presets successfully removed.</translation>
     </message>
 </context>
 <context>
@@ -849,7 +852,7 @@ Your presets are up to date!</source>
     <message>
         <location filename="../ffconverter/audiovideotab.py" line="187"/>
         <source>More</source>
-        <translation type="unfinished"></translation>
+        <translation>More</translation>
     </message>
 </context>
 </TS>

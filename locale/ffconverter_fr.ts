@@ -64,7 +64,7 @@
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="434"/>
         <source>Preset name must be one word and contain only letters and digits.</source>
-        <translation type="obsolete">Le nom de la présélection doit n'avoir qu'un mot et ne contenir que des lettres et des chiffres.</translation>
+        <translation type="obsolete">Le nom de la présélection doit n&apos;avoir qu&apos;un mot et ne contenir que des lettres et des chiffres.</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="459"/>
@@ -79,27 +79,27 @@
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="473"/>
         <source>Extension label can&apos;t be left blank.</source>
-        <translation>La désignation de l'extension ne peut rester vide.</translation>
+        <translation>La désignation de l&apos;extension ne peut rester vide.</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="453"/>
         <source>Extension must be one word and must not start with a dot.</source>
-        <translation type="obsolete">L'extension doit n'avoir qu'un mot et ne pas commencer par un point.</translation>
+        <translation type="obsolete">L&apos;extension doit n&apos;avoir qu&apos;un mot et ne pas commencer par un point.</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="417"/>
         <source>Edit {0}</source>
-        <translation type="unfinished"></translation>
+        <translation>Modifier {0}</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="480"/>
         <source>Extension must be one word and must not start with a  dot.</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;extension doit être un mot et ne doit pas commencer par un point.</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="448"/>
         <source>Preset name must be one word, start with a letter and contain only letters, digits, underscores, hyphens, colons and periods. It cannot also start with xml.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le nom de la présélection doit être un mot, commencer par une lettre et ne contenir que des lettres, des chiffres, des traits de soulignement, des traits d&apos;union, des deux points et des points. Il ne peut pas non plus commencer par xml.</translation>
     </message>
 </context>
 <context>
@@ -147,7 +147,7 @@
     <message>
         <location filename="../ffconverter/audiovideotab.py" line="87"/>
         <source>Frame Rate (fps):</source>
-        <translation>Nombre d'images par secondes :</translation>
+        <translation>Nombre d&apos;images par secondes :</translation>
     </message>
     <message>
         <location filename="../ffconverter/audiovideotab.py" line="88"/>
@@ -179,12 +179,12 @@
         <source>Neither ffmpeg nor avconv are installed.
 You will not be able to convert audio/video files until you install one of them.</source>
         <translation type="obsolete">Ni ffmpeg ni avconv ne sont installés.
-Vous ne pourrez pas convertir de fichiers audio/vidéo avant d'avoir installé l'un d'eux. </translation>
+Vous ne pourrez pas convertir de fichiers audio/vidéo avant d&apos;avoir installé l&apos;un d&apos;eux. </translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="778"/>
         <source>Extension must be one word and must not start with a dot.</source>
-        <translation type="obsolete">L'extension doit n'avoir qu'un mot et ne pas commencer par un point.</translation>
+        <translation type="obsolete">L&apos;extension doit n&apos;avoir qu&apos;un mot et ne pas commencer par un point.</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="785"/>
@@ -194,82 +194,82 @@ Vous ne pourrez pas convertir de fichiers audio/vidéo avant d'avoir installé l
     <message>
         <location filename="../ffconverter/audiovideotab.py" line="111"/>
         <source>Preserve aspect ratio</source>
-        <translation type="unfinished"></translation>
+        <translation>Conserver le rapport hauteur/largeur</translation>
     </message>
     <message>
         <location filename="../ffconverter/audiovideotab.py" line="112"/>
         <source>Preserve video size</source>
-        <translation type="unfinished"></translation>
+        <translation>Préserver la taille de la vidéo</translation>
     </message>
     <message>
         <location filename="../ffconverter/audiovideotab.py" line="127"/>
         <source>Audio Channels:</source>
-        <translation type="unfinished"></translation>
+        <translation>Canaux audio:</translation>
     </message>
     <message>
         <location filename="../ffconverter/audiovideotab.py" line="159"/>
         <source>Split file. Begin time</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichier fractionné. Début de l&apos;heure</translation>
     </message>
     <message>
         <location filename="../ffconverter/audiovideotab.py" line="161"/>
         <source>Duration</source>
-        <translation type="unfinished"></translation>
+        <translation>Durée</translation>
     </message>
     <message>
         <location filename="../ffconverter/audiovideotab.py" line="167"/>
         <source>Embed subtitle:</source>
-        <translation type="unfinished"></translation>
+        <translation>Intégrer le sous-titre:</translation>
     </message>
     <message>
         <location filename="../ffconverter/audiovideotab.py" line="172"/>
         <source>Rotate:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tourner:</translation>
     </message>
     <message>
         <location filename="../ffconverter/audiovideotab.py" line="287"/>
         <source>Choose File</source>
-        <translation type="unfinished">Choisir un fichier</translation>
+        <translation>Choisir un fichier</translation>
     </message>
     <message>
         <location filename="../ffconverter/audiovideotab.py" line="46"/>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>Aucun</translation>
     </message>
     <message>
         <location filename="../ffconverter/audiovideotab.py" line="48"/>
         <source>clockwise</source>
-        <translation type="unfinished"></translation>
+        <translation>dans le sens horaire</translation>
     </message>
     <message>
         <location filename="../ffconverter/audiovideotab.py" line="54"/>
         <source>vertical flip</source>
-        <translation type="unfinished"></translation>
+        <translation>retournement vertical</translation>
     </message>
     <message>
         <location filename="../ffconverter/audiovideotab.py" line="50"/>
         <source>counter clockwise</source>
-        <translation type="unfinished"></translation>
+        <translation>dans le sens inverse horaire</translation>
     </message>
     <message>
         <location filename="../ffconverter/audiovideotab.py" line="53"/>
         <source>horizontal flip</source>
-        <translation type="unfinished"></translation>
+        <translation>retournement horizontal</translation>
     </message>
     <message>
         <location filename="../ffconverter/audiovideotab.py" line="129"/>
         <source>Threads:</source>
-        <translation type="unfinished"></translation>
+        <translation>Fils CPU:</translation>
     </message>
     <message>
         <location filename="../ffconverter/audiovideotab.py" line="39"/>
         <source>Disable</source>
-        <translation type="unfinished"></translation>
+        <translation>Désactiver</translation>
     </message>
     <message>
         <location filename="../ffconverter/audiovideotab.py" line="281"/>
         <source>FFmpeg is not installed!</source>
-        <translation type="unfinished"></translation>
+        <translation>FFmpeg n&apos;est pas installé!</translation>
     </message>
 </context>
 <context>
@@ -306,8 +306,8 @@ Vous ne pourrez pas convertir de fichiers audio/vidéo avant d'avoir installé l
         <location filename="../ffconverter/documenttab.py" line="62"/>
         <source>Unocov is not installed.
 You will not be able to convert document files until you install it.</source>
-        <translation type="obsolete">Unocov n'est pas installé.
-Vous ne pourrez pas convertir de fichiers document avant de l'avoir installé.</translation>
+        <translation type="obsolete">Unocov n&apos;est pas installé.
+Vous ne pourrez pas convertir de fichiers document avant de l&apos;avoir installé.</translation>
     </message>
     <message>
         <location filename="../ffconverter/documenttab.py" line="52"/>
@@ -317,7 +317,7 @@ Vous ne pourrez pas convertir de fichiers document avant de l'avoir installé.</
     <message>
         <location filename="../ffconverter/ffconverter.py" line="1022"/>
         <source>%1 is not %2!</source>
-        <translation type="obsolete">%1 n'est pas %2</translation>
+        <translation type="obsolete">%1 n&apos;est pas %2</translation>
     </message>
     <message>
         <location filename="../ffconverter/documenttab.py" line="85"/>
@@ -340,12 +340,12 @@ Vous ne pourrez pas convertir de fichiers document avant de l'avoir installé.</
     <message>
         <location filename="../ffconverter/dynamictab.py" line="34"/>
         <source>Only show common formats</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher uniquement les formats de fichiers courants</translation>
     </message>
     <message>
         <location filename="../ffconverter/dynamictab.py" line="35"/>
         <source>Convert to:</source>
-        <translation type="unfinished">Convertir vers :</translation>
+        <translation>Convertir vers :</translation>
     </message>
 </context>
 <context>
@@ -358,7 +358,7 @@ Vous ne pourrez pas convertir de fichiers document avant de l'avoir installé.</
     <message>
         <location filename="../ffconverter/imagetab.py" line="46"/>
         <source>Image Size:</source>
-        <translation>Taille de l'image :</translation>
+        <translation>Taille de l&apos;image :</translation>
     </message>
     <message>
         <location filename="../ffconverter/imagetab.py" line="110"/>
@@ -369,8 +369,8 @@ Vous ne pourrez pas convertir de fichiers document avant de l'avoir installé.</
         <location filename="../ffconverter/ffconverter.py" line="953"/>
         <source>PythonMagick is not installed.
 You will not be able to convert image files until you install it.</source>
-        <translation type="obsolete">PythonMagick n'est pas installé.
-Vous ne pourrez pas convertir de fichiers image avant de l'avoir installé.</translation>
+        <translation type="obsolete">PythonMagick n&apos;est pas installé.
+Vous ne pourrez pas convertir de fichiers image avant de l&apos;avoir installé.</translation>
     </message>
     <message>
         <location filename="../ffconverter/imagetab.py" line="110"/>
@@ -380,42 +380,42 @@ Vous ne pourrez pas convertir de fichiers image avant de l'avoir installé.</tra
     <message>
         <location filename="../ffconverter/imagetab.py" line="57"/>
         <source>Maintain aspect ratio</source>
-        <translation>Conserver le ratio d'aspect</translation>
+        <translation>Conserver le ratio d&apos;aspect</translation>
     </message>
     <message>
         <location filename="../ffconverter/imagetab.py" line="40"/>
         <source>Extra options:</source>
-        <translation type="unfinished"></translation>
+        <translation>Options supplémentaires:</translation>
     </message>
     <message>
         <location filename="../ffconverter/imagetab.py" line="58"/>
         <source>Auto-crop</source>
-        <translation type="unfinished"></translation>
+        <translation>Recadrage automatique</translation>
     </message>
     <message>
         <location filename="../ffconverter/imagetab.py" line="62"/>
         <source>Rotate</source>
-        <translation type="unfinished"></translation>
+        <translation>Tourner</translation>
     </message>
     <message>
         <location filename="../ffconverter/imagetab.py" line="62"/>
         <source>degrees - clockwise</source>
-        <translation type="unfinished"></translation>
+        <translation>degrés - sens horaire</translation>
     </message>
     <message>
         <location filename="../ffconverter/imagetab.py" line="66"/>
         <source>Vertical flip</source>
-        <translation type="unfinished"></translation>
+        <translation>retournement vertical</translation>
     </message>
     <message>
         <location filename="../ffconverter/imagetab.py" line="67"/>
         <source>Horizontal flip</source>
-        <translation type="unfinished"></translation>
+        <translation>retournement horizontal</translation>
     </message>
     <message>
         <location filename="../ffconverter/imagetab.py" line="106"/>
         <source>ImageMagick is not installed!</source>
-        <translation type="unfinished"></translation>
+        <translation>ImageMagick n&apos;est pas installé!</translation>
     </message>
 </context>
 <context>
@@ -443,7 +443,7 @@ Vous ne pourrez pas convertir de fichiers image avant de l'avoir installé.</tra
     <message>
         <location filename="../ffconverter/ffconverter.py" line="92"/>
         <source>Delete original</source>
-        <translation>Supprimer l'original</translation>
+        <translation>Supprimer l&apos;original</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="93"/>
@@ -588,7 +588,7 @@ Vous ne pourrez pas convertir de fichiers image avant de l'avoir installé.</tra
     <message>
         <location filename="../ffconverter/ffconverter.py" line="399"/>
         <source>Output folder does not exists!</source>
-        <translation>Le dossier de sortie n'existe pas !</translation>
+        <translation>Le dossier de sortie n&apos;existe pas !</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="405"/>
@@ -630,7 +630,7 @@ Vous ne pourrez pas convertir de fichiers image avant de l'avoir installé.</tra
         <source>Save each file in the same
 folder as input file</source>
         <translation>Enregistrer chaque fichier dans le même
-dossier que le fichier d'entrée</translation>
+dossier que le fichier d&apos;entrée</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="135"/>
@@ -655,27 +655,27 @@ dossier que le fichier d'entrée</translation>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="166"/>
         <source>documentation</source>
-        <translation type="unfinished"></translation>
+        <translation>documentation</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="447"/>
         <source>Convert among several file types to other formats</source>
-        <translation type="unfinished"></translation>
+        <translation>Convertir parmi plusieurs types de fichiers dans différents formats</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="82"/>
         <source>All Formats</source>
-        <translation type="unfinished"></translation>
+        <translation>Tous les fichiers</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="82"/>
         <source>Audio/Video Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Paramètres audio/vidéo</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="83"/>
         <source>Image Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Paramètres de l&apos;image</translation>
     </message>
 </context>
 <context>
@@ -693,7 +693,7 @@ dossier que le fichier d'entrée</translation>
     <message>
         <location filename="../ffconverter/preferences_dlg.py" line="38"/>
         <source>Add &apos;~&apos; prefix</source>
-        <translation>Ajouter le préfixe '~'</translation>
+        <translation>Ajouter le préfixe &apos;~&apos;</translation>
     </message>
     <message>
         <location filename="../ffconverter/preferences_dlg.py" line="39"/>
@@ -763,47 +763,47 @@ dossier que le fichier d'entrée</translation>
     <message>
         <location filename="../ffconverter/preferences_dlg.py" line="73"/>
         <source>Video codecs</source>
-        <translation type="unfinished"></translation>
+        <translation>Codecs vidéo</translation>
     </message>
     <message>
         <location filename="../ffconverter/preferences_dlg.py" line="76"/>
         <source>Audio codecs</source>
-        <translation type="unfinished"></translation>
+        <translation>Codecs audio</translation>
     </message>
     <message>
         <location filename="../ffconverter/preferences_dlg.py" line="118"/>
         <source>Extra formats</source>
-        <translation type="unfinished"></translation>
+        <translation>Formats additionnels</translation>
     </message>
     <message>
         <location filename="../ffconverter/preferences_dlg.py" line="89"/>
         <source>Default video codecs</source>
-        <translation type="unfinished"></translation>
+        <translation>Codecs vidéo par défaut</translation>
     </message>
     <message>
         <location filename="../ffconverter/preferences_dlg.py" line="90"/>
         <source>Default audio codecs</source>
-        <translation type="unfinished"></translation>
+        <translation>Codecs audio par défaut</translation>
     </message>
     <message>
         <location filename="../ffconverter/preferences_dlg.py" line="67"/>
         <source>Path to executable:</source>
-        <translation type="unfinished"></translation>
+        <translation>Chemin d&apos;accès à l&apos;exécutable:</translation>
     </message>
     <message>
         <location filename="../ffconverter/preferences_dlg.py" line="102"/>
         <source>Default options:</source>
-        <translation type="unfinished"></translation>
+        <translation>Options par défaut:</translation>
     </message>
     <message>
         <location filename="../ffconverter/preferences_dlg.py" line="139"/>
         <source>Images</source>
-        <translation type="unfinished">Images</translation>
+        <translation>Images</translation>
     </message>
     <message>
         <location filename="../ffconverter/preferences_dlg.py" line="140"/>
         <source>Documents</source>
-        <translation type="unfinished">Documents</translation>
+        <translation>Documents</translation>
     </message>
 </context>
 <context>
@@ -811,7 +811,7 @@ dossier que le fichier d'entrée</translation>
     <message>
         <location filename="../ffconverter/progress.py" line="73"/>
         <source>In progress: </source>
-        <translation>En cours :</translation>
+        <translation>En cours: </translation>
     </message>
     <message>
         <location filename="../ffconverter/progress.py" line="71"/>
@@ -866,12 +866,12 @@ dossier que le fichier d'entrée</translation>
     <message>
         <location filename="../ffconverter/progress.py" line="164"/>
         <source>Converted: {0}/{1}</source>
-        <translation type="unfinished"></translation>
+        <translation>Converti : {0}/{1}</translation>
     </message>
     <message>
         <location filename="../ffconverter/progress.py" line="76"/>
         <source>System shutdown after conversion</source>
-        <translation type="unfinished"></translation>
+        <translation>Arrêt du système après la conversion</translation>
     </message>
 </context>
 <context>
@@ -934,7 +934,7 @@ dossier que le fichier d'entrée</translation>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="193"/>
         <source>Are you sure that you want to delete all presets?</source>
-        <translation>Etes vous sûrs de vouloir effacer toutes les présélections ? </translation>
+        <translation>Etes vous sûrs de vouloir effacer toutes les présélections?</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="250"/>
@@ -946,7 +946,7 @@ Etes vous sûrs de vouloir continuer ?</translation>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="282"/>
         <source>Are you sure that you want to restore the default presets?</source>
-        <translation>Etes vous sûrs de vouloir restaurer les présélections par défaut ? </translation>
+        <translation>Etes vous sûrs de vouloir restaurer les présélections par défaut?</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="257"/>
@@ -986,38 +986,39 @@ Etes vous sûrs de vouloir continuer ?</translation>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="179"/>
         <source>Are you sure that you want to delete the {0} preset?</source>
-        <translation type="unfinished"></translation>
+        <translation>Êtes-vous sûr de vouloir supprimer le préréglage {0}?</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="268"/>
         <source>Export presets</source>
-        <translation type="unfinished">Exporter les présélections</translation>
+        <translation>Exporter les présélections</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="351"/>
         <source>All presets with an __OLD suffix will be deleted. Are you sure that you want to continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Toutes les présélections avec un suffixe _OLD seront effacées. Etes vous sûrs de vouloir continuer ?</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="256"/>
         <source>Successful import!</source>
-        <translation type="unfinished"></translation>
+        <translation>Importation réussie!</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="289"/>
         <source>Default presets restored successfully.</source>
-        <translation type="unfinished"></translation>
+        <translation>Restauration réussie des préréglages par défaut.</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="345"/>
         <source>Synchronization completed.
 Your presets are up to date!</source>
-        <translation type="unfinished"></translation>
+        <translation>Synchronisation terminée.
+Vos préréglages sont à jour!</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="366"/>
         <source>Old presets successfully removed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Les anciens préréglages ont été supprimés avec succès.</translation>
     </message>
 </context>
 <context>
