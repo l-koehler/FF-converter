@@ -249,7 +249,17 @@
     </message>
 </context>
 <context>
-    <name>DocumentTab</name>
+    <name>DynamicTab</name>
+    <message>
+        <location filename="../ffconverter/dynamictab.py" line="34"/>
+        <source>Only show common formats</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ffconverter/dynamictab.py" line="35"/>
+        <source>Convert to:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ImageTab</name>

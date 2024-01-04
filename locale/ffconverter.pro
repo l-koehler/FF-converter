@@ -1,7 +1,7 @@
 SOURCES       = ../ffconverter/ffconverter.py ../ffconverter/preferences_dlg.py
 SOURCES      += ../ffconverter/progress.py ../ffconverter/presets_dlgs.py
 SOURCES      += ../ffconverter/about_dlg.py ../ffconverter/audiovideotab.py
-SOURCES      += ../ffconverter/documenttab.py ../ffconverter/imagetab.py
+SOURCES      += ../ffconverter/dynamictab.py ../ffconverter/imagetab.py
 TRANSLATIONS  = ffconverter_en.ts ffconverter_el.ts ffconverter_tr.ts
 TRANSLATIONS += ffconverter_ru.ts ffconverter_zh_CN.ts ffconverter_de_DE.ts
 TRANSLATIONS += ffconverter_hu.ts ffconverter_pt.ts ffconverter_pl_PL.ts

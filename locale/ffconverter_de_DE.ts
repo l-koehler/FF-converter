@@ -24,17 +24,17 @@
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="387"/>
         <source>Preset name (one word, A-z, 0-9)</source>
-        <translation>Voreingestellter Name (ein Wort, A-z, 0-9)</translation>
+        <translation>Name der Voreinstellung (ein Wort, A-z, 0-9)</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="389"/>
         <source>Preset label</source>
-        <translation>Voreingestelltes Label</translation>
+        <translation>Label der Voreinstellung</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="391"/>
         <source>Preset command line parameters</source>
-        <translation>Voreingestellter Befehlszeilenparameter</translation>
+        <translation>Befehlszeilenparameter der Voreinstellung</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="393"/>
@@ -54,12 +54,12 @@
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="440"/>
         <source>Preset name can&apos;t be left blank.</source>
-        <translation>Voreingestellter Name darf nicht leer sein.</translation>
+        <translation>Voreinstellungs-Name darf nicht leer sein.</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="459"/>
         <source>Preset label can&apos;t be left blank.</source>
-        <translation>Voreingestelltes Label darf nicht leer sein.</translation>
+        <translation>Voreinstellungs-Label darf nicht leer sein.</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="466"/>
@@ -74,7 +74,7 @@
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="417"/>
         <source>Edit {0}</source>
-        <translation>Bearbeiten {0}</translation>
+        <translation>Bearbeite {0}</translation>
     </message>
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="480"/>
@@ -84,7 +84,7 @@
     <message>
         <location filename="../ffconverter/presets_dlgs.py" line="448"/>
         <source>Preset name must be one word, start with a letter and contain only letters, digits, underscores, hyphens, colons and periods. It cannot also start with xml.</source>
-        <translation>Voreingestellter Name muss ein Wort sein welcher mit einem Buchstaben beginnt und nur aus Buchstaben, Unterstrichen, Bindestrichen, Zahlen und einem Doppelpunkt bestehen darf. Der Name darf nicht mit &quot;xml&quot; beginnen.</translation>
+        <translation>Voreingestellter Name muss ein Wort sein, mit einem Buchstaben beginnen und nur aus Buchstaben, Unterstrichen, Bindestrichen, Zahlen und Doppelpunkten bestehen darf. Der Name darf nicht mit XML beginnen.</translation>
     </message>
 </context>
 <context>
@@ -97,7 +97,7 @@
     <message>
         <location filename="../ffconverter/audiovideotab.py" line="77"/>
         <source>Command:</source>
-        <translation>Kommando:</translation>
+        <translation>Befehl:</translation>
     </message>
     <message>
         <location filename="../ffconverter/audiovideotab.py" line="79"/>
@@ -187,7 +187,7 @@
     <message>
         <location filename="../ffconverter/audiovideotab.py" line="46"/>
         <source>None</source>
-        <translation>Keines</translation>
+        <translation>Keine</translation>
     </message>
     <message>
         <location filename="../ffconverter/audiovideotab.py" line="48"/>
@@ -217,7 +217,7 @@
     <message>
         <location filename="../ffconverter/audiovideotab.py" line="39"/>
         <source>Disable</source>
-        <translation>Deaktiviere</translation>
+        <translation>Deaktivieren</translation>
     </message>
     <message>
         <location filename="../ffconverter/audiovideotab.py" line="281"/>
@@ -267,11 +267,24 @@
     </message>
 </context>
 <context>
+    <name>DynamicTab</name>
+    <message>
+        <location filename="../ffconverter/dynamictab.py" line="34"/>
+        <source>Only show common formats</source>
+        <translation>Nur häufige Formate anzeigen</translation>
+    </message>
+    <message>
+        <location filename="../ffconverter/dynamictab.py" line="35"/>
+        <source>Convert to:</source>
+        <translation>Konvertiere zu:</translation>
+    </message>
+</context>
+<context>
     <name>ImageTab</name>
     <message>
         <location filename="../ffconverter/imagetab.py" line="38"/>
         <source>Convert to:</source>
-        <translation>Konvertiere nach:</translation>
+        <translation>Konvertiere zu:</translation>
     </message>
     <message>
         <location filename="../ffconverter/imagetab.py" line="46"/>
@@ -286,7 +299,7 @@
     <message>
         <location filename="../ffconverter/imagetab.py" line="110"/>
         <source>The size LineEdit may not be empty.</source>
-        <translation>The Größenangabe darf nicht fehlen.</translation>
+        <translation>Die Größenangabe darf nicht fehlen.</translation>
     </message>
     <message>
         <location filename="../ffconverter/imagetab.py" line="57"/>
@@ -414,17 +427,17 @@
     <message>
         <location filename="../ffconverter/ffconverter.py" line="131"/>
         <source>Reset</source>
-        <translation>Rücksetzen</translation>
+        <translation>Zurücksetzen</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="131"/>
         <source>Reset presets</source>
-        <translation>Voreinstellungen rücksetzen</translation>
+        <translation>Voreinstellungen zurücksetzen</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="62"/>
         <source>Clear</source>
-        <translation>Löschen</translation>
+        <translation>Liste löschen</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="143"/>
@@ -494,17 +507,17 @@
     <message>
         <location filename="../ffconverter/ffconverter.py" line="60"/>
         <source>Add</source>
-        <translation>Hinzufügen</translation>
+        <translation>Datei hinzufügen</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="61"/>
         <source>Delete</source>
-        <translation>Löschen</translation>
+        <translation>Datei entfernen</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="143"/>
         <source>Clear All</source>
-        <translation>Lösche Eingabefeld</translation>
+        <translation>Lösche Alles</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="392"/>
@@ -515,8 +528,8 @@
         <location filename="../ffconverter/ffconverter.py" line="90"/>
         <source>Save each file in the same
 folder as input file</source>
-        <translation>Konvertierte Datei im gleichen
-Ordner speichern</translation>
+        <translation>Jede konvertierte Datei im
+Ordner der Input-Datei speichern</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="135"/>
@@ -526,7 +539,7 @@ Ordner speichern</translation>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="135"/>
         <source>Synchronize presets</source>
-        <translation>Synchronisationsvoreinstellungen</translation>
+        <translation>Synchronisiere Voreinstellungen</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="139"/>
@@ -536,7 +549,7 @@ Ordner speichern</translation>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="139"/>
         <source>Remove old presets</source>
-        <translation>Entferne alte Vorgaben</translation>
+        <translation>Entferne alte Voreinstellungen</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="166"/>
@@ -551,17 +564,17 @@ Ordner speichern</translation>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="82"/>
         <source>All Formats</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle Formate</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="82"/>
         <source>Audio/Video Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Audio/Video-Einstellungen</translation>
     </message>
     <message>
         <location filename="../ffconverter/ffconverter.py" line="83"/>
         <source>Image Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Bild-Einstellungen</translation>
     </message>
 </context>
 <context>
@@ -579,7 +592,7 @@ Ordner speichern</translation>
     <message>
         <location filename="../ffconverter/preferences_dlg.py" line="38"/>
         <source>Add &apos;~&apos; prefix</source>
-        <translation> Präfix '~' hinzufügen</translation>
+        <translation>Präfix &apos;~&apos; hinzufügen</translation>
     </message>
     <message>
         <location filename="../ffconverter/preferences_dlg.py" line="39"/>
@@ -682,7 +695,7 @@ Ordner speichern</translation>
     <message>
         <location filename="../ffconverter/progress.py" line="73"/>
         <source>In progress: </source>
-        <translation>In Arbeit:</translation>
+        <translation>In Arbeit: </translation>
     </message>
     <message>
         <location filename="../ffconverter/progress.py" line="78"/>
@@ -737,7 +750,7 @@ Ordner speichern</translation>
     <message>
         <location filename="../ffconverter/progress.py" line="76"/>
         <source>System shutdown after conversion</source>
-        <translation type="unfinished"></translation>
+        <translation>Computer nach Umwandlung herunterfahren</translation>
     </message>
 </context>
 <context>

@@ -336,6 +336,19 @@ Non é posíbel converter ficheiros de documentos sen instalalo.</translation>
     </message>
 </context>
 <context>
+    <name>DynamicTab</name>
+    <message>
+        <location filename="../ffconverter/dynamictab.py" line="34"/>
+        <source>Only show common formats</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ffconverter/dynamictab.py" line="35"/>
+        <source>Convert to:</source>
+        <translation type="unfinished">Converter a:</translation>
+    </message>
+</context>
+<context>
     <name>ImageTab</name>
     <message>
         <location filename="../ffconverter/imagetab.py" line="38"/>

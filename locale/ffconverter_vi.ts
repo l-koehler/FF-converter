@@ -336,6 +336,19 @@ Bạn sẽ không thể chuyển đổi được các tập tin tài liệu cho 
     </message>
 </context>
 <context>
+    <name>DynamicTab</name>
+    <message>
+        <location filename="../ffconverter/dynamictab.py" line="34"/>
+        <source>Only show common formats</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ffconverter/dynamictab.py" line="35"/>
+        <source>Convert to:</source>
+        <translation type="unfinished">Chuyển đổi sang:</translation>
+    </message>
+</context>
+<context>
     <name>ImageTab</name>
     <message>
         <location filename="../ffconverter/imagetab.py" line="38"/>
