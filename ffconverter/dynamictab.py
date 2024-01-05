@@ -54,16 +54,34 @@ class DynamicTab(QWidget):
         self.extQCB.clear()
         possible_outputs = []
         for input_file in list_of_files:
+            file_outputs = []
             input_file_ext = utils.get_extension(input_file)
             for conv in all_supported_conversions:
                 if input_file_ext in conv[0]:
-                    possible_outputs += conv[1]
-        # dedupe list
-        possible_outputs = list(dict.fromkeys(possible_outputs))  
+                    # append only once per file
+                    file_outputs += conv[1]
+            possible_outputs.append(file_outputs)
+        # possible_outputs: list of lists of output formats, one per input file
+        # valid_outputs: list of outputs possible for ALL files
+        if len(list_of_files) > 1:
+            valid_outputs = []
+            for extension in sum(possible_outputs, []):
+                available = True
+                for i in possible_outputs:
+                    if extension not in i:
+                        available = False
+                        break
+                if available and extension not in valid_outputs:
+                    valid_outputs.append(extension)
+        else:
+            first_output_list = possible_outputs[0] if possible_outputs else []
+            valid_outputs = list(dict.fromkeys(first_output_list))
+
         if self.commonformatQChB.isChecked():
             # remove all uncommon formats from the list
-            possible_outputs[:] = [ext for ext in possible_outputs if ext in config.common_formats]
-        self.extQCB.addItems(sorted(possible_outputs))
+            valid_outputs[:] = [ext for ext in valid_outputs
+                                if ext in config.common_formats]
+        self.extQCB.addItems(sorted(valid_outputs))
 
     def ok_to_continue(self):
         return True
