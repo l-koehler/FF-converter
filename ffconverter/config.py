@@ -100,8 +100,12 @@ compression_formats = [
         'ar', 'squashfs', 'tar', 'tgz', 'zip'
     ]
 
+common_compression_formats = [
+        '[Folder]', 'tar', 'tar.gz', 'zip'
+        ]
+
 #-----common formats (used for not displaying uncommon formats)
-common_formats = image_common_formats + document_formats + common_markdown_formats + video_formats
+common_formats = image_common_formats + document_formats + common_markdown_formats + video_formats + common_compression_formats
 
 #-----misc
 translators = [

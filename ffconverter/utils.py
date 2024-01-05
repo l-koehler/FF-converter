@@ -181,7 +181,7 @@ def get_all_conversions(get_conv_for_ext = False, ext = ["",""], missing = []):
     # same as above
     if 'tar/ar/zip/squashfs-tools' not in missing:
         compression_exts = [['deb', 'a', 'ar', 'o', 'so', 'sqfs', 'squashfs', 'snap', 'tgz', 'tar.gz', 'tar'],
-                            ['ar', 'squashfs', 'tar', 'tgz', 'zip']]
+                            ['[Folder]', 'ar', 'squashfs', 'tar', 'tgz', 'zip']] # TODO: Localize [Folder]
         supported_tmp.append(compression_exts)
     else:
         compression_exts = [[], []]

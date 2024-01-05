@@ -211,13 +211,13 @@ class MainWindow(QMainWindow):
         self.setWindowTitle('Multi-Converter')
 
         self.load_settings()
-        missing = self.check_for_dependencies()
+        self.missing = self.check_for_dependencies()
 
         self.audiovideo_tab.set_default_command()
         self.image_tab.set_default_command()
         self.toQLE.setText(self.default_output)
 
-        self.all_supported_conversions = utils.get_all_conversions(missing=missing)
+        self.all_supported_conversions = utils.get_all_conversions(missing=self.missing)
         
         self.filesList_update()
 

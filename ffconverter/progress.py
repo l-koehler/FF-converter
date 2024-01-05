@@ -463,23 +463,29 @@ class Progress(QDialog):
         """
         Use tar/ar/squashfs-tools/zip to convert compressed files.
         """
-        # Start by decompressing
-        try:
-            os.mkdir(config.tmp_dir)
-        except FileExistsError:
-            # tmp_dir already exists, empty it
-            shutil.rmtree(config.tmp_dir)
-            os.mkdir(config.tmp_dir)
-            pass
-        
         from_file_ext = os.path.splitext(from_file)[1]
         from_file_ext = from_file_ext.replace(".","").replace("\"","")
+        to_file_ext = os.path.splitext(to_file)[1]
+        to_file_ext = to_file_ext.replace(".","").replace("\"","")
+        # Start by decompressing
+        decompress_dir = config.tmp_dir
+        if to_file_ext == "[Folder]":
+            decompress_dir = to_file.replace(".[Folder]","").replace("\"","")
+
+        try:
+            os.mkdir(decompress_dir)
+        except FileExistsError:
+            # tmp_dir already exists, empty it
+            shutil.rmtree(decompress_dir)
+            os.mkdir(decompress_dir)
+            pass
+        
         if from_file_ext in ['deb', 'a', 'ar', 'o', 'so']:
-            cmd = 'ar -x {0} --output {1}'.format(from_file, config.tmp_dir)
+            cmd = 'ar -x {0} --output {1}'.format(from_file, decompress_dir)
         elif from_file_ext in ['sqfs', 'squashfs', 'snap']:
-            cmd = 'unsquashfs -d {0} {1}'.format(config.tmp_dir, from_file)
+            cmd = 'unsquashfs -d {0} {1}'.format(decompress_dir, from_file)
         else:
-            cmd = 'tar -xvf {0} -C {1}'.format(from_file, config.tmp_dir)
+            cmd = 'tar -xvf {0} -C {1}'.format(from_file, decompress_dir)
         self.update_text_edit_signal.emit(cmd + '\n')
         child = subprocess.Popen(
                 shlex.split(cmd),
@@ -503,14 +509,12 @@ class Progress(QDialog):
         log_lvl(final_output, extra=log_data)
 
         if return_code != 0:
-            shutil.rmtree(config.tmp_dir)
+            shutil.rmtree(decompress_dir)
             return False
-        # Now, recompress the files in config.tmp_dir
-        to_file_ext = os.path.splitext(to_file)[1]
-        to_file_ext = to_file_ext.replace(".","").replace("\"","")
+        # Now, recompress the files in decompress_dir
         if to_file_ext in ['ar', 'a']:
             # ar can only 'add' single files to archives. so iterate over all
-            for fpath in Path(config.tmp_dir).rglob('*.*'):
+            for fpath in Path(decompress_dir).rglob('*.*'):
                 if os.path.isfile(fpath):
                     cmd = 'ar cr {0} \"{1}\"'.format(to_file, fpath)
                     self.update_text_edit_signal.emit(cmd + '\n')
@@ -535,16 +539,19 @@ class Progress(QDialog):
                     log_lvl = logging.info if return_code == 0 else logging.error
                     log_lvl(final_output, extra=log_data)
 
-                    shutil.rmtree(config.tmp_dir)
+                    shutil.rmtree(decompress_dir)
                     return return_code == 0
         elif to_file_ext in ['sqfs', 'squashfs']:
-            cmd = 'mksquashfs {0} {1}'.format(config.tmp_dir, to_file)
+            cmd = 'mksquashfs {0} {1}'.format(decompress_dir, to_file)
         elif to_file_ext in ['tgz', 'tar.gz']:
-            cmd = 'tar -czvf {0} {1}'.format(to_file, config.tmp_dir)
+            cmd = 'tar -czvf {0} {1}'.format(to_file, decompress_dir)
         elif to_file_ext in ['zip']:
-            cmd = 'zip -r -q {0} {1}'.format(to_file, config.tmp_dir)
-        else:
-            cmd = 'tar -cvf {0} {1}'.format(to_file, config.tmp_dir)
+            cmd = 'zip -r -q {0} {1}'.format(to_file, decompress_dir)
+        elif to_file_ext in ['tar']:
+            cmd = 'tar -cvf {0} {1}'.format(to_file, decompress_dir)
+        elif to_file_ext in ['[Folder]']:
+            # nothing to do, decompress was enough
+            pass
         
         self.update_text_edit_signal.emit(cmd + '\n')
         child = subprocess.Popen(
@@ -568,7 +575,8 @@ class Progress(QDialog):
         log_lvl = logging.info if return_code == 0 else logging.error
         log_lvl(final_output, extra=log_data)
         
-        shutil.rmtree(config.tmp_dir)
+        if to_file_ext not in ['[Folder]']:
+            shutil.rmtree(decompress_dir)
         return return_code == 0
     
     def convert_dynamic(self, from_file, to_file):
@@ -576,7 +584,7 @@ class Progress(QDialog):
         from_file_ext = from_file_ext.replace(".","").replace("\"","")
         to_file_ext = os.path.splitext(to_file)[1]
         to_file_ext = to_file_ext.replace(".","").replace("\"","")
-        converter = utils.get_all_conversions(get_conv_for_ext = True, ext = [from_file_ext, to_file_ext])
+        converter = utils.get_all_conversions(get_conv_for_ext = True, ext = [from_file_ext, to_file_ext], missing = self.parent.missing)
         if converter == "ffmpeg":
             return self.convert_video(from_file, to_file, "") # cmd empty
         elif converter == "pandoc":
