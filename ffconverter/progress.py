@@ -160,6 +160,12 @@ class Progress(QDialog):
             sum_files = self.ok + self.error
             msg = QMessageBox(self)
             msg.setStandardButtons(QMessageBox.Ok)
+            if self.error:
+                # not all files have been converted
+                msg.setIcon(QMessageBox.Critical)
+            else:
+                # all files have been converted
+                msg.setIcon(QMessageBox.Information)
             msg.setWindowTitle(self.tr("Report"))
             msg.setText(self.tr("Converted: {0}/{1}".format(self.ok,sum_files)))
             msg.setModal(False)
