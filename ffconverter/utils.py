@@ -31,6 +31,7 @@ from PyQt5.QtWidgets import (
         QAction, QLayout, QLineEdit, QListWidget, QListWidgetItem, QMenu,
         QSpacerItem, QWidget, QHBoxLayout, QVBoxLayout, QGridLayout
         )
+from ffconverter import config
 
 
 def duration_in_seconds(duration):
@@ -217,6 +218,28 @@ def get_ext_conversions(extension):
             possible_conversions.append(converter[0])
     return possible_conversions
 
+
+def get_extension(file_path):
+    """
+    Given a file path (or name, the file isn't opened),
+    return a extension without leading dot.
+    It the extension is in config.double_formats, the double format
+    will be returned (e.g. 'tar.gz').
+    """
+
+    # if there are quotation marks around the file path, remove them
+    file_path = file_path.replace("\"", "")
+
+    remainder, first_ext = os.path.splitext(file_path)
+    first_ext = first_ext[1:]
+    second_ext = os.path.splitext(remainder)[-1][1:] # '' if only one ext there
+    joined_ext = second_ext + '.' + first_ext
+
+
+    if joined_ext in config.double_formats:
+        return joined_ext
+    return first_ext
+
 def start_office_listener():
     """
     Start a openoffice/libreoffice listener.
@@ -292,7 +315,9 @@ def create_paths_list(
 
     for _file in files_list:
         _dir, name = os.path.split(_file)
-        y = prefix + os.path.splitext(name)[0] + suffix + ext_to
+        # name[:-len('.'+ext_from)] is the name without extension
+        ext_from = get_extension(name)
+        y = prefix + name[:-len('.'+ext_from)] + suffix + ext_to
 
         if orig_dir:
             y = _dir + '/' + y

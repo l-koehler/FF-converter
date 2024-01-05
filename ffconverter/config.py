@@ -108,6 +108,8 @@ common_compression_formats = [
 common_formats = image_common_formats + document_formats + common_markdown_formats + video_formats + common_compression_formats
 
 #-----misc
+double_formats= ['tar.gz']
+
 translators = [
         ['[bg] Bulgarian', 'Vasil Blagoev'],
         ['[ca] Catalan', 'David Sabadell i Ximenes'

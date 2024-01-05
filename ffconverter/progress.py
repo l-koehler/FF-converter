@@ -402,9 +402,10 @@ class Progress(QDialog):
         Return True if conversion succeed, else False.
         """
         # note: from_file and to_file names are inside quotation marks
-        to_base, to_ext = os.path.splitext(to_file[1:-1])
+        to_file_ext = utils.get_extension(to_file)
 
-        cmd = 'unoconv -f {0} -o {1} {2}'.format(to_ext[1:], to_file, from_file)
+        cmd = 'unoconv -f {0} -o {1} {2}'.format(to_file_ext,
+                                                 to_file, from_file)
         self.update_text_edit_signal.emit(cmd + '\n')
         child = subprocess.Popen(
                 shlex.split(cmd),
@@ -463,10 +464,8 @@ class Progress(QDialog):
         """
         Use tar/ar/squashfs-tools/zip to convert compressed files.
         """
-        from_file_ext = os.path.splitext(from_file)[1]
-        from_file_ext = from_file_ext.replace(".","").replace("\"","")
-        to_file_ext = os.path.splitext(to_file)[1]
-        to_file_ext = to_file_ext.replace(".","").replace("\"","")
+        from_file_ext = utils.get_extension(from_file)
+        to_file_ext = utils.get_extension(to_file)
         # Start by decompressing
         decompress_dir = config.tmp_dir
         if to_file_ext == "[Folder]":
@@ -536,7 +535,7 @@ class Progress(QDialog):
                             'returncode' : return_code,
                             'type' : 'DECOMPRESS'
                             }
-                    log_lvl = logging.info if return_code == 0 else logging.error
+                    log_lvl = logging.info if return_code==0 else logging.error
                     log_lvl(final_output, extra=log_data)
 
                     shutil.rmtree(decompress_dir)
@@ -580,17 +579,17 @@ class Progress(QDialog):
         return return_code == 0
     
     def convert_dynamic(self, from_file, to_file):
-        from_file_ext = os.path.splitext(from_file)[1]
-        from_file_ext = from_file_ext.replace(".","").replace("\"","")
-        to_file_ext = os.path.splitext(to_file)[1]
-        to_file_ext = to_file_ext.replace(".","").replace("\"","")
-        converter = utils.get_all_conversions(get_conv_for_ext = True, ext = [from_file_ext, to_file_ext], missing = self.parent.missing)
+        from_file_ext = utils.get_extension(from_file)
+        to_file_ext = utils.get_extension(to_file)
+        converter = utils.get_all_conversions(get_conv_for_ext=True,
+                                              ext=[from_file_ext,to_file_ext],
+                                              missing=self.parent.missing)
         if converter == "ffmpeg":
             return self.convert_video(from_file, to_file, "") # cmd empty
         elif converter == "pandoc":
             return self.convert_markdown(from_file, to_file)
         elif converter == "magick":
-            return self.convert_image(from_file, to_file, "", "", "") # too many arguments qwq
+            return self.convert_image(from_file, to_file, "", "", "")
         elif converter == "soffice":
             return self.convert_document(from_file, to_file)
         elif converter == "compression":

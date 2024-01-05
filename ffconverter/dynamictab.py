@@ -54,7 +54,7 @@ class DynamicTab(QWidget):
         self.extQCB.clear()
         possible_outputs = []
         for input_file in list_of_files:
-            input_file_ext = os.path.splitext(input_file)[-1][1:] # .ext -> ext
+            input_file_ext = utils.get_extension(input_file)
             for conv in all_supported_conversions:
                 if input_file_ext in conv[0]:
                     possible_outputs += conv[1]
