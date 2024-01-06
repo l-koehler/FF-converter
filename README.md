@@ -25,6 +25,7 @@ options, for example flipping the image or selecting codecs, in the tabs.
 #### Installation
 Install the `ffconverter` package from PyPI.  
 `pip` works on most distros and should be the simplest choice.
+
 ```sh
 pip install ffconverter
 ```
@@ -32,16 +33,15 @@ pip install ffconverter
 #### Troubleshooting
 On some distros (externally managed environments, Arch, Debian),  
 `pip` will not work. In this case, you should use `pipx`.  
+
 ```sh
 sudo PIPX_HOME=/usr/local/pipx PIPX_BIN_DIR=/usr/local/bin pipx install --system-site-packages ffconverter
+sudo ln -sf /usr/local/pipx/venvs/ffconverter/share/applications/ffconverter.desktop /usr/local/share/applications/ffconverter.desktop
+sudo ln -sf /usr/local/pipx/venvs/ffconverter/share/pixmaps/ffconverter.png /usr/local/share/icons/ffconverter.png
 ```
-In some cases, the program might not appear in your installed applications, but  
-the `ffconverter` command will be available. In this case, run:
-```sh
-wget https://raw.githubusercontent.com/l-koehler/FF-converter/master/share/ffconverter.desktop -O ~/.local/share/applications/ffconverter.desktop
-```
-This command should add ffconverter to your installed applications, so you can  
-access the program without the terminal.
+
+The last two commands are needed to add the program to your installed  
+applications, but the `ffconverter` command should be available without them.  
 
 #### Uninstall
 Simply run:  
@@ -53,6 +53,9 @@ Adjust this command if you used something other than `pip` to install.
 #### Run without installing
 You can launch the application without installing it  
 by running the launcher script:  
+
 ```sh
-python3 launcher
+git clone https://github.com/l-koehler/ff-converter
+cd ./ff-converter
+python3 ./launcher
 ```

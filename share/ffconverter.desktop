@@ -1,6 +1,7 @@
+#!/usr/bin/env xdg-open
 [Desktop Entry]
 Type=Application
-Version=2.0.1
+Version=2.1.3
 Name=FF Converter
 GenericName=File Format Converter
 GenericName[pt]=Conversor de ficheiros
