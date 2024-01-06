@@ -46,7 +46,7 @@ applications, but the `ffconverter` command should be available without them.
 #### Uninstall
 Simply run:  
 ```sh
-pip uninstall ffmulticonverter
+pip uninstall ffconverter
 ```
 Adjust this command if you used something other than `pip` to install.  
 
