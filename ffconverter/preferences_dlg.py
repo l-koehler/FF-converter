@@ -124,6 +124,16 @@ class Preferences(QDialog):
 
         tabwidget4_layout = utils.add_to_layout(
                 'v', extraformatsdocumentQL, hlayout3, None)
+        
+        extraformatsmarkdownQL = QLabel(
+                '<html><b>' + self.tr('Extra formats') +'</b></html>')
+        self.extraformatsmarkdownQPTE = QPlainTextEdit()
+
+        hlayout4 = utils.add_to_layout('h',
+                self.extraformatsmarkdownQPTE, QSpacerItem(220,20))
+
+        tabwidget5_layout = utils.add_to_layout(
+                'v', extraformatsmarkdownQL, hlayout4, None)
 
         widget1 = QWidget()
         widget1.setLayout(tabwidget1_layout)
@@ -133,11 +143,14 @@ class Preferences(QDialog):
         widget3.setLayout(tabwidget3_layout)
         widget4 = QWidget()
         widget4.setLayout(tabwidget4_layout)
+        widget5 = QWidget()
+        widget5.setLayout(tabwidget5_layout)
         tabWidget = QTabWidget()
         tabWidget.addTab(widget1, self.tr('General'))
         tabWidget.addTab(widget2, self.tr('Audio/Video'))
         tabWidget.addTab(widget3, self.tr('Images'))
         tabWidget.addTab(widget4, self.tr('Documents'))
+        tabWidget.addTab(widget5, self.tr('Markdown'))
 
         buttonBox = QDialogButtonBox(
                 QDialogButtonBox.Ok|QDialogButtonBox.Cancel)
@@ -177,6 +190,7 @@ class Preferences(QDialog):
                 )
         extraformats_image = (settings.value('extraformats_image') or [])
         extraformats_document = (settings.value('extraformats_document') or [])
+        extraformats_markdown = (settings.value('extraformats_markdown') or [])
 
         if overwrite_existing:
             self.exst_overwriteQRB.setChecked(True)
@@ -194,6 +208,7 @@ class Preferences(QDialog):
         self.imagecmdQLE.setText(default_command_image)
         self.extraformatsimageQPTE.setPlainText("\n".join(extraformats_image))
         self.extraformatsdocumentQPTE.setPlainText("\n".join(extraformats_document))
+        self.extraformatsmarkdownQPTE.setPlainText("\n".join(extraformats_markdown))
 
     def set_videocodecs(self, codecs):
         self.vidcodecsQPTE.setPlainText("\n".join(codecs))
@@ -237,7 +252,9 @@ class Preferences(QDialog):
                 config.image_formats)
         extraformats_document = self.plaintext_to_list(
                 self.extraformatsdocumentQPTE, config.document_formats)
-
+        extraformats_markdown = self.plaintext_to_list(
+                self.extraformatsmarkdownQPTE, config.markdown_formats)
+        
         settings = QSettings()
 
         ffmpeg_path = os.path.expanduser(self.ffmpegpathQLE.text())
@@ -256,5 +273,6 @@ class Preferences(QDialog):
         settings.setValue('default_command_image', self.imagecmdQLE.text())
         settings.setValue('extraformats_image', sorted(extraformats_image))
         settings.setValue('extraformats_document', sorted(extraformats_document))
+        settings.setValue('extraformats_markdown', sorted(extraformats_markdown))
 
         self.accept()

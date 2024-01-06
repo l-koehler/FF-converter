@@ -97,7 +97,7 @@ common_markdown_formats = ['docx', 'dokuwiki', 'epub', 'epub2', 'epub3', 'html',
 #-----compression data
 
 compression_formats = [
-        'ar', 'squashfs', 'tar', 'tgz', 'zip'
+        '[Folder]', 'ar', 'squashfs', 'tar', 'tgz', 'zip'
     ]
 
 common_compression_formats = [

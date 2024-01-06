@@ -290,6 +290,7 @@ class MainWindow(QMainWindow):
         self.audiovideo_tab.fill_video_comboboxes(videocodecs,
                 audiocodecs, extraformats_video)
         self.image_tab.fill_extension_combobox(extraformats_image)
+        
 
     def get_current_tab(self):
         for i in self.tabs:

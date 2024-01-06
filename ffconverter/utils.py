@@ -26,7 +26,7 @@ import subprocess
 import time
 import string
 
-from PyQt5.QtCore import pyqtSignal, QSize, Qt
+from PyQt5.QtCore import pyqtSignal, QSize, Qt, QSettings
 from PyQt5.QtWidgets import (
         QAction, QLayout, QLineEdit, QListWidget, QListWidgetItem, QMenu,
         QSpacerItem, QWidget, QHBoxLayout, QVBoxLayout, QGridLayout
@@ -78,8 +78,10 @@ def get_all_conversions(get_conv_for_ext = False, ext = ["",""], missing = []):
     if get_conv_for_ext is True.
     """
     supported_tmp = []
+    settings = QSettings()
     # poll ffmpeg
     if 'ffmpeg' not in missing:
+        extraformats_video = (settings.value('extraformats_video') or [])
         completed_process = subprocess.run(['ffmpeg', '-formats'],
                                     capture_output=True, text=True)
         ffmpeg_stdout = completed_process.stdout
@@ -101,13 +103,15 @@ def get_all_conversions(get_conv_for_ext = False, ext = ["",""], missing = []):
                 ffmpeg_input += extension
             if 'E' in action:
                 ffmpeg_output += extension
-        ffmpeg_conversions = [ffmpeg_input, ffmpeg_output]
+        ffmpeg_conversions = [ffmpeg_input + extraformats_video,
+                              ffmpeg_output + extraformats_video]
         supported_tmp.append(ffmpeg_conversions)
     else:
         ffmpeg_conversions = [[], []]
     
     # poll pandoc
     if 'pandoc' not in missing:
+        extraformats_markdown = (settings.value('extraformats_markdown') or [])
         completed_process = subprocess.run(['pandoc', '--list-input-formats'],
                                         capture_output=True, text=True)
         in_formats = completed_process.stdout
@@ -120,19 +124,23 @@ def get_all_conversions(get_conv_for_ext = False, ext = ["",""], missing = []):
         out_format_list = out_formats.split('\n')
         if 'markdown' in out_format_list:
             out_format_list.append('md')
-        pandoc_conversions = [in_format_list, out_format_list]
+        pandoc_conversions = [in_format_list + extraformats_markdown,
+                              out_format_list + extraformats_markdown]
         supported_tmp.append(pandoc_conversions)
     else:
         pandoc_conversions = [[], []]
     
     # poll magick
     if 'imagemagick' not in missing:
+        extraformats_image = (settings.value('extraformats_image') or [])
         try:
-            completed_process = subprocess.run(['magick', 'identify', '-list', 'format'],
+            completed_process = subprocess.run(['magick', 'identify', '-list',
+                                                'format'],
                                             capture_output=True, text=True)
         except FileNotFoundError:
             # retry with convert
-            completed_process = subprocess.run(['convert', 'identify', '-list', 'format'],
+            completed_process = subprocess.run(['convert', 'identify', '-list',
+                                                'format'],
                                             capture_output=True, text=True)
         magick_formats = completed_process.stdout
         magick_format_list = magick_formats.split('\n')
@@ -152,7 +160,8 @@ def get_all_conversions(get_conv_for_ext = False, ext = ["",""], missing = []):
                     in_formats.append(file_format)
             if "w" in rw_status:
                 out_formats.append(file_format)
-        magick_conversions = [in_formats, out_formats]
+        magick_conversions = [in_formats + extraformats_image,
+                              out_formats + extraformats_image]
         supported_tmp.append(magick_conversions)
     else:
         magick_conversions = [[], []]
@@ -160,14 +169,15 @@ def get_all_conversions(get_conv_for_ext = False, ext = ["",""], missing = []):
     # libreoffice exts
     # cant actually get those right now, so have some predefined lists instead
     if 'unoconv' not in missing:
-        calc  = [['csv', 'xls', 'xml', 'xlsx', 'ods', 'sdc'],
-                ['csv', 'html', 'xls', 'xml', 'ods', 'sdc', 'xhtml']]
-        img   = [['eps', 'emf', 'gif', 'jpg', 'odd', 'png', 'tiff', 'bmp', 'webp'],
-                ['eps', 'emf', 'gif', 'html', 'jpg', 'odd', 'pdf', 'png', 'svg', 'tiff', 'bmp', 'xhtml', 'webp']]
-        slide = [['odp', 'ppt', 'pptx', 'sda'],
-                ['eps', 'gif', 'html', 'swf', 'odp', 'ppt', 'pdf', 'svg', 'sda', 'xml']]
-        text  = [['xml', 'html', 'doc', 'docx', 'odt', 'txt', 'rtf', 'sdw', 'pdf'],
-                ['bib', 'xml', 'html', 'ltx', 'doc', 'odt', 'txt', 'pdf', 'rtf', 'sdw']]
+        extraformats_document = (settings.value('extraformats_document') or [])
+        calc  = [['csv', 'xls', 'xml', 'xlsx', 'ods', 'sdc'] + extraformats_document,
+                ['csv', 'html', 'xls', 'xml', 'ods', 'sdc', 'xhtml'] + extraformats_document]
+        img   = [['eps', 'emf', 'gif', 'jpg', 'odd', 'png', 'tiff', 'bmp', 'webp'] + extraformats_document,
+                ['eps', 'emf', 'gif', 'html', 'jpg', 'odd', 'pdf', 'png', 'svg', 'tiff', 'bmp', 'xhtml', 'webp'] + extraformats_document]
+        slide = [['odp', 'ppt', 'pptx', 'sda'] + extraformats_document,
+                ['eps', 'gif', 'html', 'swf', 'odp', 'ppt', 'pdf', 'svg', 'sda', 'xml'] + extraformats_document]
+        text  = [['xml', 'html', 'doc', 'docx', 'odt', 'txt', 'rtf', 'sdw', 'pdf'] + extraformats_document,
+                ['bib', 'xml', 'html', 'ltx', 'doc', 'odt', 'txt', 'pdf', 'rtf', 'sdw'] + extraformats_document]
         supported_tmp.append(calc)
         supported_tmp.append(img)
         supported_tmp.append(slide)
@@ -181,8 +191,10 @@ def get_all_conversions(get_conv_for_ext = False, ext = ["",""], missing = []):
     # compression exts
     # same as above
     if 'tar/ar/zip/squashfs-tools' not in missing:
-        compression_exts = [['deb', 'a', 'ar', 'o', 'so', 'sqfs', 'squashfs', 'snap', 'tgz', 'tar.gz', 'tar'],
-                            ['[Folder]', 'ar', 'squashfs', 'tar', 'tgz', 'zip']] # TODO: Localize [Folder]
+        extraformats_compression = (settings.value('extraformats_compression')
+                                    or [])
+        compression_exts = [['deb', 'a', 'ar', 'o', 'so', 'sqfs', 'squashfs', 'snap', 'tgz', 'tar.gz', 'tar'] + extraformats_compression,
+                            ['[Folder]', 'ar', 'squashfs', 'tar', 'tgz', 'zip'] + extraformats_compression] # TODO: Localize [Folder]
         supported_tmp.append(compression_exts)
     else:
         compression_exts = [[], []]
