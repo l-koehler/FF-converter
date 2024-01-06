@@ -571,27 +571,27 @@ You will not be able to convert image files until you install it.</source>
         <translation type="obsolete">文件檔</translation>
     </message>
     <message>
-        <location filename="../ffconverter/ffconverter.py" line="314"/>
+        <location filename="../ffconverter/ffconverter.py" line="318"/>
         <source>Choose File</source>
         <translation>選擇檔案</translation>
     </message>
     <message>
-        <location filename="../ffconverter/ffconverter.py" line="357"/>
+        <location filename="../ffconverter/ffconverter.py" line="366"/>
         <source>Choose output destination</source>
         <translation>選擇輸出目的地</translation>
     </message>
     <message>
-        <location filename="../ffconverter/ffconverter.py" line="395"/>
+        <location filename="../ffconverter/ffconverter.py" line="404"/>
         <source>You must choose an output folder!</source>
         <translation>您必須選擇一個輸出資料夾！</translation>
     </message>
     <message>
-        <location filename="../ffconverter/ffconverter.py" line="399"/>
+        <location filename="../ffconverter/ffconverter.py" line="408"/>
         <source>Output folder does not exists!</source>
         <translation>輸出資料夾不存在！</translation>
     </message>
     <message>
-        <location filename="../ffconverter/ffconverter.py" line="405"/>
+        <location filename="../ffconverter/ffconverter.py" line="414"/>
         <source>Error!</source>
         <translation>錯誤！</translation>
     </message>
@@ -621,7 +621,7 @@ You will not be able to convert image files until you install it.</source>
         <translation>清除所有</translation>
     </message>
     <message>
-        <location filename="../ffconverter/ffconverter.py" line="392"/>
+        <location filename="../ffconverter/ffconverter.py" line="401"/>
         <source>You must add at least one file to convert!</source>
         <translation>您必須加入至少一個檔案以供轉換！</translation>
     </message>
@@ -657,7 +657,7 @@ folder as input file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ffconverter/ffconverter.py" line="447"/>
+        <location filename="../ffconverter/ffconverter.py" line="456"/>
         <source>Convert among several file types to other formats</source>
         <translation type="unfinished"></translation>
     </message>
@@ -725,7 +725,7 @@ folder as input file</source>
         <translation type="obsolete">FFmpeg</translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="70"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="84"/>
         <source>Default command:</source>
         <translation>預設指令：</translation>
     </message>
@@ -740,69 +740,89 @@ folder as input file</source>
         <translation type="obsolete">avconv</translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="137"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="163"/>
         <source>General</source>
         <translation>一般</translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="138"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="164"/>
         <source>Audio/Video</source>
         <translation>音訊/視訊</translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="157"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="184"/>
         <source>Preferences</source>
         <translation>偏好設定</translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="208"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="241"/>
         <source>Choose default output destination</source>
         <translation>選擇預設的輸出目的地</translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="73"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="87"/>
         <source>Video codecs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="76"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="90"/>
         <source>Audio codecs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="118"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="142"/>
         <source>Extra formats</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="89"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="103"/>
         <source>Default video codecs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="90"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="104"/>
         <source>Default audio codecs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="67"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="81"/>
         <source>Path to executable:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="102"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="116"/>
         <source>Default options:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="139"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="165"/>
         <source>Images</source>
         <translation type="unfinished">圖片</translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="140"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="166"/>
         <source>Documents</source>
         <translation type="unfinished">文件</translation>
+    </message>
+    <message>
+        <location filename="../ffconverter/preferences_dlg.py" line="58"/>
+        <source>Other Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ffconverter/preferences_dlg.py" line="60"/>
+        <source>Add &quot;common&quot; formats:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ffconverter/preferences_dlg.py" line="62"/>
+        <source>Add double-extensions:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ffconverter/preferences_dlg.py" line="167"/>
+        <source>Markdown</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -838,32 +858,32 @@ folder as input file</source>
         <translation type="obsolete">已轉換：%1/%2</translation>
     </message>
     <message>
-        <location filename="../ffconverter/progress.py" line="200"/>
+        <location filename="../ffconverter/progress.py" line="206"/>
         <source>Cancel Conversion</source>
         <translation>取消轉換</translation>
     </message>
     <message>
-        <location filename="../ffconverter/progress.py" line="200"/>
+        <location filename="../ffconverter/progress.py" line="206"/>
         <source>Are you sure you want to cancel conversion?</source>
         <translation>您確定要取消轉換？</translation>
     </message>
     <message>
-        <location filename="../ffconverter/progress.py" line="234"/>
+        <location filename="../ffconverter/progress.py" line="240"/>
         <source>In progress:</source>
         <translation>正在進行：</translation>
     </message>
     <message>
-        <location filename="../ffconverter/progress.py" line="163"/>
+        <location filename="../ffconverter/progress.py" line="169"/>
         <source>Report</source>
         <translation>報告</translation>
     </message>
     <message>
-        <location filename="../ffconverter/progress.py" line="168"/>
+        <location filename="../ffconverter/progress.py" line="174"/>
         <source>Close</source>
         <translation>關閉</translation>
     </message>
     <message>
-        <location filename="../ffconverter/progress.py" line="164"/>
+        <location filename="../ffconverter/progress.py" line="170"/>
         <source>Converted: {0}/{1}</source>
         <translation type="unfinished"></translation>
     </message>

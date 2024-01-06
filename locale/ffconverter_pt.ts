@@ -521,27 +521,27 @@ Não poderá converter ficheiros de imagem até que o instale.</translation>
         <translation type="obsolete">Documentos</translation>
     </message>
     <message>
-        <location filename="../ffconverter/ffconverter.py" line="314"/>
+        <location filename="../ffconverter/ffconverter.py" line="318"/>
         <source>Choose File</source>
         <translation>Escolha o ficheiro</translation>
     </message>
     <message>
-        <location filename="../ffconverter/ffconverter.py" line="357"/>
+        <location filename="../ffconverter/ffconverter.py" line="366"/>
         <source>Choose output destination</source>
         <translation>Escolha a pasta de destino</translation>
     </message>
     <message>
-        <location filename="../ffconverter/ffconverter.py" line="395"/>
+        <location filename="../ffconverter/ffconverter.py" line="404"/>
         <source>You must choose an output folder!</source>
         <translation>Tem que escolher a pasta de destino!</translation>
     </message>
     <message>
-        <location filename="../ffconverter/ffconverter.py" line="399"/>
+        <location filename="../ffconverter/ffconverter.py" line="408"/>
         <source>Output folder does not exists!</source>
         <translation>A pasta escolhida não existe!</translation>
     </message>
     <message>
-        <location filename="../ffconverter/ffconverter.py" line="405"/>
+        <location filename="../ffconverter/ffconverter.py" line="414"/>
         <source>Error!</source>
         <translation>Erro!</translation>
     </message>
@@ -566,7 +566,7 @@ Não poderá converter ficheiros de imagem até que o instale.</translation>
         <translation>Limpar tudo</translation>
     </message>
     <message>
-        <location filename="../ffconverter/ffconverter.py" line="392"/>
+        <location filename="../ffconverter/ffconverter.py" line="401"/>
         <source>You must add at least one file to convert!</source>
         <translation>Deve adiccionar pelo menos um ficheiro para converter!</translation>
     </message>
@@ -602,7 +602,7 @@ folder as input file</source>
         <translation>Documentação</translation>
     </message>
     <message>
-        <location filename="../ffconverter/ffconverter.py" line="447"/>
+        <location filename="../ffconverter/ffconverter.py" line="456"/>
         <source>Convert among several file types to other formats</source>
         <translation>Converter entre vários tipos de arquivo para outros formatos </translation>
     </message>
@@ -665,74 +665,94 @@ folder as input file</source>
         <translation>Sufixo:</translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="70"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="84"/>
         <source>Default command:</source>
         <translation>Comando pré-definido:</translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="137"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="163"/>
         <source>General</source>
         <translation>Geral</translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="138"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="164"/>
         <source>Audio/Video</source>
         <translation>Áudio/Vídeo</translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="157"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="184"/>
         <source>Preferences</source>
         <translation>Preferências</translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="208"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="241"/>
         <source>Choose default output destination</source>
         <translation>Escolha a pasta de destino padrão</translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="73"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="87"/>
         <source>Video codecs</source>
         <translation>Codecs de vídeo</translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="76"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="90"/>
         <source>Audio codecs</source>
         <translation>Codecs de audio</translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="118"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="142"/>
         <source>Extra formats</source>
         <translation>Formatos extra</translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="89"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="103"/>
         <source>Default video codecs</source>
         <translation>Codecs de vídeo por defeito</translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="90"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="104"/>
         <source>Default audio codecs</source>
         <translation>Codecs de audio por defeito</translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="102"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="116"/>
         <source>Default options:</source>
         <translation>Opções por defeito:</translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="139"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="165"/>
         <source>Images</source>
         <translation>Imagens</translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="67"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="81"/>
         <source>Path to executable:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="140"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="166"/>
         <source>Documents</source>
         <translation type="unfinished">Documentos</translation>
+    </message>
+    <message>
+        <location filename="../ffconverter/preferences_dlg.py" line="58"/>
+        <source>Other Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ffconverter/preferences_dlg.py" line="60"/>
+        <source>Add &quot;common&quot; formats:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ffconverter/preferences_dlg.py" line="62"/>
+        <source>Add double-extensions:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ffconverter/preferences_dlg.py" line="167"/>
+        <source>Markdown</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -763,32 +783,32 @@ folder as input file</source>
         <translation>Conversão</translation>
     </message>
     <message>
-        <location filename="../ffconverter/progress.py" line="200"/>
+        <location filename="../ffconverter/progress.py" line="206"/>
         <source>Cancel Conversion</source>
         <translation>Cancelar conversão</translation>
     </message>
     <message>
-        <location filename="../ffconverter/progress.py" line="200"/>
+        <location filename="../ffconverter/progress.py" line="206"/>
         <source>Are you sure you want to cancel conversion?</source>
         <translation>Tem a certeza que quer cancelar a conversão?</translation>
     </message>
     <message>
-        <location filename="../ffconverter/progress.py" line="234"/>
+        <location filename="../ffconverter/progress.py" line="240"/>
         <source>In progress:</source>
         <translation>A decorrer:</translation>
     </message>
     <message>
-        <location filename="../ffconverter/progress.py" line="163"/>
+        <location filename="../ffconverter/progress.py" line="169"/>
         <source>Report</source>
         <translation>Relatório</translation>
     </message>
     <message>
-        <location filename="../ffconverter/progress.py" line="168"/>
+        <location filename="../ffconverter/progress.py" line="174"/>
         <source>Close</source>
         <translation>Fechar</translation>
     </message>
     <message>
-        <location filename="../ffconverter/progress.py" line="164"/>
+        <location filename="../ffconverter/progress.py" line="170"/>
         <source>Converted: {0}/{1}</source>
         <translation>Convertido: {0}/{1}</translation>
     </message>

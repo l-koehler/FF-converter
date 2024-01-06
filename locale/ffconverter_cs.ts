@@ -475,27 +475,27 @@
         <translation>Pomoc</translation>
     </message>
     <message>
-        <location filename="../ffconverter/ffconverter.py" line="314"/>
+        <location filename="../ffconverter/ffconverter.py" line="318"/>
         <source>Choose File</source>
         <translation>Vybrat soubor</translation>
     </message>
     <message>
-        <location filename="../ffconverter/ffconverter.py" line="357"/>
+        <location filename="../ffconverter/ffconverter.py" line="366"/>
         <source>Choose output destination</source>
         <translation>Vybrat cíl výstupu</translation>
     </message>
     <message>
-        <location filename="../ffconverter/ffconverter.py" line="395"/>
+        <location filename="../ffconverter/ffconverter.py" line="404"/>
         <source>You must choose an output folder!</source>
         <translation>Musíte vybrat cílovou složku!</translation>
     </message>
     <message>
-        <location filename="../ffconverter/ffconverter.py" line="399"/>
+        <location filename="../ffconverter/ffconverter.py" line="408"/>
         <source>Output folder does not exists!</source>
         <translation>Cílový složka neexistuje!</translation>
     </message>
     <message>
-        <location filename="../ffconverter/ffconverter.py" line="405"/>
+        <location filename="../ffconverter/ffconverter.py" line="414"/>
         <source>Error!</source>
         <translation>Chyba!</translation>
     </message>
@@ -520,7 +520,7 @@
         <translation>Vyčistit vše</translation>
     </message>
     <message>
-        <location filename="../ffconverter/ffconverter.py" line="392"/>
+        <location filename="../ffconverter/ffconverter.py" line="401"/>
         <source>You must add at least one file to convert!</source>
         <translation>Musíte přidat alespoň jeden soubor k převedení!</translation>
     </message>
@@ -557,7 +557,7 @@ jeho původní složky</translation>
         <translation>dokumentace</translation>
     </message>
     <message>
-        <location filename="../ffconverter/ffconverter.py" line="447"/>
+        <location filename="../ffconverter/ffconverter.py" line="456"/>
         <source>Convert among several file types to other formats</source>
         <translation>Převod mezi několika typy souborů do jiných formátů</translation>
     </message>
@@ -620,74 +620,94 @@ jeho původní složky</translation>
         <translation>Přípona:</translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="70"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="84"/>
         <source>Default command:</source>
         <translation>Výchozí příkaz:</translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="137"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="163"/>
         <source>General</source>
         <translation>Všeobecné</translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="138"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="164"/>
         <source>Audio/Video</source>
         <translation>Audio/Video</translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="157"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="184"/>
         <source>Preferences</source>
         <translation>Předvolby</translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="208"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="241"/>
         <source>Choose default output destination</source>
         <translation>Vybrat výchozí cíl výstupu</translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="73"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="87"/>
         <source>Video codecs</source>
         <translation>Video kodeky</translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="76"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="90"/>
         <source>Audio codecs</source>
         <translation>Zvukové kodeky</translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="118"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="142"/>
         <source>Extra formats</source>
         <translation>Další formáty</translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="89"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="103"/>
         <source>Default video codecs</source>
         <translation>Výchozí video kodeky</translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="90"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="104"/>
         <source>Default audio codecs</source>
         <translation>Výchozí zvukové kodeky</translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="102"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="116"/>
         <source>Default options:</source>
         <translation>Výchozí volby:</translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="139"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="165"/>
         <source>Images</source>
         <translation>Obrázky</translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="67"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="81"/>
         <source>Path to executable:</source>
         <translation>Cesta ke spustitelnému:</translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="140"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="166"/>
         <source>Documents</source>
         <translation>Dokumenty</translation>
+    </message>
+    <message>
+        <location filename="../ffconverter/preferences_dlg.py" line="58"/>
+        <source>Other Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ffconverter/preferences_dlg.py" line="60"/>
+        <source>Add &quot;common&quot; formats:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ffconverter/preferences_dlg.py" line="62"/>
+        <source>Add double-extensions:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ffconverter/preferences_dlg.py" line="167"/>
+        <source>Markdown</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -713,32 +733,32 @@ jeho původní složky</translation>
         <translation>Konverze</translation>
     </message>
     <message>
-        <location filename="../ffconverter/progress.py" line="200"/>
+        <location filename="../ffconverter/progress.py" line="206"/>
         <source>Cancel Conversion</source>
         <translation>Zrušit konverzi</translation>
     </message>
     <message>
-        <location filename="../ffconverter/progress.py" line="200"/>
+        <location filename="../ffconverter/progress.py" line="206"/>
         <source>Are you sure you want to cancel conversion?</source>
         <translation>Opravdu chcete přerušit konverzi?</translation>
     </message>
     <message>
-        <location filename="../ffconverter/progress.py" line="234"/>
+        <location filename="../ffconverter/progress.py" line="240"/>
         <source>In progress:</source>
         <translation>Probíhá:</translation>
     </message>
     <message>
-        <location filename="../ffconverter/progress.py" line="163"/>
+        <location filename="../ffconverter/progress.py" line="169"/>
         <source>Report</source>
         <translation>Oznámit</translation>
     </message>
     <message>
-        <location filename="../ffconverter/progress.py" line="168"/>
+        <location filename="../ffconverter/progress.py" line="174"/>
         <source>Close</source>
         <translation>Zavřít</translation>
     </message>
     <message>
-        <location filename="../ffconverter/progress.py" line="164"/>
+        <location filename="../ffconverter/progress.py" line="170"/>
         <source>Converted: {0}/{1}</source>
         <translation>Převedeno: {0}/{1}</translation>
     </message>

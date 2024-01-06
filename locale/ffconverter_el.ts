@@ -476,27 +476,27 @@
         <translation>Βοήθεια</translation>
     </message>
     <message>
-        <location filename="../ffconverter/ffconverter.py" line="314"/>
+        <location filename="../ffconverter/ffconverter.py" line="318"/>
         <source>Choose File</source>
         <translation>Επιλογή αρχείου</translation>
     </message>
     <message>
-        <location filename="../ffconverter/ffconverter.py" line="357"/>
+        <location filename="../ffconverter/ffconverter.py" line="366"/>
         <source>Choose output destination</source>
         <translation>Επιλογή φακέλου αποθήκευσης</translation>
     </message>
     <message>
-        <location filename="../ffconverter/ffconverter.py" line="395"/>
+        <location filename="../ffconverter/ffconverter.py" line="404"/>
         <source>You must choose an output folder!</source>
         <translation>Πρέπει να επιλέξετε μια τοποθεσία αποθήκευσης!</translation>
     </message>
     <message>
-        <location filename="../ffconverter/ffconverter.py" line="399"/>
+        <location filename="../ffconverter/ffconverter.py" line="408"/>
         <source>Output folder does not exists!</source>
         <translation>Ο φάκελος αποθήκευσης δεν υπάρχει!</translation>
     </message>
     <message>
-        <location filename="../ffconverter/ffconverter.py" line="405"/>
+        <location filename="../ffconverter/ffconverter.py" line="414"/>
         <source>Error!</source>
         <translation>Σφάλμα!</translation>
     </message>
@@ -521,7 +521,7 @@
         <translation>Καθαρισμός όλων</translation>
     </message>
     <message>
-        <location filename="../ffconverter/ffconverter.py" line="392"/>
+        <location filename="../ffconverter/ffconverter.py" line="401"/>
         <source>You must add at least one file to convert!</source>
         <translation>Πρέπει να προσθέσετε τουλάχιστον ένα αρχείο για μετατροπή!</translation>
     </message>
@@ -558,7 +558,7 @@ folder as input file</source>
         <translation>τεκμηρίωση</translation>
     </message>
     <message>
-        <location filename="../ffconverter/ffconverter.py" line="447"/>
+        <location filename="../ffconverter/ffconverter.py" line="456"/>
         <source>Convert among several file types to other formats</source>
         <translation>Μετατροπή μεταξύ διάφορων τύπων αρχείων σε διαφορετικές μορφές</translation>
     </message>
@@ -621,74 +621,94 @@ folder as input file</source>
         <translation>Κατάληξη:</translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="70"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="84"/>
         <source>Default command:</source>
         <translation>Προεπιλεγμένη εντολή:</translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="137"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="163"/>
         <source>General</source>
         <translation>Γενικά</translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="138"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="164"/>
         <source>Audio/Video</source>
         <translation>Audio/Video</translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="157"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="184"/>
         <source>Preferences</source>
         <translation>Προτιμήσεις</translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="208"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="241"/>
         <source>Choose default output destination</source>
         <translation>Επιλογή προεπιλεγμένου φακέλου αποθήκευσης</translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="73"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="87"/>
         <source>Video codecs</source>
         <translation>Video codecs</translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="76"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="90"/>
         <source>Audio codecs</source>
         <translation>Audio codecs</translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="118"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="142"/>
         <source>Extra formats</source>
         <translation>Επιπλέον επεκτάσεις</translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="89"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="103"/>
         <source>Default video codecs</source>
         <translation>Προεπιλεγμένοι video codecs</translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="90"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="104"/>
         <source>Default audio codecs</source>
         <translation>Προεπιλεγμένοι audio codecs</translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="102"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="116"/>
         <source>Default options:</source>
         <translation>Προεπιλεγμένα ορίσματα:</translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="139"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="165"/>
         <source>Images</source>
         <translation>Εικόνες</translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="67"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="81"/>
         <source>Path to executable:</source>
         <translation>Path για το εκτελέσιμο:</translation>
     </message>
     <message>
-        <location filename="../ffconverter/preferences_dlg.py" line="140"/>
+        <location filename="../ffconverter/preferences_dlg.py" line="166"/>
         <source>Documents</source>
         <translation>Έγγραφα</translation>
+    </message>
+    <message>
+        <location filename="../ffconverter/preferences_dlg.py" line="58"/>
+        <source>Other Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ffconverter/preferences_dlg.py" line="60"/>
+        <source>Add &quot;common&quot; formats:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ffconverter/preferences_dlg.py" line="62"/>
+        <source>Add double-extensions:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ffconverter/preferences_dlg.py" line="167"/>
+        <source>Markdown</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -714,32 +734,32 @@ folder as input file</source>
         <translation>Μετατροπή</translation>
     </message>
     <message>
-        <location filename="../ffconverter/progress.py" line="200"/>
+        <location filename="../ffconverter/progress.py" line="206"/>
         <source>Cancel Conversion</source>
         <translation>Διακοπή μετατροπής</translation>
     </message>
     <message>
-        <location filename="../ffconverter/progress.py" line="200"/>
+        <location filename="../ffconverter/progress.py" line="206"/>
         <source>Are you sure you want to cancel conversion?</source>
         <translation>Είστε σίγουρος οτι θέλετε να ακυρώσετε την διαδικασία;</translation>
     </message>
     <message>
-        <location filename="../ffconverter/progress.py" line="234"/>
+        <location filename="../ffconverter/progress.py" line="240"/>
         <source>In progress:</source>
         <translation>Σε πρόοδο:</translation>
     </message>
     <message>
-        <location filename="../ffconverter/progress.py" line="163"/>
+        <location filename="../ffconverter/progress.py" line="169"/>
         <source>Report</source>
         <translation>Αναφορά</translation>
     </message>
     <message>
-        <location filename="../ffconverter/progress.py" line="168"/>
+        <location filename="../ffconverter/progress.py" line="174"/>
         <source>Close</source>
         <translation>Κλείσιμο</translation>
     </message>
     <message>
-        <location filename="../ffconverter/progress.py" line="164"/>
+        <location filename="../ffconverter/progress.py" line="170"/>
         <source>Converted: {0}/{1}</source>
         <translation>Μετατράπηκαν: {0}/{1}</translation>
     </message>
