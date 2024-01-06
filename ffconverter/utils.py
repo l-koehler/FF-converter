@@ -61,7 +61,7 @@ def is_installed(program):
         return is_installed('convert')
     return ''
 
-def get_all_conversions(get_conv_for_ext = False, ext = ["",""], missing = []):
+def get_all_conversions(settings, get_conv_for_ext = False, ext = ["",""], missing = []):
     """
     generates a nested list. how to access:
     supported_tmp[converter_index][in/out] = [types]
@@ -78,7 +78,7 @@ def get_all_conversions(get_conv_for_ext = False, ext = ["",""], missing = []):
     if get_conv_for_ext is True.
     """
     supported_tmp = []
-    settings = QSettings()
+
     # poll ffmpeg
     if 'ffmpeg' not in missing:
         extraformats_video = (settings.value('extraformats_video') or [])
@@ -240,6 +240,8 @@ def get_extension(file_path):
     """
 
     # if there are quotation marks around the file path, remove them
+    settings = QSettings()
+    
     file_path = file_path.replace("\"", "")
 
     remainder, first_ext = os.path.splitext(file_path)
@@ -247,8 +249,8 @@ def get_extension(file_path):
     second_ext = os.path.splitext(remainder)[-1][1:] # '' if only one ext there
     joined_ext = second_ext + '.' + first_ext
 
-
-    if joined_ext in config.double_formats:
+    all_double = config.double_formats + (settings.value('extraformats_double') or [])
+    if joined_ext in all_double:
         return joined_ext
     return first_ext
 

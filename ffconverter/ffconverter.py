@@ -210,14 +210,14 @@ class MainWindow(QMainWindow):
 
         self.setWindowTitle('Multi-Converter')
 
-        self.load_settings()
+        self.settings = self.load_settings()
         self.missing = self.check_for_dependencies()
 
         self.audiovideo_tab.set_default_command()
         self.image_tab.set_default_command()
         self.toQLE.setText(self.default_output)
 
-        self.all_supported_conversions = utils.get_all_conversions(missing=self.missing)
+        self.all_supported_conversions = utils.get_all_conversions(self.settings, missing=self.missing)
         
         self.filesList_update()
 
@@ -286,12 +286,15 @@ class MainWindow(QMainWindow):
         extraformats_markdown = (settings.value('extraformats_markdown') or [])
         extraformats_compression = (settings.value('extraformats_compression')
                                     or [])
+        extraformats_common = (settings.value('extraformats_common') or [])
+        extraformats_double = (settings.value('extraformats_double') or [])
 
         self.audiovideo_tab.fill_video_comboboxes(videocodecs,
                 audiocodecs, extraformats_video)
         self.image_tab.fill_extension_combobox(extraformats_image)
         
-
+        return settings
+        
     def get_current_tab(self):
         for i in self.tabs:
             if self.tabs.index(i) == self.tabWidget.currentIndex():

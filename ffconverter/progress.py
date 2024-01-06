@@ -587,7 +587,8 @@ class Progress(QDialog):
     def convert_dynamic(self, from_file, to_file):
         from_file_ext = utils.get_extension(from_file)
         to_file_ext = utils.get_extension(to_file)
-        converter = utils.get_all_conversions(get_conv_for_ext=True,
+        converter = utils.get_all_conversions(self.parent.settings,
+                                              get_conv_for_ext=True,
                                               ext=[from_file_ext,to_file_ext],
                                               missing=self.parent.missing)
         if converter == "ffmpeg":

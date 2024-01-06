@@ -44,7 +44,7 @@ class Preferences(QDialog):
         self.defaultQLE = QLineEdit()
         self.defaultQTB = QToolButton()
         self.defaultQTB.setText('...')
-        deafult_fol_layout = utils.add_to_layout(
+        default_fol_layout = utils.add_to_layout(
                 'h', self.defaultQLE, self.defaultQTB)
         nameQL = QLabel('<html><b>' + self.tr('Name files') +'</b></html>')
         prefixQL = QLabel(self.tr('Prefix:'))
@@ -52,15 +52,29 @@ class Preferences(QDialog):
         self.prefixQLE = QLineEdit()
         self.suffixQLE = QLineEdit()
         grid = utils.add_to_grid(
-                [prefixQL, self.prefixQLE], [suffixQL, self.suffixQLE])
+                [prefixQL, self.prefixQLE],
+                [suffixQL, self.suffixQLE])
         prefix_layout = utils.add_to_layout('h', grid, None)
+        otherQL = QLabel('<html><b>' + self.tr('Other Settings') +'</b></html>')
+        # set elements here
+        commonformatsQL = QLabel(self.tr('Add "common" formats:'))
+        self.commonformatsQPTE = QPlainTextEdit()
+        doubleformatsQL = QLabel(self.tr('Add double-extensions:'))
+        self.doubleformatsQPTE = QPlainTextEdit()
+        
+        other_grid = utils.add_to_grid(
+                [commonformatsQL, doubleformatsQL],
+                [self.commonformatsQPTE, self.doubleformatsQPTE])
+        other_layout = utils.add_to_layout('h', other_grid, None)
 
         tabwidget1_layout = utils.add_to_layout(
                 'v', saveQL,
                 QSpacerItem(14, 13), existQL, exist_layout,
-                QSpacerItem(14, 13), defaultQL, deafult_fol_layout,
-                QSpacerItem(13, 13), nameQL, QSpacerItem(14, 13),
-                prefix_layout, None
+                QSpacerItem(14, 13), defaultQL, default_fol_layout,
+                QSpacerItem(13, 13), nameQL,
+                QSpacerItem(14, 13), prefix_layout,
+                QSpacerItem(14, 13), otherQL,
+                QSpacerItem(14, 13), other_layout, None
                 )
 
         ffmpegQL = QLabel('<html><b>FFmpeg</b></html>')
@@ -191,6 +205,8 @@ class Preferences(QDialog):
         extraformats_image = (settings.value('extraformats_image') or [])
         extraformats_document = (settings.value('extraformats_document') or [])
         extraformats_markdown = (settings.value('extraformats_markdown') or [])
+        extraformats_common = (settings.value('extraformats_common') or [])
+        extraformats_double = (settings.value('extraformats_double') or [])
 
         if overwrite_existing:
             self.exst_overwriteQRB.setChecked(True)
@@ -209,6 +225,8 @@ class Preferences(QDialog):
         self.extraformatsimageQPTE.setPlainText("\n".join(extraformats_image))
         self.extraformatsdocumentQPTE.setPlainText("\n".join(extraformats_document))
         self.extraformatsmarkdownQPTE.setPlainText("\n".join(extraformats_markdown))
+        self.commonformatsQPTE.setPlainText("\n".join(extraformats_common))
+        self.doubleformatsQPTE.setPlainText("\n".join(extraformats_double))
 
     def set_videocodecs(self, codecs):
         self.vidcodecsQPTE.setPlainText("\n".join(codecs))
@@ -254,6 +272,10 @@ class Preferences(QDialog):
                 self.extraformatsdocumentQPTE, config.document_formats)
         extraformats_markdown = self.plaintext_to_list(
                 self.extraformatsmarkdownQPTE, config.markdown_formats)
+        extraformats_common = self.plaintext_to_list(
+                self.commonformatsQPTE, config.common_formats)
+        extraformats_double = self.plaintext_to_list(
+                self.doubleformatsQPTE, config.double_formats)
         
         settings = QSettings()
 
@@ -274,5 +296,7 @@ class Preferences(QDialog):
         settings.setValue('extraformats_image', sorted(extraformats_image))
         settings.setValue('extraformats_document', sorted(extraformats_document))
         settings.setValue('extraformats_markdown', sorted(extraformats_markdown))
+        settings.setValue('extraformats_common', sorted(extraformats_common))
+        settings.setValue('extraformats_double', sorted(extraformats_double))
 
         self.accept()

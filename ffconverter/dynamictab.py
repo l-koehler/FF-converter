@@ -78,9 +78,9 @@ class DynamicTab(QWidget):
             valid_outputs = list(dict.fromkeys(first_output_list))
 
         if self.commonformatQChB.isChecked():
+            all_common = (self.parent.settings.value('extraformats_common') or []) + config.common_formats
             # remove all uncommon formats from the list
-            valid_outputs[:] = [ext for ext in valid_outputs
-                                if ext in config.common_formats]
+            valid_outputs[:] = [ext for ext in valid_outputs if ext in all_common]
         self.extQCB.addItems(sorted(valid_outputs))
 
     def ok_to_continue(self):
