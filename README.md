@@ -20,8 +20,7 @@ options, for example flipping the image or selecting codecs, in the tabs.
 * imagemagick (Images)  
 * unoconv (Office formats)  
 * pandoc (Markdown)  
-* squashfs-tools, zip (Compressed files)  
-* binutils, tar (Compressed files, should be preinstalled)  
+* squashfs-tools, zip, unzip, binutils, tar, gzip, bzip2 (Compressed files)  
 
 #### Installation
 Install the `ffconverter` package from PyPI.  

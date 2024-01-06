@@ -242,9 +242,13 @@ class MainWindow(QMainWindow):
         self.imagemagick = utils.is_installed('magick')
         self.pandoc = utils.is_installed('pandoc')
         
-        self.compresstools = utils.is_installed('tar') and\
-        utils.is_installed('ar') and utils.is_installed('zip') and\
-        utils.is_installed('unsquashfs') and utils.is_installed('mksquashfs')
+        self.compress_zip = utils.is_installed('zip')
+        self.compress_unzip = utils.is_installed('unzip')
+        self.compress_tar = utils.is_installed('tar')
+        self.compress_squash = utils.is_installed('mksquashfs') and utils.is_installed('unsquashfs')
+        self.compress_ar = utils.is_installed('ar')
+        self.compress_gzip = utils.is_installed('gzip')
+        self.compress_bzip2 = utils.is_installed('bzip2')
 
         missing = []
         if not self.ffmpeg_path:
@@ -255,8 +259,20 @@ class MainWindow(QMainWindow):
             missing.append('imagemagick')
         if not self.pandoc:
             missing.append('pandoc')
-        if not self.compresstools:
-            missing.append('tar/ar/zip/squashfs-tools')
+        if not self.compress_zip:
+            missing.append('zip')
+        if not self.compress_unzip:
+            missing.append('unzip')
+        if not self.compress_tar:
+            missing.append('tar')
+        if not self.compress_squash:
+            missing.append('squashfs-tools')
+        if not self.compress_ar:
+            missing.append('binutils/ar')
+        if not self.compress_gzip:
+            missing.append('gzip')
+        if not self.compress_bzip2:
+            missing.append('bzip2')
 
         if missing:
             missing = ', '.join(missing)

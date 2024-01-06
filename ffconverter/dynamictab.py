@@ -58,7 +58,7 @@ class DynamicTab(QWidget):
             input_file_ext = utils.get_extension(input_file)
             for conv in all_supported_conversions:
                 if input_file_ext in conv[0]:
-                    # append only once per file
+                    # append to possible_outputs only once per file
                     file_outputs += conv[1]
             possible_outputs.append(file_outputs)
         # possible_outputs: list of lists of output formats, one per input file

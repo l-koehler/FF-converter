@@ -468,7 +468,7 @@ class Progress(QDialog):
 
     def convert_compression(self, from_file, to_file):
         """
-        Use tar/ar/squashfs-tools/zip to convert compressed files.
+        Use tar/ar/squashfs-tools/(un)zip to convert compressed files.
         """
         from_file_ext = utils.get_extension(from_file)
         to_file_ext = utils.get_extension(to_file)
@@ -489,6 +489,8 @@ class Progress(QDialog):
             cmd = 'ar -x {0} --output {1}'.format(from_file, decompress_dir)
         elif from_file_ext in ['sqfs', 'squashfs', 'snap']:
             cmd = 'unsquashfs -d {0} {1}'.format(decompress_dir, from_file)
+        elif from_file_ext in ['zip']:
+            cmd = 'unzip {0} -d {1}'.format(from_file, decompress_dir)
         else:
             cmd = 'tar -xvf {0} -C {1}'.format(from_file, decompress_dir)
         self.update_text_edit_signal.emit(cmd + '\n')
@@ -549,14 +551,16 @@ class Progress(QDialog):
         elif to_file_ext in ['sqfs', 'squashfs']:
             cmd = 'mksquashfs {0} {1}'.format(decompress_dir, to_file)
         elif to_file_ext in ['tgz', 'tar.gz']:
-            cmd = 'tar -czvf {0} {1}'.format(to_file, decompress_dir)
+            cmd = 'tar -czvf {0} --directory={1} .'.format(to_file, decompress_dir)
         elif to_file_ext in ['zip']:
             cmd = 'zip -r -q {0} {1}'.format(to_file, decompress_dir)
         elif to_file_ext in ['tar']:
-            cmd = 'tar -cvf {0} {1}'.format(to_file, decompress_dir)
+            cmd = 'tar -cvf {0} --directory={1} .'.format(to_file, decompress_dir)
         elif to_file_ext in ['[Folder]']:
             # nothing to do, decompress was enough
             pass
+        elif to_file_ext in ['tar.bz2']:
+            cmd = 'tar -cvjSf {0} --directory={1} .'.format(to_file, decompress_dir)
         
         self.update_text_edit_signal.emit(cmd + '\n')
         child = subprocess.Popen(

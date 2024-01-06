@@ -190,14 +190,33 @@ def get_all_conversions(settings, get_conv_for_ext = False, ext = ["",""], missi
     
     # compression exts
     # same as above
-    if 'tar/ar/zip/squashfs-tools' not in missing:
-        extraformats_compression = (settings.value('extraformats_compression')
-                                    or [])
-        compression_exts = [['deb', 'a', 'ar', 'o', 'so', 'sqfs', 'squashfs', 'snap', 'tgz', 'tar.gz', 'tar'] + extraformats_compression,
-                            ['[Folder]', 'ar', 'squashfs', 'tar', 'tgz', 'zip'] + extraformats_compression] # TODO: Localize [Folder]
-        supported_tmp.append(compression_exts)
-    else:
-        compression_exts = [[], []]
+    extraformats_compression = (settings.value('extraformats_compression')
+                                or [])
+    compression_exts = [[], []]
+    if 'tar' not in missing:
+        compression_exts[0] += ['tar']
+        compression_exts[1] += ['tar']
+        if 'gzip' not in missing:
+            compression_exts[0] += ['tgz', 'tar.gz']
+            compression_exts[1] += ['tgz', 'tar.gz']
+        if 'bzip2' not in missing:
+            compression_exts[0] += ['tar.bz2']
+            compression_exts[1] += ['tar.bz2']
+    # zip and unzip are separate for some reason
+    if 'unzip' not in missing:
+        compression_exts[0] += ['zip']
+    if 'zip' not in missing:
+        compression_exts[1] += ['zip']
+    if 'squashfs-tools' not in missing:
+        compression_exts[0] += ['sqfs', 'squashfs', 'snap']
+        compression_exts[1] += ['squashfs']
+    if 'ar/binutils' not in missing:
+        compression_exts[0] += ['deb', 'a', 'ar', 'o', 'so']
+        compression_exts[1] += ['ar']
+    if compression_exts != [[], []]: # if any of the tools work
+        compression_exts[0] += extraformats_compression
+        compression_exts[1] += extraformats_compression + ['[Folder]']
+    supported_tmp.append(compression_exts)
     
     # if the function is meant to return a converter for a in/output pair
     if get_conv_for_ext:
