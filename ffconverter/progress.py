@@ -295,7 +295,8 @@ class Progress(QDialog):
         """
         # note: from_file and to_file names are inside quotation marks
         convert_cmd = '{0} -y -i {1} {2} {3}'.format(
-                self.parent.ffmpeg_path, from_file, command, to_file)
+                self.parent.ffmpeg_path.replace("\\", "/"),
+                from_file, command, to_file)
         self.update_text_edit_signal.emit(convert_cmd + '\n')
 
         self.process = subprocess.Popen(
