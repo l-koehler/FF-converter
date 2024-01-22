@@ -2,6 +2,7 @@
 
 import ffconverter
 from distutils.core import setup
+import os
 
 if os.name == 'nt':
     data_files = [('share/applications', ['share/ffconverter.desktop']),
