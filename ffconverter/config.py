@@ -3,9 +3,14 @@ import os
 
 #-----general data
 
-home = os.getenv("HOME")
-config_dir = os.path.join(home, '.config/ffconverter/')
-tmp_dir = '/tmp/ffconverter/'
+if os.name == 'nt':
+    home = os.environ['USERPROFILE']
+    config_dir = os.path.join(home, 'AppData/Local/ffconverter/')
+    tmp_dir = 'C:/temp/ffconverter'
+else:
+    home = os.getenv("HOME")
+    config_dir = os.path.join(home, '.config/ffconverter/')
+    tmp_dir = '/tmp/ffconverter/'
 
 default_ffmpeg_cmd = ''
 default_imagemagick_cmd = ''

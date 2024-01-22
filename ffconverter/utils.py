@@ -52,6 +52,7 @@ def is_installed(program):
     empty sring.
     """
     program = os.path.expanduser(program)
+    print(program)
     for path in os.getenv('PATH').split(os.pathsep):
         fpath = os.path.join(path, program)
         if os.path.isfile(fpath) and os.access(fpath, os.X_OK):
