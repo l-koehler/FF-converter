@@ -52,11 +52,15 @@ def is_installed(program):
     empty sring.
     """
     program = os.path.expanduser(program)
-    print(program)
     for path in os.getenv('PATH').split(os.pathsep):
         fpath = os.path.join(path, program)
-        if os.path.isfile(fpath) and os.access(fpath, os.X_OK):
-            return fpath
+        if os.name == 'nt':
+            fpath_ls = [fpath, fpath+'.exe', fpath+'.cmd', fpath+'.bat']
+        else:
+            fpath_ls = [fpath, fpath+'.sh']
+        for fpath in fpath_ls:
+            if os.path.isfile(fpath) and os.access(fpath, os.X_OK):
+                return fpath
     # imagemagick 6 uses 'convert', version 7 uses 'magick'
     if program == 'magick':
         return is_installed('convert')

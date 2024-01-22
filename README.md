@@ -9,6 +9,9 @@ select a format in the dropdown list, then click Convert.
 For Videos, Music and Images, there are additional  
 options, for example flipping the image or selecting codecs, in the tabs.  
 
+Both Linux and Windows are supported and tested.  
+MacOS should work, but I don't have a Mac, so I can't test that.
+
 #### Dependencies:
 * python3  
 * pyqt5  
@@ -24,13 +27,13 @@ options, for example flipping the image or selecting codecs, in the tabs.
 
 #### Installation
 Install the `ffconverter` package from PyPI.  
-`pip` works on most distros and should be the simplest choice.
+`pip` works on Windows and most Linux Distributions.  
 
 ```sh
 pip install ffconverter
 ```
 
-#### Troubleshooting
+#### Troubleshooting (Linux)
 On some distros (externally managed environments, Arch, Debian),  
 `pip` will not work. In this case, you should use `pipx`.  
 
@@ -42,6 +45,27 @@ sudo ln -sf /usr/local/pipx/venvs/ffconverter/share/pixmaps/ffconverter.png /usr
 
 The last two commands are needed to add the program to your installed  
 applications, but the `ffconverter` command should be available without them.  
+
+#### Troubleshooting (Windows)
+
+If you use Windows, you will likely not have any of the programs  
+the converter uses. You will need to install them by either manually putting  
+.exe files on your PATH or (recommended) by using [scoop](https://scoop.sh).  
+If the programs are not available after that, close your CMD.  
+
+If you want the program on your Desktop, create a new Shortcut  
+and enter this as the path:  
+
+```sh
+"C:\Program Files\Python310\pythonw.exe" -c "from ffconverter import ffconverter as ff; ff.main()"
+```
+
+You may need to replace the path to pythonw.exe with the correct path  
+for your system. You can get this path by running this CMD Command:  
+
+```sh
+where pythonw
+```
 
 #### Uninstall
 Simply run:  

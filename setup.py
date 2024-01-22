@@ -3,11 +3,16 @@
 import ffconverter
 from distutils.core import setup
 
-
-data_files = [('share/applications/', ['share/ffconverter.desktop']),
-              ('share/pixmaps/', ['share/ffconverter.png']),
-              ('share/ffconverter', ['share/presets.xml']),
-              ('share/man/man1', ['man/ffconverter.1.gz'])]
+if os.name == 'nt':
+    data_files = [('share/applications', ['share/ffconverter.desktop']),
+                ('share/pixmaps', ['share/ffconverter.png']),
+                ('share/ffconverter', ['share/presets.xml']),
+                ('share/man/man1', ['man/ffconverter.1.gz'])]
+else:
+    data_files = [('share/applications/', ['share/ffconverter.desktop']),
+                ('share/pixmaps/', ['share/ffconverter.png']),
+                ('share/ffconverter', ['share/presets.xml']),
+                ('share/man/man1', ['man/ffconverter.1.gz'])]
 
 setup(
     name = ffconverter.__name__,
