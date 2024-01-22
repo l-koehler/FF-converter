@@ -37,6 +37,7 @@ setup(
         'License :: OSI Approved :: GNU General Public License (GPL)',
         'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
         'Operating System :: POSIX :: Linux',
+        'Operating System :: Microsoft :: Windows',
         'Development Status :: 5 - Production/Stable',
         'Environment :: X11 Applications :: Qt',
         'Natural Language :: English',

@@ -2,7 +2,7 @@
 MANIFEST
 build/
 dist/
-ffmulticonverter.egg-info/
+ffconverter.egg-info/
 locale/*.qm
 *.pyc
 *.kate-swp
