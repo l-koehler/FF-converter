@@ -69,7 +69,7 @@ class Preferences(QDialog):
 
         if os.name == 'nt':
             self.use_wslQChB = QCheckBox(self.tr("Windows: Use WSL for conversions"))
-            use_wlsGrid = utils.add_to_grid([self.use_wslQChB])
+            use_wslGrid = utils.add_to_grid([self.use_wslQChB])
         else:
             use_wslGrid = None
 
@@ -81,7 +81,7 @@ class Preferences(QDialog):
                 QSpacerItem(14, 13), prefix_layout,
                 QSpacerItem(14, 13), otherQL,
                 QSpacerItem(14, 13), other_layout,
-                QSpacerItem(14, 13), use_wlsGrid
+                QSpacerItem(14, 13), use_wslGrid
                 )
 
         ffmpegQL = QLabel('<html><b>FFmpeg</b></html>')
