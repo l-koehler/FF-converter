@@ -43,16 +43,18 @@ def duration_in_seconds(duration):
     hours, mins, secs = [int(i) for i in duration.split(':')]
     return secs + (hours * 3600) + (mins * 60)
 
-def is_installed(program):
+def is_installed(program, use_wsl):
+    print(use_wsl)
     """
     If program is a program name, returns the absolute path to this program if
     included in the PATH enviromental variable, else empty string.
 
     If program is an absolute path, returns the path if it's executable, else
-    empty sring.
+    empty string.
     """
     program = os.path.expanduser(program)
-    for path in os.getenv('PATH').split(os.pathsep):
+    path_env = os.getenv('PATH').split(os.pathsep)
+    for path in path_env:
         fpath = os.path.join(path, program)
         if os.name == 'nt':
             fpath_ls = [fpath, fpath+'.exe', fpath+'.cmd', fpath+'.bat']
@@ -63,8 +65,49 @@ def is_installed(program):
                 return fpath
     # imagemagick 6 uses 'convert', version 7 uses 'magick'
     if program == 'magick':
-        return is_installed('convert')
+        return is_installed('convert', use_wsl)
+
+    # only if nothing was found on the regular system, check WSL
+    if use_wsl == True:
+        # Add 'wsl -- echo $PATH'
+        try:
+            wsl_which = subprocess.check_output(["wsl", "--", "which", program])
+            wsl_which = wsl_which.decode('utf-8')
+            if not wsl_which.startswith('which: no '):
+                fpath = 'wsl:' + wsl_which.split('\n')[0]
+                return fpath
+        except subprocess.CalledProcessError:
+            pass
+
     return ''
+
+def wsl_adjust(use_wsl, command, path1="", path2=""):
+    # This function will always be called, but isn't needed without WSL
+    if not use_wsl:
+        return [command, path1, path2]
+
+    def adjust_path(path, ret_command):
+        # unquote path and command
+        ret_command = ret_command.replace("\"", "")
+        path = path.replace("\"", "")
+        # backslashes suck and windows can use slashes just fine
+        path = path.replace("\\", "/")
+        # replace D:/whatever with /mnt/d/whatever for WSL commands
+        if ret_command.startswith('wsl'):
+            drive_letter = path[0]
+            ret_path = path[2:].replace("\\", "/")
+            ret_path = "\"/mnt/" + drive_letter.lower() + ret_path + "\""
+            return ret_path
+        return path
+
+    # Get full path of command (which might be wsl:/bin/mksquashfs for example)
+    ret_command = is_installed(command, use_wsl)
+    # In this case, the command is "wsl -- /bin/mksquashfs"
+    if ret_command.startswith('wsl:'):
+        ret_command = "wsl -- " + ret_command[4:]
+    else:
+        ret_command = "\"" + ret_command + "\""
+    return [ret_command, adjust_path(path1, ret_command), adjust_path(path2, ret_command)]
 
 def get_all_conversions(settings, get_conv_for_ext = False, ext = ["",""], missing = []):
     """
@@ -95,13 +138,12 @@ def get_all_conversions(settings, get_conv_for_ext = False, ext = ["",""], missi
         for line in ffmpeg_stdout_lines:
             line_args = line.split()
             action = line_args[0]
-            
             # dont run on the header lines
             pattern = r'^\s*(DE|D|E)\s+(\S+)'
             match = re.match(pattern, line)
             if not match:
                 continue
-            
+
             # line_args[1] can be "ext" or "ext1,ext2", so a split is neccesary
             extension = line_args[1].split(',')
             if 'D' in action:

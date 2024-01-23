@@ -174,7 +174,8 @@ class Progress(QDialog):
             self.cancelQPB.setText(self.tr("Close"))
 
             if self.shutdownQCB.isChecked():
-                if utils.is_installed('systemctl'):
+                # Locating systemctl in WSL would be pointless
+                if utils.is_installed('systemctl', False):
                     subprocess.call(shlex.split('systemctl poweroff'))
                 else:
                     subprocess.call(shlex.split('shutdown -h now'))
@@ -355,6 +356,7 @@ class Progress(QDialog):
         Return True if conversion succeed, else False.
         """
         # note: from_file and to_file names are inside quotation marks
+        use_wsl = self.parent.settings.value('use_wsl', type=bool)
         resize = ''
         if size:
             resize = '-resize {0}'.format(size)
@@ -362,26 +364,17 @@ class Progress(QDialog):
                 resize += '\!'
 
         imgcmd = ' ' + imgcmd.strip() + ' '
-        try:
-            cmd = 'magick {0} {1}{2}{3}'.format(from_file, resize, imgcmd, to_file)
-            self.update_text_edit_signal.emit(cmd + '\n')
-            child = subprocess.Popen(
-                    shlex.split(cmd),
-                    stderr=subprocess.STDOUT,
-                    stdout=subprocess.PIPE
-                    )
-            child.wait()
-        except FileNotFoundError:
-            cmd = 'convert {0} {1}{2}{3}'.format(from_file, resize, imgcmd, to_file)
-            self.update_text_edit_signal.emit(cmd + '\n')
-            child = subprocess.Popen(
-                    shlex.split(cmd),
-                    stderr=subprocess.STDOUT,
-                    stdout=subprocess.PIPE
-                    )
-            child.wait()
-            
-        
+        command, from_file, to_file = utils.wsl_adjust(use_wsl, 'magick', from_file, to_file)
+        cmd = f'{command} {from_file} {resize}{imgcmd}{to_file}'
+        self.update_text_edit_signal.emit(cmd + '\n')
+        child = subprocess.Popen(
+                shlex.split(cmd),
+                stderr=subprocess.STDOUT,
+                stdout=subprocess.PIPE
+                )
+        child.wait()
+
+
 
         reader = io.TextIOWrapper(child.stdout, encoding='utf8')
         final_output = reader.read()
@@ -396,7 +389,7 @@ class Progress(QDialog):
                 }
         log_lvl = logging.info if return_code == 0 else logging.error
         log_lvl(final_output, extra=log_data)
-        
+
         return return_code == 0
 
     def convert_document(self, from_file, to_file):
@@ -409,10 +402,10 @@ class Progress(QDialog):
         Return True if conversion succeed, else False.
         """
         # note: from_file and to_file names are inside quotation marks
+        use_wsl = self.parent.settings.value('use_wsl', type=bool)
         to_file_ext = utils.get_extension(to_file)
-
-        cmd = 'unoconv -f {0} -o {1} {2}'.format(to_file_ext,
-                                                 to_file, from_file)
+        command, from_file, to_file = utils.wsl_adjust(use_wsl, 'unoconv', from_file, to_file)
+        cmd = f'{command} -f {to_file_ext} -o {to_file} {from_file}'
         self.update_text_edit_signal.emit(cmd + '\n')
         child = subprocess.Popen(
                 shlex.split(cmd),
@@ -436,13 +429,15 @@ class Progress(QDialog):
         log_lvl(final_output, extra=log_data)
 
         return return_code == 0
-    
+
     def convert_markdown(self, from_file, to_file):
         """
         Use pandoc to convert markdown files.
         The syntax is 'pandoc -s <input> -o <output>'
         """
-        cmd = 'pandoc -s {0} -o {1}'.format(from_file, to_file)
+        use_wsl = self.parent.settings.value('use_wsl', type=bool)
+        command, from_file, to_file = utils.wsl_adjust(use_wsl, 'pandoc', from_file, to_file)
+        cmd = f'{command} -s {from_file} -o {to_file}'
         self.update_text_edit_signal.emit(cmd + '\n')
         child = subprocess.Popen(
                 shlex.split(cmd),
@@ -473,6 +468,8 @@ class Progress(QDialog):
         """
         from_file_ext = utils.get_extension(from_file)
         to_file_ext = utils.get_extension(to_file)
+        use_wsl = self.parent.settings.value('use_wsl', type=bool)
+
         # Start by decompressing
         decompress_dir = config.tmp_dir
         if to_file_ext == "[Folder]":
@@ -485,15 +482,19 @@ class Progress(QDialog):
             shutil.rmtree(decompress_dir)
             os.mkdir(decompress_dir)
             pass
-        
+
         if from_file_ext in ['deb', 'a', 'ar', 'o', 'so']:
-            cmd = 'ar -x {0} --output {1}'.format(from_file, decompress_dir)
+            command, cmd_from_file, cmd_decompress_dir = utils.wsl_adjust(use_wsl, 'ar', from_file, decompress_dir)
+            cmd = f'{command} -x {cmd_from_file} --output {cmd_decompress_dir}'
         elif from_file_ext in ['sqfs', 'squashfs', 'snap']:
-            cmd = 'unsquashfs -d {0} {1}'.format(decompress_dir, from_file)
+            command, cmd_from_file, cmd_decompress_dir = utils.wsl_adjust(use_wsl, 'unsquashfs', from_file, decompress_dir)
+            cmd = f'{command} -d {cmd_decompress_dir} {cmd_from_file}'
         elif from_file_ext in ['zip']:
-            cmd = 'unzip {0} -d {1}'.format(from_file, decompress_dir)
+            command, cmd_from_file, cmd_decompress_dir = utils.wsl_adjust(use_wsl, 'unzip', from_file, decompress_dir)
+            cmd = f'{command} {cmd_from_file} -d {cmd_decompress_dir}'
         else:
-            cmd = 'tar -xvf {0} -C {1}'.format(from_file, decompress_dir)
+            command, cmd_from_file, cmd_decompress_dir = utils.wsl_adjust(use_wsl, 'tar', from_file, decompress_dir)
+            cmd = f'{command} -xvf {cmd_from_file} -C {cmd_decompress_dir}'
         self.update_text_edit_signal.emit(cmd + '\n')
         child = subprocess.Popen(
                 shlex.split(cmd),
@@ -524,7 +525,8 @@ class Progress(QDialog):
             # ar can only 'add' single files to archives. so iterate over all
             for fpath in Path(decompress_dir).rglob('*.*'):
                 if os.path.isfile(fpath):
-                    cmd = 'ar cr {0} \"{1}\"'.format(to_file, fpath)
+                    command, to_file, fpath = utils.wsl_adjust(use_wsl, 'ar', to_file, fpath)
+                    cmd = f'{command} cr {to_file} \"{fpath}\"'
                     self.update_text_edit_signal.emit(cmd + '\n')
                     child = subprocess.Popen(
                             shlex.split(cmd),
@@ -550,19 +552,24 @@ class Progress(QDialog):
                     shutil.rmtree(decompress_dir)
                     return return_code == 0
         elif to_file_ext in ['sqfs', 'squashfs']:
-            cmd = 'mksquashfs {0} {1}'.format(decompress_dir, to_file)
+            command, cmd_to_file, cmd_decompress_dir = utils.wsl_adjust(use_wsl, 'mksquashfs', to_file, decompress_dir)
+            cmd = f'{command} {cmd_decompress_dir} {cmd_to_file}'
         elif to_file_ext in ['tgz', 'tar.gz']:
-            cmd = 'tar -czvf {0} --directory={1} .'.format(to_file, decompress_dir)
+            command, cmd_to_file, cmd_decompress_dir = utils.wsl_adjust(use_wsl, 'tar', to_file, decompress_dir)
+            cmd = f'{command} -czvf {cmd_to_file} --directory={cmd_decompress_dir} .'
         elif to_file_ext in ['zip']:
-            cmd = 'zip -r -q {0} {1}'.format(to_file, decompress_dir)
+            command, cmd_to_file, cmd_decompress_dir = utils.wsl_adjust(use_wsl, 'zip', to_file, decompress_dir)
+            cmd = f'{command} -r -q {cmd_to_file} {cmd_decompress_dir}'
         elif to_file_ext in ['tar']:
-            cmd = 'tar -cvf {0} --directory={1} .'.format(to_file, decompress_dir)
+            command, cmd_to_file, cmd_decompress_dir = utils.wsl_adjust(use_wsl, 'tar', to_file, decompress_dir)
+            cmd = f'{command} -cvf {cmd_to_file} --directory={cmd_decompress_dir} .'
         elif to_file_ext in ['[Folder]']:
             # nothing to do, decompress was enough
             pass
         elif to_file_ext in ['tar.bz2']:
-            cmd = 'tar -cvjSf {0} --directory={1} .'.format(to_file, decompress_dir)
-        
+            command, cmd_to_file, cmd_decompress_dir = utils.wsl_adjust(use_wsl, 'tar', to_file, decompress_dir)
+            cmd = f'{command} -cvjSf {cmd_to_file} --directory={cmd_decompress_dir} .'
+
         self.update_text_edit_signal.emit(cmd + '\n')
         child = subprocess.Popen(
                 shlex.split(cmd),
@@ -584,11 +591,12 @@ class Progress(QDialog):
                 }
         log_lvl = logging.info if return_code == 0 else logging.error
         log_lvl(final_output, extra=log_data)
-        
+
         if to_file_ext not in ['[Folder]']:
             shutil.rmtree(decompress_dir)
+            pass
         return return_code == 0
-    
+
     def convert_dynamic(self, from_file, to_file):
         from_file_ext = utils.get_extension(from_file)
         to_file_ext = utils.get_extension(to_file)
@@ -597,7 +605,7 @@ class Progress(QDialog):
                                               ext=[from_file_ext,to_file_ext],
                                               missing=self.parent.missing)
         if converter == "ffmpeg":
-            return self.convert_video(from_file, to_file, "") # cmd empty
+            return self.convert_video(from_file, to_file, "")
         elif converter == "pandoc":
             return self.convert_markdown(from_file, to_file)
         elif converter == "magick":

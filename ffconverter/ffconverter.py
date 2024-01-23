@@ -218,7 +218,7 @@ class MainWindow(QMainWindow):
         self.toQLE.setText(self.default_output)
 
         self.all_supported_conversions = utils.get_all_conversions(self.settings, missing=self.missing)
-        
+
         self.filesList_update()
 
     def parse_cla(self):
@@ -235,20 +235,21 @@ class MainWindow(QMainWindow):
         Check if each one of the program dependencies are installed and
         update self.dependenciesQL with the appropriate message.
         """
-        if not utils.is_installed(self.ffmpeg_path):
-            self.ffmpeg_path = utils.is_installed('ffmpeg')
+        use_wsl = self.settings.value('use_wsl', type=bool)
+        if not utils.is_installed(self.ffmpeg_path, use_wsl):
+            self.ffmpeg_path = utils.is_installed('ffmpeg', use_wsl)
             QSettings().setValue('ffmpeg_path', self.ffmpeg_path)
-        self.unoconv = utils.is_installed('unoconv')
-        self.imagemagick = utils.is_installed('magick')
-        self.pandoc = utils.is_installed('pandoc')
-        
-        self.compress_zip = utils.is_installed('zip')
-        self.compress_unzip = utils.is_installed('unzip')
-        self.compress_tar = utils.is_installed('tar')
-        self.compress_squash = utils.is_installed('mksquashfs') and utils.is_installed('unsquashfs')
-        self.compress_ar = utils.is_installed('ar')
-        self.compress_gzip = utils.is_installed('gzip')
-        self.compress_bzip2 = utils.is_installed('bzip2')
+        self.unoconv = utils.is_installed('unoconv', use_wsl)
+        self.imagemagick = utils.is_installed('magick', use_wsl)
+        self.pandoc = utils.is_installed('pandoc', use_wsl)
+
+        self.compress_zip = utils.is_installed('zip', use_wsl)
+        self.compress_unzip = utils.is_installed('unzip', use_wsl)
+        self.compress_tar = utils.is_installed('tar', use_wsl)
+        self.compress_squash = utils.is_installed('mksquashfs', use_wsl) and utils.is_installed('unsquashfs', use_wsl)
+        self.compress_ar = utils.is_installed('ar', use_wsl)
+        self.compress_gzip = utils.is_installed('gzip', use_wsl)
+        self.compress_bzip2 = utils.is_installed('bzip2', use_wsl)
 
         missing = []
         if not self.ffmpeg_path:

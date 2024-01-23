@@ -20,7 +20,7 @@ from PyQt5.QtCore import QSettings, QTimer
 from PyQt5.QtWidgets import (
         QDialog, QDialogButtonBox, QFileDialog, QLabel, QLineEdit,
         QRadioButton, QSpacerItem, QTabWidget, QToolButton, QWidget,
-        QPlainTextEdit, QPushButton
+        QPlainTextEdit, QPushButton, QCheckBox
         )
 
 from ffconverter import utils
@@ -61,11 +61,17 @@ class Preferences(QDialog):
         self.commonformatsQPTE = QPlainTextEdit()
         doubleformatsQL = QLabel(self.tr('Add double-extensions:'))
         self.doubleformatsQPTE = QPlainTextEdit()
-        
+
         other_grid = utils.add_to_grid(
                 [commonformatsQL, doubleformatsQL],
                 [self.commonformatsQPTE, self.doubleformatsQPTE])
         other_layout = utils.add_to_layout('h', other_grid, None)
+
+        if os.name == 'nt':
+            self.use_wslQChB = QCheckBox(self.tr("Windows: Use WSL for conversions"))
+            use_wlsGrid = utils.add_to_grid([self.use_wslQChB])
+        else:
+            use_wslGrid = None
 
         tabwidget1_layout = utils.add_to_layout(
                 'v', saveQL,
@@ -74,7 +80,8 @@ class Preferences(QDialog):
                 QSpacerItem(13, 13), nameQL,
                 QSpacerItem(14, 13), prefix_layout,
                 QSpacerItem(14, 13), otherQL,
-                QSpacerItem(14, 13), other_layout, None
+                QSpacerItem(14, 13), other_layout,
+                QSpacerItem(14, 13), use_wlsGrid
                 )
 
         ffmpegQL = QLabel('<html><b>FFmpeg</b></html>')
@@ -138,7 +145,7 @@ class Preferences(QDialog):
 
         tabwidget4_layout = utils.add_to_layout(
                 'v', extraformatsdocumentQL, hlayout3, None)
-        
+
         extraformatsmarkdownQL = QLabel(
                 '<html><b>' + self.tr('Extra formats') +'</b></html>')
         self.extraformatsmarkdownQPTE = QPlainTextEdit()
@@ -227,6 +234,9 @@ class Preferences(QDialog):
         self.extraformatsmarkdownQPTE.setPlainText("\n".join(extraformats_markdown))
         self.commonformatsQPTE.setPlainText("\n".join(extraformats_common))
         self.doubleformatsQPTE.setPlainText("\n".join(extraformats_double))
+        if os.name == 'nt':
+            use_wsl = settings.value('use_wsl', type=bool)
+            self.use_wslQChB.setChecked(use_wsl)
 
     def set_videocodecs(self, codecs):
         self.vidcodecsQPTE.setPlainText("\n".join(codecs))
@@ -276,12 +286,17 @@ class Preferences(QDialog):
                 self.commonformatsQPTE, config.common_formats)
         extraformats_double = self.plaintext_to_list(
                 self.doubleformatsQPTE, config.double_formats)
-        
         settings = QSettings()
 
+        # WSL is irrelevant for everything but Windows, so should be false.
+        if os.name == 'nt':
+            use_wsl = self.use_wslQChB.isChecked()
+        else:
+            use_wsl = False
+
         ffmpeg_path = os.path.expanduser(self.ffmpegpathQLE.text())
-        if not utils.is_installed(ffmpeg_path):
-            ffmpeg_path = utils.is_installed('ffmpeg')
+        if not utils.is_installed(ffmpeg_path, use_wsl):
+            ffmpeg_path = utils.is_installed('ffmpeg', use_wsl)
 
         settings.setValue('overwrite_existing', self.exst_overwriteQRB.isChecked())
         settings.setValue('default_output', self.defaultQLE.text())
@@ -298,5 +313,6 @@ class Preferences(QDialog):
         settings.setValue('extraformats_markdown', sorted(extraformats_markdown))
         settings.setValue('extraformats_common', sorted(extraformats_common))
         settings.setValue('extraformats_double', sorted(extraformats_double))
+        settings.setValue('use_wsl', use_wsl)
 
         self.accept()

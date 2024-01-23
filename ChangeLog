@@ -1,3 +1,9 @@
+Version 2.2.2
+-------------
+
+* When running on Windows, the program can now use dependencies that are
+  installed on WSL (must be enabled in preferences)
+
 Version 2.2.1
 -------------
 

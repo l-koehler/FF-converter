@@ -16,6 +16,11 @@ MacOS should work, but I don't have a Mac, so I can't test that.
 * python3  
 * pyqt5  
 
+On Linux, use your distributions package manager or pip to install these.
+On Windows, use [python.org](https://python.org) to get python (the version  
+in the Microsoft Store lacks pythonw.exe), then use  
+`python -m pip install PyQt5` to get PyQt5.  
+
 #### Optional dependencies:
 (Without these some conversions will not work)  
 
@@ -24,6 +29,13 @@ MacOS should work, but I don't have a Mac, so I can't test that.
 * unoconv (Office formats)  
 * pandoc (Markdown)  
 * squashfs-tools, zip, unzip, binutils, tar, gzip, bzip2 (Compressed files)  
+
+On Linux, use your distributions Package manager to install these.  
+On Windows, either get .exe files and place them on the $PATH , use [scoop](https://scoop.sh),  
+or (for everything but ffmpeg) install the dependencies in WSL.  
+You could also try other third-party package managers  
+or even the Microsoft Store, the program only needs the command  
+(e.g. `unoconv`) to be available on the CMD.  
 
 #### Installation
 Install the `ffconverter` package from PyPI.  
@@ -47,12 +59,6 @@ The last two commands are needed to add the program to your installed
 applications, but the `ffconverter` command should be available without them.  
 
 #### Troubleshooting (Windows)
-
-If you use Windows, you will likely not have any of the programs  
-the converter uses. You will need to install them by either manually putting  
-.exe files on your PATH or (recommended) by using [scoop](https://scoop.sh).  
-If the programs are not available after that, close your CMD.  
-
 If you want the program on your Desktop, create a new Shortcut  
 and enter this as the path:  
 
