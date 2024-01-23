@@ -74,7 +74,7 @@ def is_installed(program, use_wsl):
             wsl_which = subprocess.check_output(["wsl", "--", "which", program])
             wsl_which = wsl_which.decode('utf-8')
             if not wsl_which.startswith('which: no '):
-                fpath = 'wsl:' + wsl_which.split('\n')[0]
+                fpath = 'wsl -- ' + wsl_which.split('\n')[0]
                 return fpath
         except subprocess.CalledProcessError:
             pass
@@ -82,34 +82,44 @@ def is_installed(program, use_wsl):
     return ''
 
 def wsl_adjust(use_wsl, command, path1="", path2=""):
-    # This function will always be called, but isn't needed without WSL
+    # This function will always be called, but isn't needed if WSL can't be used
+    # this also is the only case where it won't forcibly adjust all paths to use
+    # slashes as pathsep.
     if not use_wsl:
         return [command, path1, path2]
 
-    def adjust_path(path, ret_command):
-        # unquote path and command
-        ret_command = ret_command.replace("\"", "")
-        path = path.replace("\"", "")
-        # backslashes suck and windows can use slashes just fine
-        path = path.replace("\\", "/")
+    # unquote command and
+    # get the full path of the command (might also be a wsl command)
+    command = command.replace("\"", "")
+    full_command = is_installed(command, use_wsl)
+
+    def adjust_path(path, force_unix_paths):
+        # unquote path
+        # also always replace backslashes, windows can handle regular ones
+        path = path.replace('\"', '').replace('\\', '/')
         # replace D:/whatever with /mnt/d/whatever for WSL commands
-        if ret_command.startswith('wsl'):
+        if force_unix_paths:
             drive_letter = path[0]
-            ret_path = path[2:].replace("\\", "/")
-            ret_path = "\"/mnt/" + drive_letter.lower() + ret_path + "\""
-            return ret_path
+            wsl_path = path[2:] # remove drive letter
+            wsl_path = '\"/mnt/' + drive_letter.lower() + wsl_path + '\"'
+            return wsl_path
         return path
 
-    # Get full path of command (which might be wsl:/bin/mksquashfs for example)
-    ret_command = is_installed(command, use_wsl)
-    # In this case, the command is "wsl -- /bin/mksquashfs"
-    if ret_command.startswith('wsl:'):
-        ret_command = "wsl -- " + ret_command[4:]
+    # properly quote command, just in case there are spaces or stuff in the path
+    force_unix_paths = False
+    if full_command.startswith('wsl -- '):
+        force_unix_paths = True
+        full_command = 'wsl -- \"' + full_command[7:] + '\"'
     else:
-        ret_command = "\"" + ret_command + "\""
-    return [ret_command, adjust_path(path1, ret_command), adjust_path(path2, ret_command)]
+        full_command = '\"' + full_command + '\"'
 
-def get_all_conversions(settings, get_conv_for_ext = False, ext = ["",""], missing = []):
+    return_list = [full_command.replace('\\', '/'),
+        adjust_path(path1, force_unix_paths),
+        adjust_path(path2, force_unix_paths)]
+    return return_list
+
+def get_all_conversions(settings, get_conv_for_ext = False,
+                        ext = ["",""], missing = []):
     """
     generates a nested list. how to access:
     supported_tmp[converter_index][in/out] = [types]
@@ -176,7 +186,7 @@ def get_all_conversions(settings, get_conv_for_ext = False, ext = ["",""], missi
         supported_tmp.append(pandoc_conversions)
     else:
         pandoc_conversions = [[], []]
-    
+
     # poll magick
     if 'imagemagick' not in missing:
         extraformats_image = (settings.value('extraformats_image') or [])
@@ -196,14 +206,16 @@ def get_all_conversions(settings, get_conv_for_ext = False, ext = ["",""], missi
         for line in magick_format_list:
             line_args = line.split()
             # if the line is empty or does not start with all-caps (EXTENSION)
-            if len(line_args) < 3 or set(line_args[0]) <= set(f'{string.ascii_uppercase}*-'):
+            uppercase_chars = string.ascii_uppercase + '*-'
+            if len(line_args) < 3 or set(line_args[0]) <= set(uppercase_chars):
                 continue
             file_format, module, rw_status = line_args[:3]
             if module in ['BRAILLE', 'TXT']:
                 continue
             
             if "r" in rw_status:
-                if module not in ['PDF']: # the program will break trying to read some PDFs
+                # the program will break trying to read some PDFs
+                if module not in ['PDF']:
                     in_formats.append(file_format)
             if "w" in rw_status:
                 out_formats.append(file_format)
@@ -264,7 +276,7 @@ def get_all_conversions(settings, get_conv_for_ext = False, ext = ["",""], missi
         compression_exts[0] += extraformats_compression
         compression_exts[1] += extraformats_compression + ['[Folder]']
     supported_tmp.append(compression_exts)
-    
+
     # if the function is meant to return a converter for a in/output pair
     if get_conv_for_ext:
         if ext[0] in ffmpeg_conversions[0] and ext[1] in ffmpeg_conversions[1]:
