@@ -16,7 +16,7 @@ MacOS should work, but I don't have a Mac, so I can't test that.
 * python3  
 * pyqt5  
 
-On Linux, use your distributions package manager or pip to install these.
+On Linux, use your distributions package manager or pip to install these.  
 On Windows, use [python.org](https://python.org) to get python (the version  
 in the Microsoft Store is [worse in some regards](https://docs.python.org/3/using/windows.html#known-issues)), then use  
 `python -m pip install PyQt5` to get PyQt5.  
