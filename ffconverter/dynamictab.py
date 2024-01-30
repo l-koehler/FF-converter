@@ -39,8 +39,7 @@ class DynamicTab(QWidget):
         hlayout2 = utils.add_to_layout('h', self.commonformatQChB)
         final_layout = utils.add_to_layout('v', hlayout1, hlayout2)
         self.setLayout(final_layout)
-        
-        
+
         # default to only common formats
         self.commonformatQChB.setChecked(True)
         self.commonformatQChB.stateChanged.connect(parent.filesList_update)
@@ -52,37 +51,12 @@ class DynamicTab(QWidget):
     """
     def fill_extension_combobox(self, list_of_files, all_supported_conversions):
         self.extQCB.clear()
-        possible_outputs = []
-        for input_file in list_of_files:
-            file_outputs = []
-            input_file_ext = utils.get_extension(input_file)
-            for conv in all_supported_conversions:
-                if input_file_ext in conv[0]:
-                    # append to possible_outputs only once per file
-                    file_outputs += conv[1]
-            possible_outputs.append(file_outputs)
-        # possible_outputs: list of lists of output formats, one per input file
-        # valid_outputs: list of outputs possible for ALL files
-        if len(list_of_files) > 1:
-            valid_outputs = []
-            for extension in sum(possible_outputs, []):
-                available = True
-                for i in possible_outputs:
-                    if extension not in i:
-                        available = False
-                        break
-                if available and extension not in valid_outputs:
-                    valid_outputs.append(extension)
-        else:
-            # flatten and deduplicate
-            first_output_list = possible_outputs[0] if possible_outputs else []
-            valid_outputs = list(dict.fromkeys(first_output_list))
-
+        common = []
         if self.commonformatQChB.isChecked():
-            all_common = (self.parent.settings.value('extraformats_common') or []) + config.common_formats
-            # remove all uncommon formats from the list
-            valid_outputs[:] = [ext for ext in valid_outputs if ext in all_common]
-        self.extQCB.addItems(sorted(valid_outputs))
+            common = (self.parent.settings.value('extraformats_common') or []) + config.common_formats
+        outputs = utils.get_combobox_content(self, list_of_files, all_supported_conversions,
+                                             common=common)
+        self.extQCB.addItems(outputs)
 
     def ok_to_continue(self):
         return True

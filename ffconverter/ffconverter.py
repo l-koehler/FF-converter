@@ -20,6 +20,7 @@ import platform
 import textwrap
 import logging
 import webbrowser
+from threading import Thread
 
 from PyQt5.QtGui import QIcon, QKeySequence
 from PyQt5.QtCore import (
@@ -29,7 +30,7 @@ from PyQt5.QtCore import (
 from PyQt5.QtWidgets import (
         QAbstractItemView, QApplication, QCheckBox, QFileDialog, QLabel,
         QLineEdit, QMainWindow, QMessageBox, QPushButton, QShortcut, QTabWidget,
-        QToolButton, QWidget
+        QToolButton, QWidget, QComboBox
         )
 
 import ffconverter as ffmc
@@ -59,6 +60,23 @@ class MainWindow(QMainWindow):
         self.settings = QSettings()
 
         mobile_ui = self.settings.value('mobile_ui', type=bool)
+
+        # needed by threaded_conversion_check, which we want to start
+        # as early as possible to save time on startup
+        if not mobile_ui:
+            self.dynamic_tab = DynamicTab(self)
+            self.audiovideo_tab = AudioVideoTab(self)
+            self.image_tab = ImageTab(self)
+            self.dependenciesQL = QLabel()
+        self.load_settings(self.settings)
+
+        def threaded_conversion_check(self):
+            self.check_for_dependencies()
+            return(utils.get_all_conversions(self.settings, missing=self.missing))
+        # Start a thread to get the conversions, join() it at the end of __init__
+        conversion_check_thread = utils.ThreadWithReturn(target=threaded_conversion_check, args=(self,))
+        conversion_check_thread.start()
+
         self.parse_cla()
 
         self.setWindowTitle('FF-Converter')
@@ -81,12 +99,9 @@ class MainWindow(QMainWindow):
                 )
 
         if mobile_ui:
-            self.load_settings(self.settings)
-            self.missing = self.check_for_dependencies()
-            self.all_supported_conversions = utils.get_all_conversions(self.settings, missing=self.missing)
-
             # Mobile UI has less features, but is usable on devices
             # with a smaller, vertical screen (Linux Phones)
+            self.name = "Mobile"
             addQPB = QPushButton(self.tr('Add'))
             clearQPB = QPushButton(self.tr('Clear'))
             preferencesQPB = QPushButton(self.tr('Preferences'))
@@ -102,6 +117,10 @@ class MainWindow(QMainWindow):
             self.toQTB.setText('...')
             hlayout2 = utils.add_to_layout('h', outputQL, self.toQLE, self.toQTB)
 
+            convertQL = QLabel(self.tr('Convert to:'))
+            self.extQCB = QComboBox()
+            hlayout3 = utils.add_to_layout('h', convertQL, self.extQCB)
+
             convertQPB = QPushButton(self.tr('&Convert'))
 
             self.filesList.dropped.connect(self.filesList_add_dragged)
@@ -111,12 +130,15 @@ class MainWindow(QMainWindow):
             convertQPB.clicked.connect(convertAction.triggered)
             preferencesQPB.clicked.connect(preferencesAction.triggered)
 
-            final_layout = utils.add_to_layout('v', vlayout1, hlayout2, convertQPB)
+            final_layout = utils.add_to_layout('v', vlayout1, hlayout2,
+                                               hlayout3, convertQPB)
 
             widget = QWidget()
             widget.setLayout(final_layout)
             self.setCentralWidget(widget)
             # return early, full UI will not be created
+            conversion_check_thread.join()
+            self.all_supported_conversions = conversion_check_thread.result
             return
 
         addQPB = QPushButton(self.tr('Add'))
@@ -134,10 +156,6 @@ class MainWindow(QMainWindow):
         self.toQTB = QToolButton()
         self.toQTB.setText('...')
         hlayout2 = utils.add_to_layout('h', outputQL, self.toQLE, self.toQTB)
-
-        self.dynamic_tab = DynamicTab(self)
-        self.audiovideo_tab = AudioVideoTab(self)
-        self.image_tab = ImageTab(self)
 
         self.tabs = [self.dynamic_tab, self.audiovideo_tab,
                      self.image_tab]
@@ -159,7 +177,6 @@ class MainWindow(QMainWindow):
         final_layout = utils.add_to_layout(
                 'v', hlayout1, self.tabWidget, hlayout2, hlayout3, hlayout4)
 
-        self.dependenciesQL = QLabel()
         self.statusBar().addPermanentWidget(self.dependenciesQL, stretch=1)
 
         widget = QWidget()
@@ -254,13 +271,14 @@ class MainWindow(QMainWindow):
         del_shortcut.setKey(Qt.Key_Delete)
         del_shortcut.activated.connect(self.filesList_delete)
 
-        self.load_settings(self.settings)
-        self.missing = self.check_for_dependencies()
-        self.all_supported_conversions = utils.get_all_conversions(self.settings, missing=self.missing)
-
         self.audiovideo_tab.set_default_command()
         self.image_tab.set_default_command()
         self.toQLE.setText(self.default_output)
+
+        # get all supported conversions from the thread started before the UI creation
+        # most of the time is still spent waiting for the thread
+        conversion_check_thread.join()
+        self.all_supported_conversions = conversion_check_thread.result
 
         self.filesList_update()
 
@@ -295,38 +313,37 @@ class MainWindow(QMainWindow):
         self.compress_gzip = utils.is_installed('gzip', use_wsl)
         self.compress_bzip2 = utils.is_installed('bzip2', use_wsl)
 
-        missing = []
+        self.missing = []
         if not self.ffmpeg_path:
-            missing.append('ffmpeg')
+            self.missing.append('ffmpeg')
         if not self.unoconv:
-            missing.append('unoconv')
+            self.missing.append('unoconv')
         if not self.imagemagick:
-            missing.append('imagemagick')
+            self.missing.append('imagemagick')
         if not self.pandoc:
-            missing.append('pandoc')
+            self.missing.append('pandoc')
         if not self.compress_zip:
-            missing.append('zip')
+            self.missing.append('zip')
         if not self.compress_unzip:
-            missing.append('unzip')
+            self.missing.append('unzip')
         if not self.compress_tar:
-            missing.append('tar')
+            self.missing.append('tar')
         if not self.compress_squash:
-            missing.append('squashfs-tools')
+            self.missing.append('squashfs-tools')
         if not self.compress_ar:
-            missing.append('binutils/ar')
+            self.missing.append('binutils/ar')
         if not self.compress_gzip:
-            missing.append('gzip')
+            self.missing.append('gzip')
         if not self.compress_bzip2:
-            missing.append('bzip2')
+            self.missing.append('bzip2')
 
-        if missing:
-            missing = ', '.join(missing)
-            status = self.tr('Missing dependencies:') + ' ' + missing
+        if self.missing:
+            self.missing = ', '.join(self.missing)
+            status = self.tr('Missing dependencies:') + ' ' + self.missing
             if mobile_ui:
                 print(status)
             else:
                 self.dependenciesQL.setText(status)
-        return missing
 
     def load_settings(self, settings):
 
@@ -368,16 +385,24 @@ class MainWindow(QMainWindow):
         self.filesList.clear()
         for i in self.fnames:
             self.filesList.addItem(i)
-        # update dynamic tab
-        # dynamic_tab takes not extra formats, but a list of all files added
-        self.dynamic_tab.fill_extension_combobox(self.fnames, self.all_supported_conversions)
+        if self.mobile_ui:
+            # update mobile UI combobox
+            self.extQCB.clear()
+            outputs = utils.get_combobox_content(self, self.fnames,
+                                                 self.all_supported_conversions, [])
+            self.extQCB.addItems(outputs)
+        else:
+            # update dynamic tab
+            # dynamic_tab takes not extra formats, but a list of all files added
+            self.dynamic_tab.fill_extension_combobox(self.fnames, self.all_supported_conversions)
 
     def filesList_add(self):
         filters  = 'All Files (*);;'
-        filters += 'Audio/Video Files (*.{});;'.format(
-                ' *.'.join(self.audiovideo_tab.formats))
-        filters += 'Image Files (*.{});;'.format(
-                ' *.'.join(self.image_tab.formats + self.image_tab.extra_img))
+        if not self.mobile_ui:
+            filters += 'Audio/Video Files (*.{});;'.format(
+                    ' *.'.join(self.audiovideo_tab.formats))
+            filters += 'Image Files (*.{});;'.format(
+                    ' *.'.join(self.image_tab.formats + self.image_tab.extra_img))
 
         fnames = QFileDialog.getOpenFileNames(self, 'FF Multi Converter - ' +
                 self.tr('Choose File'), config.home, filters,
@@ -460,17 +485,23 @@ class MainWindow(QMainWindow):
 
         Return False if an error arises, else True.
         """
+        if self.mobile_ui:
+            origQCB_status = False
+            tab_ok = True
+        else:
+            origQCB_status = self.origQCB.isChecked()
+            tab_ok = self.get_current_tab().ok_to_continue()
         try:
             if not self.fnames:
                 raise ValidationError(
                         self.tr('You must add at least one file to convert!'))
-            elif not self.origQCB.isChecked() and not self.toQLE.text():
+            elif not origQCB_status and not self.toQLE.text():
                 raise ValidationError(
                         self.tr('You must choose an output folder!'))
-            elif (not self.origQCB.isChecked() and
+            elif (not origQCB_status and
                   not os.path.exists(self.toQLE.text())):
                 raise ValidationError(self.tr('Output folder does not exists!'))
-            if not self.get_current_tab().ok_to_continue():
+            if not tab_ok:
                 return False
             return True
 
@@ -487,21 +518,32 @@ class MainWindow(QMainWindow):
         if not self.ok_to_continue():
             return
 
-        tab = self.get_current_tab()
+        if self.mobile_ui:
+            tab = self
+        else:
+            tab = self.get_current_tab()
         ext_to = '.' + tab.extQCB.currentText()
 
         if tab.name == 'All Formats' and not self.office_listener_started:
             utils.start_office_listener()
             self.office_listener_started = True
 
-        _list = utils.create_paths_list(
-                self.fnames, ext_to, self.prefix, self.suffix,
-                self.toQLE.text(), self.origQCB.isChecked(),
-                self.overwrite_existing
-                )
+        if self.mobile_ui:
+            _list = utils.create_paths_list(
+                    self.fnames, ext_to, self.prefix, self.suffix,
+                    self.toQLE.text(), False, self.overwrite_existing
+                    )
+            dialog = progress.Progress(
+                    _list, tab, False, self)
+        else:
+            _list = utils.create_paths_list(
+                    self.fnames, ext_to, self.prefix, self.suffix,
+                    self.toQLE.text(), self.origQCB.isChecked(),
+                    self.overwrite_existing
+                    )
+            dialog = progress.Progress(
+                    _list, tab, self.deleteQCB.isChecked(), self)
 
-        dialog = progress.Progress(
-                _list, tab, self.deleteQCB.isChecked(), self)
         dialog.show()
 
     def open_dialog_preferences(self):

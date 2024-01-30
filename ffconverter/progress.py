@@ -174,7 +174,7 @@ class Progress(QDialog):
             self.cancelQPB.setText(self.tr("Close"))
 
             if self.shutdownQCB.isChecked():
-                # Locating systemctl in WSL would be pointless
+                # Locating systemctl in WSL would be pointless, use_wsl is False
                 if utils.is_installed('systemctl', False):
                     subprocess.call(shlex.split('systemctl poweroff'))
                 else:

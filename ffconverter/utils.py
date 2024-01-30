@@ -25,6 +25,7 @@ import shlex
 import subprocess
 import time
 import string
+import threading
 
 from PyQt5.QtCore import pyqtSignal, QSize, Qt, QSettings
 from PyQt5.QtWidgets import (
@@ -33,6 +34,11 @@ from PyQt5.QtWidgets import (
         )
 from ffconverter import config
 
+class ThreadWithReturn(threading.Thread):
+    def __init__(self, group=None, target=None, name=None, args=(), kwargs={}, *, daemon=None):
+        def function():
+            self.result = target(*args, **kwargs)
+        super().__init__(group=group, target=function, name=name, daemon=daemon)
 
 def duration_in_seconds(duration):
     """
@@ -166,7 +172,7 @@ def get_all_conversions(settings, get_conv_for_ext = False,
         supported_tmp.append(ffmpeg_conversions)
     else:
         ffmpeg_conversions = [[], []]
-    
+
     # poll pandoc
     if 'pandoc' not in missing:
         extraformats_markdown = (settings.value('extraformats_markdown') or [])
@@ -225,7 +231,7 @@ def get_all_conversions(settings, get_conv_for_ext = False,
         supported_tmp.append(magick_conversions)
     else:
         magick_conversions = [[], []]
-    
+
     # libreoffice exts
     # cant actually get those right now, so have some predefined lists instead
     if 'unoconv' not in missing:
@@ -320,7 +326,7 @@ def get_extension(file_path):
 
     # if there are quotation marks around the file path, remove them
     settings = QSettings()
-    
+
     file_path = file_path.replace("\"", "")
 
     remainder, first_ext = os.path.splitext(file_path)
@@ -332,6 +338,39 @@ def get_extension(file_path):
     if joined_ext in all_double:
         return joined_ext
     return first_ext
+
+def get_combobox_content(self, list_of_files, all_supported_conversions,
+                         common=[]):
+    possible_outputs = []
+    for input_file in list_of_files:
+        file_outputs = []
+        input_file_ext = get_extension(input_file)
+        for conv in all_supported_conversions:
+            if input_file_ext in conv[0]:
+                # append to possible_outputs only once per file
+                file_outputs += conv[1]
+        possible_outputs.append(file_outputs)
+    # possible_outputs: list of lists of output formats, one per input file
+    # valid_outputs: list of outputs possible for ALL files
+    if len(list_of_files) > 1:
+        valid_outputs = []
+        for extension in sum(possible_outputs, []):
+            available = True
+            for i in possible_outputs:
+                if extension not in i:
+                    available = False
+                    break
+            if available and extension not in valid_outputs:
+                valid_outputs.append(extension)
+    else:
+        # flatten and deduplicate
+        first_output_list = possible_outputs[0] if possible_outputs else []
+        valid_outputs = list(dict.fromkeys(first_output_list))
+
+    if common != []:
+        # remove all uncommon formats from the list
+        valid_outputs[:] = [ext for ext in valid_outputs if ext in common]
+    return valid_outputs
 
 def start_office_listener():
     """
