@@ -74,8 +74,6 @@ class Preferences(QDialog):
         else:
             other_optionsGrid = utils.add_to_grid([self.mobile_uiQChB])
 
-        mobile_uiGrid = utils.add_to_grid([self.use_wslQChB])
-
         tabwidget1_layout = utils.add_to_layout(
                 'v', saveQL,
                 QSpacerItem(14, 13), existQL, exist_layout,
