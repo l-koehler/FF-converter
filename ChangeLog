@@ -1,3 +1,11 @@
+Version 2.3.0
+-------------
+
+* Added toggle to use a mobile UI, which has less features
+  but fits on smaller screens (Linux/Windows Phones)
+
+* Image conversion on Windows doesn't get stuck anymore
+
 Version 2.2.2
 -------------
 

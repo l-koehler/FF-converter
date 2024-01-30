@@ -51,12 +51,78 @@ class ValidationError(Exception):
 
 class MainWindow(QMainWindow):
     def __init__(self, parent=None):
+        # TODO: add a smaller UI that fits mobile devices better
+        # this could be challenging as at this point QSettings don't exist yet
+
         super(MainWindow, self).__init__(parent)
 
         self.fnames = []  # list of file names to be converted
         self.office_listener_started = False
 
+        self.settings = QSettings()
+        
+        mobile_ui = self.settings.value('mobile_ui', type=bool)
         self.parse_cla()
+
+        self.setWindowTitle('FF-Converter')
+
+        openAction = utils.create_action(
+                self, self.tr('Open'), QKeySequence.Open, None,
+                self.tr('Open a file'), self.filesList_add
+                )
+        convertAction = utils.create_action(
+                self, self.tr('Convert'), 'Ctrl+C', None,
+                self.tr('Convert files'), self.start_conversion
+                )
+        quitAction = utils.create_action(
+                self, self.tr('Quit'), 'Ctrl+Q', None,
+                self.tr('Quit'), self.close
+                )
+        preferencesAction = utils.create_action(
+                self, self.tr('Preferences'), 'Alt+Ctrl+P',
+                None, self.tr('Preferences'), self.open_dialog_preferences
+                )
+
+        if mobile_ui:
+            self.load_settings(self.settings)
+            self.missing = self.check_for_dependencies()
+            self.all_supported_conversions = utils.get_all_conversions(self.settings, missing=self.missing)
+
+            # Mobile UI has less features, but is usable on devices
+            # with a smaller, vertical screen (Linux Phones)
+            print("__INIT__ Mobile UI")
+            addQPB = QPushButton(self.tr('Add'))
+            clearQPB = QPushButton(self.tr('Clear'))
+            preferencesQPB = QPushButton(self.tr('Preferences'))
+            self.filesList = utils.FilesList()
+            self.filesList.setSelectionMode(QAbstractItemView.ExtendedSelection)
+            hlayout1 = utils.add_to_layout('h', addQPB, clearQPB, preferencesQPB, None)
+            vlayout1 = utils.add_to_layout('v', self.filesList, hlayout1)
+
+            outputQL = QLabel(self.tr('Output folder:'))
+            self.toQLE = QLineEdit()
+            self.toQLE.setReadOnly(True)
+            self.toQTB = QToolButton()
+            self.toQTB.setText('...')
+            hlayout2 = utils.add_to_layout('h', outputQL, self.toQLE, self.toQTB)
+
+            convertQPB = QPushButton(self.tr('&Convert'))
+
+            self.filesList.dropped.connect(self.filesList_add_dragged)
+            addQPB.clicked.connect(self.filesList_add)
+            clearQPB.clicked.connect(self.filesList_clear)
+            self.toQTB.clicked.connect(self.get_output_folder)
+            convertQPB.clicked.connect(convertAction.triggered)
+            preferencesQPB.clicked.connect(preferencesAction.triggered)
+
+            final_layout = utils.add_to_layout('v', vlayout1, hlayout2, convertQPB)
+
+            widget = QWidget()
+            widget.setLayout(final_layout)
+            self.setCentralWidget(widget)
+            # return early, full UI will not be created
+            return
+
         addQPB = QPushButton(self.tr('Add'))
         delQPB = QPushButton(self.tr('Delete'))
         clearQPB = QPushButton(self.tr('Clear'))
@@ -104,18 +170,6 @@ class MainWindow(QMainWindow):
         widget.setLayout(final_layout)
         self.setCentralWidget(widget)
 
-        openAction = utils.create_action(
-                self, self.tr('Open'), QKeySequence.Open, None,
-                self.tr('Open a file'), self.filesList_add
-                )
-        convertAction = utils.create_action(
-                self, self.tr('Convert'), 'Ctrl+C', None,
-                self.tr('Convert files'), self.start_conversion
-                )
-        quitAction = utils.create_action(
-                self, self.tr('Quit'), 'Ctrl+Q', None,
-                self.tr('Quit'), self.close
-                )
         edit_presetsAction = utils.create_action(
                 self, self.tr('Edit Presets'), 'Ctrl+P', None,
                 self.tr('Edit Presets'), self.open_dialog_presets
@@ -143,10 +197,6 @@ class MainWindow(QMainWindow):
         clearallAction = utils.create_action(
                 self, self.tr('Clear All'), None, None,
                 self.tr('Clear form'), self.clear_all
-                )
-        preferencesAction = utils.create_action(
-                self, self.tr('Preferences'), 'Alt+Ctrl+P',
-                None, self.tr('Preferences'), self.open_dialog_preferences
                 )
         trackerAction = utils.create_action(
                 self, 'Issue tracker', None, None, None,
@@ -208,16 +258,13 @@ class MainWindow(QMainWindow):
         del_shortcut.setKey(Qt.Key_Delete)
         del_shortcut.activated.connect(self.filesList_delete)
 
-        self.setWindowTitle('Multi-Converter')
-
-        self.settings = self.load_settings()
+        self.load_settings(self.settings)
         self.missing = self.check_for_dependencies()
+        self.all_supported_conversions = utils.get_all_conversions(self.settings, missing=self.missing)
 
         self.audiovideo_tab.set_default_command()
         self.image_tab.set_default_command()
         self.toQLE.setText(self.default_output)
-
-        self.all_supported_conversions = utils.get_all_conversions(self.settings, missing=self.missing)
 
         self.filesList_update()
 
@@ -236,6 +283,7 @@ class MainWindow(QMainWindow):
         update self.dependenciesQL with the appropriate message.
         """
         use_wsl = self.settings.value('use_wsl', type=bool)
+        mobile_ui = self.settings.value('mobile_ui', type=bool)
         if not utils.is_installed(self.ffmpeg_path, use_wsl):
             self.ffmpeg_path = utils.is_installed('ffmpeg', use_wsl)
             QSettings().setValue('ffmpeg_path', self.ffmpeg_path)
@@ -278,12 +326,15 @@ class MainWindow(QMainWindow):
         if missing:
             missing = ', '.join(missing)
             status = self.tr('Missing dependencies:') + ' ' + missing
-            self.dependenciesQL.setText(status)
+            if mobile_ui:
+                print(status)
+            else:
+                self.dependenciesQL.setText(status)
         return missing
 
-    def load_settings(self):
-        settings = QSettings()
+    def load_settings(self, settings):
 
+        self.mobile_ui = settings.value('mobile_ui', type=bool)
         self.overwrite_existing = settings.value('overwrite_existing', type=bool)
         self.default_output = settings.value('default_output', type=str)
         self.prefix = settings.value('prefix', type=str)
@@ -295,9 +346,6 @@ class MainWindow(QMainWindow):
         extraformats_video = (settings.value('extraformats_video') or [])
         videocodecs = (settings.value('videocodecs') or config.video_codecs)
         audiocodecs = (settings.value('audiocodecs') or config.audio_codecs)
-        self.default_command_image = (settings.value('default_command_image',
-                type=str) or
-                config.default_imagemagick_cmd)
         extraformats_image = (settings.value('extraformats_image') or [])
         extraformats_document = (settings.value('extraformats_document') or [])
         extraformats_markdown = (settings.value('extraformats_markdown') or [])
@@ -306,12 +354,15 @@ class MainWindow(QMainWindow):
         extraformats_common = (settings.value('extraformats_common') or [])
         extraformats_double = (settings.value('extraformats_double') or [])
 
-        self.audiovideo_tab.fill_video_comboboxes(videocodecs,
+        if not self.mobile_ui:
+            self.audiovideo_tab.fill_video_comboboxes(videocodecs,
                 audiocodecs, extraformats_video)
-        self.image_tab.fill_extension_combobox(extraformats_image)
-        
+            self.image_tab.fill_extension_combobox(extraformats_image)
+            self.default_command_image = (settings.value('default_command_image',
+                type=str) or config.default_imagemagick_cmd)
+
         return settings
-        
+
     def get_current_tab(self):
         for i in self.tabs:
             if self.tabs.index(i) == self.tabWidget.currentIndex():
@@ -461,7 +512,7 @@ class MainWindow(QMainWindow):
         """Open the preferences dialog."""
         dialog = preferences_dlg.Preferences(self)
         if dialog.exec_():
-            self.load_settings()
+            self.load_settings(self.settings)
 
     def open_dialog_presets(self):
         """Open the presets dialog."""

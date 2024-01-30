@@ -74,6 +74,7 @@ class DynamicTab(QWidget):
                 if available and extension not in valid_outputs:
                     valid_outputs.append(extension)
         else:
+            # flatten and deduplicate
             first_output_list = possible_outputs[0] if possible_outputs else []
             valid_outputs = list(dict.fromkeys(first_output_list))
 

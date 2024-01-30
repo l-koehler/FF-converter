@@ -20,7 +20,7 @@ from PyQt5.QtCore import QSettings, QTimer
 from PyQt5.QtWidgets import (
         QDialog, QDialogButtonBox, QFileDialog, QLabel, QLineEdit,
         QRadioButton, QSpacerItem, QTabWidget, QToolButton, QWidget,
-        QPlainTextEdit, QPushButton, QCheckBox
+        QPlainTextEdit, QPushButton, QCheckBox, QMessageBox
         )
 
 from ffconverter import utils
@@ -67,11 +67,14 @@ class Preferences(QDialog):
                 [self.commonformatsQPTE, self.doubleformatsQPTE])
         other_layout = utils.add_to_layout('h', other_grid, None)
 
+        self.mobile_uiQChB = QCheckBox(self.tr("Use (smaller) mobile UI"))
         if os.name == 'nt':
             self.use_wslQChB = QCheckBox(self.tr("Windows: Use WSL for conversions"))
-            use_wslGrid = utils.add_to_grid([self.use_wslQChB])
+            other_optionsGrid = utils.add_to_grid([self.use_wslQChB],[self.mobile_uiQChB])
         else:
-            use_wslGrid = None
+            other_optionsGrid = utils.add_to_grid([self.mobile_uiQChB])
+
+        mobile_uiGrid = utils.add_to_grid([self.use_wslQChB])
 
         tabwidget1_layout = utils.add_to_layout(
                 'v', saveQL,
@@ -81,7 +84,7 @@ class Preferences(QDialog):
                 QSpacerItem(14, 13), prefix_layout,
                 QSpacerItem(14, 13), otherQL,
                 QSpacerItem(14, 13), other_layout,
-                QSpacerItem(14, 13), use_wslGrid
+                QSpacerItem(14, 13), other_optionsGrid,
                 )
 
         ffmpegQL = QLabel('<html><b>FFmpeg</b></html>')
@@ -195,6 +198,7 @@ class Preferences(QDialog):
     def load_settings(self):
         """Load settings and update graphical widgets with loaded values."""
         settings = QSettings()
+        mobile_ui = settings.value('mobile_ui', type=bool)
         overwrite_existing = settings.value('overwrite_existing', type=bool)
         default_output = settings.value('default_output', type=str)
         prefix = settings.value('prefix', type=str)
@@ -219,6 +223,10 @@ class Preferences(QDialog):
             self.exst_overwriteQRB.setChecked(True)
         else:
             self.exst_prefixQRB.setChecked(True)
+        if mobile_ui:
+            self.mobile_uiQChB.setChecked(True)
+        else:
+            self.mobile_uiQChB.setChecked
 
         self.defaultQLE.setText(default_output)
         self.prefixQLE.setText(prefix)
@@ -272,6 +280,9 @@ class Preferences(QDialog):
     def save_settings(self):
         """Set settings values by extracting the appropriate information from
         the graphical widgets."""
+        # set this to true if something that requires a restart was changed
+        ui_change = False
+
         videocodecs = self.plaintext_to_list(self.vidcodecsQPTE)
         audiocodecs = self.plaintext_to_list(self.audcodecsQPTE)
         extraformats_video = self.plaintext_to_list(self.extraformatsffmpegQPTE,
@@ -298,6 +309,11 @@ class Preferences(QDialog):
         if not utils.is_installed(ffmpeg_path, use_wsl):
             ffmpeg_path = utils.is_installed('ffmpeg', use_wsl)
 
+        # check if the UI was changed
+        if settings.value('mobile_ui', type=bool) != self.mobile_uiQChB.isChecked():
+            ui_change = True
+
+        settings.setValue('mobile_ui', self.mobile_uiQChB.isChecked())
         settings.setValue('overwrite_existing', self.exst_overwriteQRB.isChecked())
         settings.setValue('default_output', self.defaultQLE.text())
         settings.setValue('prefix', self.prefixQLE.text())
@@ -315,4 +331,16 @@ class Preferences(QDialog):
         settings.setValue('extraformats_double', sorted(extraformats_double))
         settings.setValue('use_wsl', use_wsl)
 
-        self.accept()
+        if ui_change:
+            ret = QMessageBox.question(self,'',
+                self.tr("The changed settings require a program restart. Close Program?"),
+                QMessageBox.Yes | QMessageBox.No)
+            if ret == QMessageBox.Yes:
+                self.accept()
+                exit(0)
+            else:
+                # reset changes to mobile_ui and mobile_uiQChB
+                settings.setValue('mobile_ui', not self.mobile_uiQChB.isChecked())
+                self.mobile_uiQChB.setChecked(not self.mobile_uiQChB.isChecked())
+        else:
+            self.accept()
