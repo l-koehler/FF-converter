@@ -1,4 +1,4 @@
-# Copyright (C) 2023 l-koehler
+# Copyright (C) 2023-2024 l-koehler
 # Copyright (C) 2011-2016 Ilias Stamatis <stamatis.iliass@gmail.com>
 #
 # This program is free software: you can redistribute it and/or modify
@@ -51,16 +51,13 @@ class ValidationError(Exception):
 
 class MainWindow(QMainWindow):
     def __init__(self, parent=None):
-        # TODO: add a smaller UI that fits mobile devices better
-        # this could be challenging as at this point QSettings don't exist yet
-
         super(MainWindow, self).__init__(parent)
 
         self.fnames = []  # list of file names to be converted
         self.office_listener_started = False
 
         self.settings = QSettings()
-        
+
         mobile_ui = self.settings.value('mobile_ui', type=bool)
         self.parse_cla()
 
@@ -90,7 +87,6 @@ class MainWindow(QMainWindow):
 
             # Mobile UI has less features, but is usable on devices
             # with a smaller, vertical screen (Linux Phones)
-            print("__INIT__ Mobile UI")
             addQPB = QPushButton(self.tr('Add'))
             clearQPB = QPushButton(self.tr('Clear'))
             preferencesQPB = QPushButton(self.tr('Preferences'))
