@@ -50,7 +50,6 @@ def duration_in_seconds(duration):
     return secs + (hours * 3600) + (mins * 60)
 
 def is_installed(program, use_wsl):
-    print(use_wsl)
     """
     If program is a program name, returns the absolute path to this program if
     included in the PATH enviromental variable, else empty string.
