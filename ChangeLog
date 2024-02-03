@@ -1,3 +1,10 @@
+Version 2.3.1
+-------------
+
+* Removed unneeded print() left in by accident
+
+* fix imagemagick conversion being broken with old versions of imagemagick
+
 Version 2.3.0
 -------------
 
