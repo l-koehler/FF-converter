@@ -364,7 +364,8 @@ class Progress(QDialog):
                 resize += '\!'
 
         imgcmd = ' ' + imgcmd.strip() + ' '
-        command, from_file, to_file = utils.wsl_adjust(use_wsl, 'magick', from_file, to_file)
+        command_name = utils.is_installed('magick', use_wsl)
+        command, from_file, to_file = utils.wsl_adjust(use_wsl, command_name, from_file, to_file)
         cmd = f'{command} {from_file} {resize}{imgcmd}{to_file}'
         self.update_text_edit_signal.emit(cmd + '\n')
         child = subprocess.Popen(
