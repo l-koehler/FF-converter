@@ -69,10 +69,11 @@ class MainWindow(QMainWindow):
             self.image_tab = ImageTab(self)
             self.dependenciesQL = QLabel()
         self.load_settings(self.settings)
+        self.use_wsl = self.settings.value('use_wsl', type=bool)
 
         def threaded_conversion_check(self):
             self.check_for_dependencies()
-            return(utils.get_all_conversions(self.settings, missing=self.missing))
+            return(utils.get_all_conversions(self.settings, missing=self.missing, use_wsl=self.use_wsl))
         # Start a thread to get the conversions, join() it at the end of __init__
         conversion_check_thread = utils.ThreadWithReturn(target=threaded_conversion_check, args=(self,))
         conversion_check_thread.start()

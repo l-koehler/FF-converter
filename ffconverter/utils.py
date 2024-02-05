@@ -49,7 +49,7 @@ def duration_in_seconds(duration):
     hours, mins, secs = [int(i) for i in duration.split(':')]
     return secs + (hours * 3600) + (mins * 60)
 
-def is_installed(program, use_wsl):
+def is_installed(program, use_wsl, wsl_only=False):
     """
     If program is a program name, returns the absolute path to this program if
     included in the PATH enviromental variable, else empty string.
@@ -57,21 +57,25 @@ def is_installed(program, use_wsl):
     If program is an absolute path, returns the path if it's executable, else
     empty string.
     """
-    program = os.path.expanduser(program)
-    path_env = os.getenv('PATH').split(os.pathsep)
-    for path in path_env:
-        fpath = os.path.join(path, program)
-        if os.name == 'nt':
-            fpath_ls = [fpath, fpath+'.exe', fpath+'.cmd', fpath+'.bat']
-        else:
-            fpath_ls = [fpath, fpath+'.sh']
-        for fpath in fpath_ls:
-            if os.path.isfile(fpath) and os.access(fpath, os.X_OK):
-                return fpath
-    # imagemagick 6 uses 'convert', version 7 uses 'magick'
-    # 'convert' is reserved for fat-to-ntfs conversion in windows
-    if program == 'magick' and os.name != 'nt':
-        return is_installed('convert', use_wsl)
+
+    if program.startswith('wsl'): return program # do not resolve WSL paths
+
+    # wsl_only is used to not get "convert" on a windows system
+    if wsl_only == False:
+        path_env = os.getenv('PATH').split(os.pathsep)
+        for path in path_env:
+            fpath = os.path.join(path, program)
+            if os.name == 'nt':
+                fpath_ls = [fpath, fpath+'.exe', fpath+'.cmd', fpath+'.bat']
+            else:
+                fpath_ls = [fpath, fpath+'.sh']
+            for fpath in fpath_ls:
+                if os.path.isfile(fpath) and os.access(fpath, os.X_OK):
+                    return fpath
+        # imagemagick 6 uses 'convert', version 7 uses 'magick'
+        # 'convert' is reserved for fat-to-ntfs conversion in windows
+        if program == 'magick' and os.name != 'nt':
+            return is_installed('convert', False)
 
     # only if nothing was found on the regular system, check WSL
     if use_wsl == True:
@@ -125,7 +129,7 @@ def wsl_adjust(use_wsl, command, path1="", path2=""):
     return return_list
 
 def get_all_conversions(settings, get_conv_for_ext = False,
-                        ext = ["",""], missing = []):
+                        ext = ["",""], missing = [], use_wsl = False):
     """
     generates a nested list. how to access:
     supported_tmp[converter_index][in/out] = [types]
@@ -202,9 +206,11 @@ def get_all_conversions(settings, get_conv_for_ext = False,
                                             capture_output=True, text=True)
         except FileNotFoundError:
             # retry with convert
-            completed_process = subprocess.run(['convert', 'identify', '-list',
-                                                'format'],
-                                            capture_output=True, text=True)
+            if use_wsl:
+                cmd = ['wsl', '--', 'convert', 'identify', '-list', 'format']
+            else:
+                cmd = ['convert', 'identify', '-list', 'format']
+            completed_process = subprocess.run(cmd, capture_output=True, text=True)
         magick_formats = completed_process.stdout
         magick_format_list = magick_formats.split('\n')
         in_formats = []
@@ -216,15 +222,20 @@ def get_all_conversions(settings, get_conv_for_ext = False,
             if len(line_args) < 3 or set(line_args[0]) <= set(uppercase_chars):
                 continue
             file_format, module, rw_status = line_args[:3]
+            file_format = file_format.lower().replace('*', '')
             if module in ['BRAILLE', 'TXT']:
                 continue
-            
             if "r" in rw_status:
                 # the program will break trying to read some PDFs
                 if module not in ['PDF']:
                     in_formats.append(file_format)
             if "w" in rw_status:
                 out_formats.append(file_format)
+        # for formats like PNG, the output will be PNG00 .. PNG64.
+        if 'png00' in in_formats and 'png' not in in_formats:
+            in_formats.append('png')
+        if 'png00' in out_formats and 'png' not in out_formats:
+            out_formats.append('png')
         magick_conversions = [in_formats + extraformats_image,
                               out_formats + extraformats_image]
         supported_tmp.append(magick_conversions)
@@ -252,7 +263,7 @@ def get_all_conversions(settings, get_conv_for_ext = False,
         img = [[], []]
         slide = [[], []]
         text = [[], []]
-    
+
     # compression exts
     # same as above
     extraformats_compression = (settings.value('extraformats_compression')
@@ -305,15 +316,6 @@ def get_all_conversions(settings, get_conv_for_ext = False,
             return "unsupported"
     else:
         return supported_tmp
-
-def get_ext_conversions(extension):
-    possible_conversions = []
-    all_conversions = get_all_conversions()
-    for converter in all_conversions:
-        if extension in converter[0]:
-            possible_conversions.append(converter[0])
-    return possible_conversions
-
 
 def get_extension(file_path):
     """

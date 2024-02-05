@@ -277,8 +277,9 @@ class Progress(QDialog):
                             pass
                 else:
                     self.error += 1
-            except FileNotFoundError:
-                # the path returned by utils.is_installed is wrong
+            except Exception as e:
+                # convert() caused a exception, likely a wrong command was used.
+                print(f"convert() thread exception: {e}")
                 self.error += 1
 
             self.file_converted_signal.emit()
@@ -608,7 +609,8 @@ class Progress(QDialog):
         converter = utils.get_all_conversions(self.parent.settings,
                                               get_conv_for_ext=True,
                                               ext=[from_file_ext,to_file_ext],
-                                              missing=self.parent.missing)
+                                              missing=self.parent.missing,
+                                              use_wsl=self.parent.use_wsl)
         if converter == "ffmpeg":
             return self.convert_video(from_file, to_file, "")
         elif converter == "pandoc":
@@ -620,4 +622,5 @@ class Progress(QDialog):
         elif converter == "compression":
             return self.convert_compression(from_file, to_file)
         else:
+            print("Error: Did not find suitable converter for dynamic conversion!")
             return False
