@@ -267,14 +267,18 @@ class Progress(QDialog):
                 conv_func = self.convert_dynamic
                 params = (from_file, to_file)
 
-            if conv_func(*params):
-                self.ok += 1
-                if self.delete and not from_file == to_file:
-                    try:
-                        os.remove(from_file[1:-1])
-                    except OSError:
-                        pass
-            else:
+            try:
+                if conv_func(*params):
+                    self.ok += 1
+                    if self.delete and not from_file == to_file:
+                        try:
+                            os.remove(from_file[1:-1])
+                        except OSError:
+                            pass
+                else:
+                    self.error += 1
+            except FileNotFoundError:
+                # the path returned by utils.is_installed is wrong
                 self.error += 1
 
             self.file_converted_signal.emit()
