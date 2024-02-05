@@ -81,7 +81,7 @@ def is_installed(program, use_wsl, wsl_only=False):
     if use_wsl == True:
         # Add 'wsl -- echo $PATH'
         try:
-            wsl_which = subprocess.check_output(["wsl", "--", "which", program])
+            wsl_which = subprocess.check_output(["wsl", "--", "which", program], stderr = subprocess.STDOUT)
             wsl_which = wsl_which.decode('utf-8')
             if not wsl_which.startswith('which: no '):
                 fpath = 'wsl -- ' + wsl_which.split('\n')[0]
