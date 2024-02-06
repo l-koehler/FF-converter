@@ -45,6 +45,11 @@ Install the `ffconverter` package from PyPI.
 pip install ffconverter
 ```
 
+#### Troubleshooting
+If a optional dependency is installed after the program, you might  
+need to restart the program twice to ensure the cache gets overwritten.  
+If this does not work, delete the cache (Preferences -> Delete Cache).  
+
 #### Troubleshooting (Linux)
 On some distros (externally managed environments, Arch, Debian),  
 `pip` will not work. In this case, you should use `pipx`.  

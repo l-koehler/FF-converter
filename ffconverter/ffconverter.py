@@ -91,6 +91,8 @@ class MainWindow(QMainWindow):
                         print(status)
                     else:
                         self.dependenciesQL.setText(status)
+                # TODO: Now rewrite the cache in a separate thread to refresh it
+                # without delaying the startup
             else:
                 # if the cache directory is missing, generate it
                 if not os.path.exists(config.cache_dir):
@@ -111,8 +113,30 @@ class MainWindow(QMainWindow):
                         parser.write(configfile)
             return supported_conversions
 
+        def threaded_cache_rewrite(self):
+            # this will run on startup to update the cache in the background
+            try:
+                self.check_for_dependencies()
+                supported_conversions = utils.get_all_conversions(self.settings,
+                                                                missing=self.missing,
+                                                                use_wsl=self.use_wsl)
+            except RuntimeError:
+                # the main program was closed before the rewrite finished
+                # do not overwrite the cache with the possibly damaged result
+                return False
+            import configparser
+            parser = configparser.ConfigParser()
+            # write config file
+            parser['CACHE'] = {}
+            parser['CACHE']['missing'] = str(self.missing)
+            parser['CACHE']['conversions'] = str(supported_conversions)
+            with open(config.cache_file, 'w') as configfile:
+                parser.write(configfile)
+            return True
+
         # Start a thread to get the conversions, join() it at the end of __init__
         # conversion_check_thread.result = self.all_supported_conversions
+        # After that, start the rewrite thread to update the cache in the background
         conversion_check_thread = utils.ThreadWithReturn(target=threaded_conversion_check, args=(self,))
         conversion_check_thread.start()
 
@@ -178,6 +202,9 @@ class MainWindow(QMainWindow):
             # return early, full UI will not be created
             conversion_check_thread.join()
             self.all_supported_conversions = conversion_check_thread.result
+            # start the rewrite, never join it
+            cache_rewrite_thread = utils.ThreadWithReturn(target=threaded_cache_rewrite, args=(self,))
+            cache_rewrite_thread.start()
             return
 
         addQPB = QPushButton(self.tr('Add'))
@@ -318,6 +345,9 @@ class MainWindow(QMainWindow):
         # most of the time is still spent waiting for the thread
         conversion_check_thread.join()
         self.all_supported_conversions = conversion_check_thread.result
+        # start the rewrite, never join it
+        cache_rewrite_thread = utils.ThreadWithReturn(target=threaded_cache_rewrite, args=(self,))
+        cache_rewrite_thread.start()
 
         self.filesList_update()
 
