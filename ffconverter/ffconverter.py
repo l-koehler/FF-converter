@@ -60,7 +60,7 @@ class MainWindow(QMainWindow):
         self.settings = QSettings()
 
         mobile_ui = self.settings.value('mobile_ui', type=bool)
-        self.use_cache = self.settings.value('use_cache', type=bool)
+        self.disable_cache = self.settings.value('disable_cache', type=bool)
 
         # needed by threaded_conversion_check, which we want to start
         # as early as possible to save time on startup
@@ -74,7 +74,7 @@ class MainWindow(QMainWindow):
 
         def threaded_conversion_check(self):
             # return all_supported_conversions
-            if os.path.exists(config.cache_file) and self.use_cache:
+            if os.path.exists(config.cache_file) and not self.disable_cache:
                 import ast, configparser
                 parser = configparser.ConfigParser()
                 # load settings
@@ -91,21 +91,19 @@ class MainWindow(QMainWindow):
                         print(status)
                     else:
                         self.dependenciesQL.setText(status)
-                # TODO: Now rewrite the cache in a separate thread to refresh it
-                # without delaying the startup
             else:
-                # if the cache directory is missing, generate it
-                if not os.path.exists(config.cache_dir):
-                    os.mkdir(config.cache_dir)
                 # generate self.missing and supported_conversions
                 self.check_for_dependencies()
                 supported_conversions = utils.get_all_conversions(self.settings,
                                                                   missing=self.missing,
                                                                   use_wsl=self.use_wsl)
-                if self.use_cache:
+                if not self.disable_cache:
+                    # if the cache directory is missing, generate it
+                    if not os.path.exists(config.cache_dir):
+                        os.mkdir(config.cache_dir)
+                    # write config file
                     import configparser
                     parser = configparser.ConfigParser()
-                    # write config file
                     parser['CACHE'] = {}
                     parser['CACHE']['missing'] = str(self.missing)
                     parser['CACHE']['conversions'] = str(supported_conversions)
@@ -114,7 +112,7 @@ class MainWindow(QMainWindow):
             return supported_conversions
 
         def threaded_cache_rewrite(self):
-            if not self.use_cache:
+            if self.disable_cache:
                 return False # only update the cache if it is going to be used
             # this will run on startup to update the cache in the background
             try:
