@@ -20,8 +20,6 @@ import platform
 import textwrap
 import logging
 import webbrowser
-import configparser
-import ast
 from threading import Thread
 
 from PyQt5.QtGui import QIcon, QKeySequence
@@ -75,9 +73,10 @@ class MainWindow(QMainWindow):
 
         def threaded_conversion_check(self):
             # return all_supported_conversions
-            # TODO: logic for caching
-            parser = configparser.ConfigParser()
-            if os.path.exists(config.cache_file):
+            use_cache = self.settings.value('use_cache', type=bool)
+            if os.path.exists(config.cache_file) and use_cache:
+                import ast, configparser
+                parser = configparser.ConfigParser()
                 # load settings
                 parser.read(config.cache_file)
                 self.missing = parser['CACHE']['missing']
@@ -98,15 +97,20 @@ class MainWindow(QMainWindow):
                     os.mkdir(config.cache_dir)
                 # generate self.missing and supported_conversions
                 self.check_for_dependencies()
-                supported_conversions = utils.get_all_conversions(self.settings, missing=self.missing, use_wsl=self.use_wsl)
-                # write config file
-                parser['CACHE'] = {}
-                parser['CACHE']['missing'] = str(self.missing)
-                parser['CACHE']['conversions'] = str(supported_conversions)
-                with open(config.cache_file, 'w') as configfile:
-                    parser.write(configfile)
-
+                supported_conversions = utils.get_all_conversions(self.settings,
+                                                                  missing=self.missing,
+                                                                  use_wsl=self.use_wsl)
+                if use_cache:
+                    import configparser
+                    parser = configparser.ConfigParser()
+                    # write config file
+                    parser['CACHE'] = {}
+                    parser['CACHE']['missing'] = str(self.missing)
+                    parser['CACHE']['conversions'] = str(supported_conversions)
+                    with open(config.cache_file, 'w') as configfile:
+                        parser.write(configfile)
             return supported_conversions
+
         # Start a thread to get the conversions, join() it at the end of __init__
         # conversion_check_thread.result = self.all_supported_conversions
         conversion_check_thread = utils.ThreadWithReturn(target=threaded_conversion_check, args=(self,))

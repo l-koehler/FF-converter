@@ -68,12 +68,16 @@ class Preferences(QDialog):
         other_layout = utils.add_to_layout('h', other_grid, None)
 
         self.mobile_uiQChB = QCheckBox(self.tr("Use (smaller) mobile UI"))
+        self.use_cacheQChB = QCheckBox(self.tr("Use Cache File"))
         self.delete_cacheQPB = QPushButton(self.tr("Delete Cache"))
         if os.name == 'nt':
             self.use_wslQChB = QCheckBox(self.tr("Windows: Use WSL for conversions"))
-            other_optionsGrid = utils.add_to_grid([self.use_wslQChB],[self.mobile_uiQChB], [self.delete_cacheQPB])
+            other_optionsGrid = utils.add_to_grid([self.use_wslQChB],
+                                                  [self.mobile_uiQChB],
+                                                  [self.use_cacheQChB, self.delete_cacheQPB])
         else:
-            other_optionsGrid = utils.add_to_grid([self.mobile_uiQChB], [self.delete_cacheQPB])
+            other_optionsGrid = utils.add_to_grid([self.mobile_uiQChB],
+                                                  [self.use_cacheQChB, self.delete_cacheQPB])
 
         tabwidget1_layout = utils.add_to_layout(
                 'v', saveQL,
@@ -200,6 +204,7 @@ class Preferences(QDialog):
         """Load settings and update graphical widgets with loaded values."""
         settings = QSettings()
         mobile_ui = settings.value('mobile_ui', type=bool)
+        use_cache = settings.value('use_cache', type=bool)
         overwrite_existing = settings.value('overwrite_existing', type=bool)
         default_output = settings.value('default_output', type=str)
         prefix = settings.value('prefix', type=str)
@@ -224,11 +229,8 @@ class Preferences(QDialog):
             self.exst_overwriteQRB.setChecked(True)
         else:
             self.exst_prefixQRB.setChecked(True)
-        if mobile_ui:
-            self.mobile_uiQChB.setChecked(True)
-        else:
-            self.mobile_uiQChB.setChecked
-
+        self.use_cacheQChB.setChecked(use_cache)
+        self.mobile_uiQChB.setChecked(mobile_ui)
         self.defaultQLE.setText(default_output)
         self.prefixQLE.setText(prefix)
         self.suffixQLE.setText(suffix)
@@ -329,6 +331,7 @@ class Preferences(QDialog):
             ui_change = True
 
         settings.setValue('mobile_ui', self.mobile_uiQChB.isChecked())
+        settings.setValue('use_cache', self.use_cacheQChB.isChecked())
         settings.setValue('overwrite_existing', self.exst_overwriteQRB.isChecked())
         settings.setValue('default_output', self.defaultQLE.text())
         settings.setValue('prefix', self.prefixQLE.text())
