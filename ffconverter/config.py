@@ -5,7 +5,7 @@ from ffconverter import utils
 
 if os.name == 'nt':
     home = os.environ['USERPROFILE']
-    config_dir = os.path.join(home, 'AppData/Local/ffconverter/')
+    config_dir = os.path.join(home, 'AppData/Local/ffconverter/').replace("\\", "/")
     tmp_dir = 'C:/temp/ffconverter'
 else:
     home = os.getenv("HOME")
@@ -15,19 +15,21 @@ else:
 default_ffmpeg_cmd = ''
 default_imagemagick_cmd = ''
 
-#-----log data
+#-----log/cache data
 
-log_dir = os.path.join(config_dir, 'logs/')
+log_dir = os.path.join(config_dir, 'logs/').replace("\\", "/")
 log_file = os.path.join(log_dir, 'history.log')
 log_format  = '%(asctime)s : %(levelname)s - %(type)s\n' +\
               'Command: %(command)s\n' +\
               'Return code: %(returncode)s\n%(message)s\n'
 log_dateformat = '%Y-%m-%d %H:%M:%S'
+cache_dir = os.path.join(config_dir, 'cache/').replace("\\", "/")
+cache_file = os.path.join(cache_dir, 'cache.ini')
 
 #-----presets data
 
 presets_file_name = 'presets.xml'
-presets_file = os.path.join(config_dir, presets_file_name)
+presets_file = os.path.join(config_dir, presets_file_name).replace("\\", "/")
 presets_lookup_dirs = ["/usr/local/share/", "/usr/share/"]
 presets_lookup_virtenv = 'share'
 # prefix for old presets when synchronizing

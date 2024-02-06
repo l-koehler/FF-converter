@@ -20,6 +20,8 @@ import platform
 import textwrap
 import logging
 import webbrowser
+import configparser
+import ast
 from threading import Thread
 
 from PyQt5.QtGui import QIcon, QKeySequence
@@ -72,9 +74,41 @@ class MainWindow(QMainWindow):
         self.use_wsl = self.settings.value('use_wsl', type=bool)
 
         def threaded_conversion_check(self):
-            self.check_for_dependencies()
-            return(utils.get_all_conversions(self.settings, missing=self.missing, use_wsl=self.use_wsl))
+            # return all_supported_conversions
+            # TODO: logic for caching
+            parser = configparser.ConfigParser()
+            if os.path.exists(config.cache_file):
+                # load settings
+                parser.read(config.cache_file)
+                self.missing = parser['CACHE']['missing']
+                self.missing = ast.literal_eval(self.missing)
+                supported_conversions = parser['CACHE']['conversions']
+                supported_conversions = ast.literal_eval(supported_conversions)
+                # load self.missing
+                if self.missing:
+                    status = ', '.join(self.missing)
+                    status = self.tr('Missing dependencies:') + ' ' + status
+                    if mobile_ui:
+                        print(status)
+                    else:
+                        self.dependenciesQL.setText(status)
+            else:
+                # if the cache directory is missing, generate it
+                if not os.path.exists(config.cache_dir):
+                    os.mkdir(config.cache_dir)
+                # generate self.missing and supported_conversions
+                self.check_for_dependencies()
+                supported_conversions = utils.get_all_conversions(self.settings, missing=self.missing, use_wsl=self.use_wsl)
+                # write config file
+                parser['CACHE'] = {}
+                parser['CACHE']['missing'] = str(self.missing)
+                parser['CACHE']['conversions'] = str(supported_conversions)
+                with open(config.cache_file, 'w') as configfile:
+                    parser.write(configfile)
+
+            return supported_conversions
         # Start a thread to get the conversions, join() it at the end of __init__
+        # conversion_check_thread.result = self.all_supported_conversions
         conversion_check_thread = utils.ThreadWithReturn(target=threaded_conversion_check, args=(self,))
         conversion_check_thread.start()
 
@@ -339,8 +373,8 @@ class MainWindow(QMainWindow):
             self.missing.append('bzip2')
 
         if self.missing:
-            self.missing = ', '.join(self.missing)
-            status = self.tr('Missing dependencies:') + ' ' + self.missing
+            status = ', '.join(self.missing)
+            status = self.tr('Missing dependencies:') + ' ' + status
             if mobile_ui:
                 print(status)
             else:
