@@ -73,6 +73,7 @@ class MainWindow(QMainWindow):
         self.use_wsl = self.settings.value('use_wsl', type=bool)
 
         def threaded_conversion_check(self):
+            self.cache_refreshed = False # set to true to skip cache_refresh
             # return all_supported_conversions
             if os.path.exists(config.cache_file) and not self.disable_cache:
                 import ast, configparser
@@ -98,10 +99,14 @@ class MainWindow(QMainWindow):
                                                                   missing=self.missing,
                                                                   use_wsl=self.use_wsl)
                 if not self.disable_cache:
+                    self.cache_refreshed = True
                     # if the cache directory is missing, generate it
                     if not os.path.exists(config.cache_dir):
                         os.mkdir(config.cache_dir)
-                    # write config file
+                    # write config file and set cache_refreshed so that
+                    # cache_rewrite won't run again. write here instead
+                    # of in cache_rewrite because supported_conversions
+                    # are already set
                     import configparser
                     parser = configparser.ConfigParser()
                     parser['CACHE'] = {}
@@ -113,8 +118,8 @@ class MainWindow(QMainWindow):
 
         def threaded_cache_rewrite(self):
             if self.disable_cache:
-                return False # only update the cache if it is going to be used
-            # this will run on startup to update the cache in the background
+                # only update the cache if it is going to be used
+                return False
             try:
                 self.check_for_dependencies()
                 supported_conversions = utils.get_all_conversions(self.settings,
@@ -203,8 +208,9 @@ class MainWindow(QMainWindow):
             conversion_check_thread.join()
             self.all_supported_conversions = conversion_check_thread.result
             # start the rewrite, never join it
-            cache_rewrite_thread = utils.ThreadWithReturn(target=threaded_cache_rewrite, args=(self,))
-            cache_rewrite_thread.start()
+            if not self.cache_refreshed:
+                cache_rewrite_thread = utils.ThreadWithReturn(target=threaded_cache_rewrite, args=(self,))
+                cache_rewrite_thread.start()
             return
 
         addQPB = QPushButton(self.tr('Add'))
@@ -346,8 +352,9 @@ class MainWindow(QMainWindow):
         conversion_check_thread.join()
         self.all_supported_conversions = conversion_check_thread.result
         # start the rewrite, never join it
-        cache_rewrite_thread = utils.ThreadWithReturn(target=threaded_cache_rewrite, args=(self,))
-        cache_rewrite_thread.start()
+        if not self.cache_refreshed:
+            cache_rewrite_thread = utils.ThreadWithReturn(target=threaded_cache_rewrite, args=(self,))
+            cache_rewrite_thread.start()
 
         self.filesList_update()
 
