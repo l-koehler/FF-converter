@@ -60,6 +60,7 @@ class MainWindow(QMainWindow):
         self.settings = QSettings()
 
         mobile_ui = self.settings.value('mobile_ui', type=bool)
+        self.use_cache = self.settings.value('use_cache', type=bool)
 
         # needed by threaded_conversion_check, which we want to start
         # as early as possible to save time on startup
@@ -73,8 +74,7 @@ class MainWindow(QMainWindow):
 
         def threaded_conversion_check(self):
             # return all_supported_conversions
-            use_cache = self.settings.value('use_cache', type=bool)
-            if os.path.exists(config.cache_file) and use_cache:
+            if os.path.exists(config.cache_file) and self.use_cache:
                 import ast, configparser
                 parser = configparser.ConfigParser()
                 # load settings
@@ -102,7 +102,7 @@ class MainWindow(QMainWindow):
                 supported_conversions = utils.get_all_conversions(self.settings,
                                                                   missing=self.missing,
                                                                   use_wsl=self.use_wsl)
-                if use_cache:
+                if self.use_cache:
                     import configparser
                     parser = configparser.ConfigParser()
                     # write config file
@@ -114,6 +114,8 @@ class MainWindow(QMainWindow):
             return supported_conversions
 
         def threaded_cache_rewrite(self):
+            if not self.use_cache:
+                return False # only update the cache if it is going to be used
             # this will run on startup to update the cache in the background
             try:
                 self.check_for_dependencies()
@@ -123,7 +125,7 @@ class MainWindow(QMainWindow):
             except RuntimeError:
                 # the main program was closed before the rewrite finished
                 # do not overwrite the cache with the possibly damaged result
-                return False
+                exit(0)
             import configparser
             parser = configparser.ConfigParser()
             # write config file
