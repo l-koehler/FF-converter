@@ -1,3 +1,17 @@
+Version 2.3.2
+-------------
+
+* Added Caching to all_supported_conversions and missing to make
+  starting the program faster.
+
+* Fix Issue #10: Will now no longer freeze if the external program is
+  missing when called by progress.py
+
+* Stop a error message by WSL that would display when the program
+  checks and doesn't find a dependency in WSL
+
+* Will now work with the magick command "convert" installed in WSL
+
 Version 2.3.1
 -------------
 
