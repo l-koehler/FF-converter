@@ -68,11 +68,12 @@ class Preferences(QDialog):
         other_layout = utils.add_to_layout('h', other_grid, None)
 
         self.mobile_uiQChB = QCheckBox(self.tr("Use (smaller) mobile UI"))
+        self.delete_cacheQPB = QPushButton(self.tr("Delete Cache"))
         if os.name == 'nt':
             self.use_wslQChB = QCheckBox(self.tr("Windows: Use WSL for conversions"))
-            other_optionsGrid = utils.add_to_grid([self.use_wslQChB],[self.mobile_uiQChB])
+            other_optionsGrid = utils.add_to_grid([self.use_wslQChB],[self.mobile_uiQChB], [self.delete_cacheQPB])
         else:
-            other_optionsGrid = utils.add_to_grid([self.mobile_uiQChB])
+            other_optionsGrid = utils.add_to_grid([self.mobile_uiQChB], [self.delete_cacheQPB])
 
         tabwidget1_layout = utils.add_to_layout(
                 'v', saveQL,
@@ -187,6 +188,8 @@ class Preferences(QDialog):
                 lambda: self.set_videocodecs(config.video_codecs))
         defaudcodecsQPB.clicked.connect(
                 lambda: self.set_audiocodecs(config.audio_codecs))
+        self.delete_cacheQPB.clicked.connect(
+                lambda: self.delete_cache())
 
         self.resize(400, 450)
         self.setWindowTitle(self.tr('Preferences'))
@@ -249,6 +252,20 @@ class Preferences(QDialog):
 
     def set_audiocodecs(self, codecs):
         self.audcodecsQPTE.setPlainText("\n".join(codecs))
+
+    def delete_cache(self):
+        msg = QMessageBox(self)
+        msg.setStandardButtons(QMessageBox.Ok)
+        if os.path.exists(config.cache_file):
+            os.remove(config.cache_file)
+            msg.setIcon(QMessageBox.Information)
+            msg.setText(self.tr("Cache file successfully deleted!"))
+        else:
+            msg.setIcon(QMessageBox.Warning)
+            msg.setText(self.tr("Cache file not found!"))
+        msg.setWindowTitle(self.tr("Delete Cache"))
+        msg.setModal(False)
+        msg.show()
 
     def open_dir(self):
         """Get a directory name using a standard Qt dialog and update
