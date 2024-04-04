@@ -279,7 +279,7 @@ class Progress(QDialog):
                 else:
                     self.error += 1
             except Exception as e:
-                convert() caused a exception, likely a wrong command was used.
+                # convert() caused a exception, likely a wrong command was used.
                 self.update_text_edit_signal.emit(f"Exception in convert(): {e}\n")
                 self.error += 1
 
