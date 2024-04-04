@@ -500,11 +500,10 @@ class MainWindow(QMainWindow):
             if os.path.isfile(path) and not path in self.fnames:
                 self.fnames.append(path)
         self.filesList_update()
-        if fnames:
-            # Set toQLE to the dir of the first file, if toQLE not set
-            if self.toQLE.text() == "":
-                dir_of_first_file = os.path.dirname(os.path.abspath(fnames[0]))
-                self.toQLE.setText(dir_of_first_file)
+        # Set toQLE to the dir of the first file, if toQLE not set
+        if self.fnames and self.toQLE.text() == "":
+            dir_of_first_file = os.path.dirname(os.path.abspath(self.fnames[0]))
+            self.toQLE.setText(dir_of_first_file)
 
     def filesList_delete(self):
         items = self.filesList.selectedItems()
