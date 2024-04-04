@@ -32,7 +32,6 @@ in the Microsoft Store is [worse in some regards](https://docs.python.org/3/usin
 * trimesh (python package, used for 3D Models)  
   __If trimesh is installed, these dependencies are required__
   - gmsh-sdk (python package)  
-  - patchy (python package, weird hack needed to fix trimesh)  
 
 On Linux, use your distributions Package manager to install these.  
 On Windows, either get .exe files and place them on the $PATH , use [scoop](https://scoop.sh),  
@@ -53,6 +52,18 @@ pip install ffconverter
 If a optional dependency is installed after the program, you might  
 need to restart the program twice to ensure the cache gets overwritten.  
 If this does not work, delete the cache (Preferences -> Delete Cache).  
+
+Trimesh is broken, patch for `{site_packages}/trimesh/interfaces/gmsh.py`  
+(e.g. `~/.local/lib/python3.11/site-packages/trimesh/interfaces/gmsh.py`):  
+```patch
+79,80c79
+<     if not gmsh.isInitialized():
+<         gmsh.initialize()
+---
+>     gmsh.initialize()
+```
+this patch is probably a bad idea but it delays  
+the crash until the conversion is done.  
 
 #### Troubleshooting (Linux)
 On some distros ("externally managed environments", like Arch and Debian),  

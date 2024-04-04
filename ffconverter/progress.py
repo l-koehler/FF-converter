@@ -268,20 +268,20 @@ class Progress(QDialog):
                 conv_func = self.convert_dynamic
                 params = (from_file, to_file, converter)
 
-            # try:
-            if conv_func(*params):
-                self.ok += 1
-                if self.delete and not from_file == to_file:
-                    try:
-                        os.remove(from_file[1:-1])
-                    except OSError:
-                        pass
-            else:
+            try:
+                if conv_func(*params):
+                    self.ok += 1
+                    if self.delete and not from_file == to_file:
+                        try:
+                            os.remove(from_file[1:-1])
+                        except OSError:
+                            pass
+                else:
+                    self.error += 1
+            except Exception as e:
+                convert() caused a exception, likely a wrong command was used.
+                self.update_text_edit_signal.emit(f"Exception in convert(): {e}\n")
                 self.error += 1
-            # except Exception as e:
-                # convert() caused a exception, likely a wrong command was used.
-                # self.update_text_edit_signal.emit(f"Exception in convert(): {e}\n")
-                # self.error += 1
 
             self.file_converted_signal.emit()
 
