@@ -266,7 +266,7 @@ class Progress(QDialog):
                 params = (from_file, to_file)
             else:
                 conv_func = self.convert_dynamic
-                params = (from_file, to_file)
+                params = (from_file, to_file, converter)
 
             try:
                 if conv_func(*params):
@@ -280,13 +280,29 @@ class Progress(QDialog):
                     self.error += 1
             except Exception as e:
                 # convert() caused a exception, likely a wrong command was used.
-                print(f"convert() thread exception: {e}")
+                self.update_text_edit_signal.emit(f"Exception in convert(): {e}\n")
                 self.error += 1
 
             self.file_converted_signal.emit()
 
-        self.thread = threading.Thread(target=convert)
-        self.thread.start()
+        force_no_thread = False
+        # trimesh doesn't work with threads
+        if self._type not in ['AudioVideo', 'Images', 'Markdown', 'Compression', 'Documents']:
+            from_file_ext = utils.get_extension(from_file)
+            to_file_ext = utils.get_extension(to_file)
+            converter = utils.get_all_conversions(self.parent.settings, 
+                                                get_conv_for_ext=True,
+                                                ext=[from_file_ext,to_file_ext],
+                                                missing=self.parent.missing,
+                                                use_wsl=self.parent.use_wsl)
+            if converter == "trimesh":
+                convert()
+            else:
+                self.thread = threading.Thread(target=convert)
+                self.thread.start()
+        else:
+            self.thread = threading.Thread(target=convert)
+            self.thread.start()
 
     def convert_video(self, from_file, to_file, command):
         """
@@ -606,20 +622,18 @@ class Progress(QDialog):
 
     def convert_model(self, from_file, to_file):
         # can't be imported at the start because its a optional dependency
-        if 'trimesh' not in sys.modules:
-            import trimesh
+        import trimesh
+        # python library doesn't need escaped paths, we can undo that
+        from_file = from_file.replace('"', '').replace('\\', '')
+        to_file   =   to_file.replace('"', '').replace('\\', '')
+        
+        self.update_text_edit_signal.emit(f"Loading file from {from_file}\n")
         mesh = trimesh.Trimesh(**trimesh.interfaces.gmsh.load_gmsh(file_name=from_file))
+        self.update_text_edit_signal.emit(f"Saving File to {to_file}\n")
         mesh.export(to_file)
         return True
 
-    def convert_dynamic(self, from_file, to_file):
-        from_file_ext = utils.get_extension(from_file)
-        to_file_ext = utils.get_extension(to_file)
-        converter = utils.get_all_conversions(self.parent.settings,
-                                              get_conv_for_ext=True,
-                                              ext=[from_file_ext,to_file_ext],
-                                              missing=self.parent.missing,
-                                              use_wsl=self.parent.use_wsl)
+    def convert_dynamic(self, from_file, to_file, converter):
         if converter == "ffmpeg":
             return self.convert_video(from_file, to_file, "")
         elif converter == "pandoc":

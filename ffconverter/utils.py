@@ -360,7 +360,6 @@ def get_combobox_content(self, list_of_files, all_supported_conversions,
     for input_file in list_of_files:
         file_outputs = []
         input_file_ext = get_extension(input_file)
-        print(input_file_ext)
         for conv in all_supported_conversions:
             if input_file_ext in conv[0]:
                 # append to possible_outputs only once per file
