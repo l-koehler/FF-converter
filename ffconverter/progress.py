@@ -23,6 +23,7 @@ import subprocess
 import shlex
 import shutil
 import logging
+import sys
 from pathlib import Path
 
 from PyQt5.QtCore import pyqtSignal, QTimer
@@ -603,6 +604,14 @@ class Progress(QDialog):
             pass
         return return_code == 0
 
+    def convert_model(self, from_file, to_file):
+        # can't be imported at the start because its a optional dependency
+        if 'trimesh' not in sys.modules:
+            import trimesh
+        mesh = trimesh.Trimesh(**trimesh.interfaces.gmsh.load_gmsh(file_name=from_file))
+        mesh.export(to_file)
+        return True
+
     def convert_dynamic(self, from_file, to_file):
         from_file_ext = utils.get_extension(from_file)
         to_file_ext = utils.get_extension(to_file)
@@ -621,6 +630,10 @@ class Progress(QDialog):
             return self.convert_document(from_file, to_file)
         elif converter == "compression":
             return self.convert_compression(from_file, to_file)
-        else:
+        elif converter == "trimesh":
+            return self.convert_model(from_file, to_file)
+        elif converter == "unsupported":
             print("Error: Did not find suitable converter for dynamic conversion!")
-            return False
+        else:
+            print(f"Error: Found converter \"{converter}\", but it does not implement conversion yet!")
+        return False

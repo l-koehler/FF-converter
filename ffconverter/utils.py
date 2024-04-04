@@ -324,7 +324,7 @@ def get_all_conversions(settings, get_conv_for_ext = False,
             return "soffice"
         elif ext[0] in compression_exts[0] and ext[1] in compression_exts[1]:
             return "compression"
-        elif ext[0] in model_exts[0] and ext[1] in compression_exts[1]:
+        elif ext[0] in model_exts[0] and ext[1] in model_exts[1]:
             return "trimesh"
         else:
             return "unsupported"
