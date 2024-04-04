@@ -268,20 +268,20 @@ class Progress(QDialog):
                 conv_func = self.convert_dynamic
                 params = (from_file, to_file, converter)
 
-            try:
-                if conv_func(*params):
-                    self.ok += 1
-                    if self.delete and not from_file == to_file:
-                        try:
-                            os.remove(from_file[1:-1])
-                        except OSError:
-                            pass
-                else:
-                    self.error += 1
-            except Exception as e:
-                # convert() caused a exception, likely a wrong command was used.
-                self.update_text_edit_signal.emit(f"Exception in convert(): {e}\n")
+            # try:
+            if conv_func(*params):
+                self.ok += 1
+                if self.delete and not from_file == to_file:
+                    try:
+                        os.remove(from_file[1:-1])
+                    except OSError:
+                        pass
+            else:
                 self.error += 1
+            # except Exception as e:
+                # convert() caused a exception, likely a wrong command was used.
+                # self.update_text_edit_signal.emit(f"Exception in convert(): {e}\n")
+                # self.error += 1
 
             self.file_converted_signal.emit()
 
@@ -627,10 +627,19 @@ class Progress(QDialog):
         from_file = from_file.replace('"', '').replace('\\', '')
         to_file   =   to_file.replace('"', '').replace('\\', '')
         
-        self.update_text_edit_signal.emit(f"Loading file from {from_file}\n")
-        mesh = trimesh.Trimesh(**trimesh.interfaces.gmsh.load_gmsh(file_name=from_file))
-        self.update_text_edit_signal.emit(f"Saving File to {to_file}\n")
-        mesh.export(to_file)
+        needs_gmsh = utils.get_extension(from_file) in ['iges', 'stp', 'step', 'brep']
+        try:
+            if utils.get_extension(from_file) in ['iges', 'stp', 'step', 'brep']:
+                self.update_text_edit_signal.emit(f"Loading file from {from_file} using trimesh.gmsh\n")
+                mesh = trimesh.Trimesh(**trimesh.interfaces.gmsh.load_gmsh(file_name=from_file))
+            else:
+                self.update_text_edit_signal.emit(f"Loading file from {from_file} using trimesh.default\n")
+                mesh = trimesh.load(from_file)
+            self.update_text_edit_signal.emit(f"Saving File to {to_file}\n")
+            mesh.export(to_file)
+        except Exception as e:
+            self.update_text_edit_signal.emit(f"Failed: {e}\n")
+            return False
         return True
 
     def convert_dynamic(self, from_file, to_file, converter):
