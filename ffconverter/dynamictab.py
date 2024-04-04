@@ -56,11 +56,6 @@ class DynamicTab(QWidget):
             common = (self.parent.settings.value('extraformats_common') or []) + config.common_formats
         outputs = utils.get_combobox_content(self, list_of_files, all_supported_conversions,
                                              common=common)
-        # if all possible output formats are disabled by common-formats-only, disable that and retry
-        if outputs == [] and self.commonformatQChB.isChecked():
-            outputs = utils.get_combobox_content(self, list_of_files, all_supported_conversions, common=[])
-            if outputs != []:
-                self.commonformatQChB.setChecked(False)
 
         self.extQCB.addItems(outputs)
 

@@ -383,7 +383,7 @@ def get_combobox_content(self, list_of_files, all_supported_conversions,
         first_output_list = possible_outputs[0] if possible_outputs else []
         valid_outputs = list(dict.fromkeys(first_output_list))
 
-    if common != []:
+    if [ext for ext in valid_outputs if ext in common] != []:
         # remove all uncommon formats from the list
         valid_outputs[:] = [ext for ext in valid_outputs if ext in common]
     return valid_outputs
