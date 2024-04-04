@@ -380,7 +380,6 @@ class MainWindow(QMainWindow):
         self.unoconv = utils.is_installed('unoconv', use_wsl)
         self.imagemagick = utils.is_installed('magick', use_wsl)
         self.pandoc = utils.is_installed('pandoc', use_wsl)
-
         self.compress_zip = utils.is_installed('zip', use_wsl)
         self.compress_unzip = utils.is_installed('unzip', use_wsl)
         self.compress_tar = utils.is_installed('tar', use_wsl)
@@ -388,6 +387,7 @@ class MainWindow(QMainWindow):
         self.compress_ar = utils.is_installed('ar', use_wsl)
         self.compress_gzip = utils.is_installed('gzip', use_wsl)
         self.compress_bzip2 = utils.is_installed('bzip2', use_wsl)
+        self.trimesh = utils.is_installed('trimesh', use_wsl)
 
         self.missing = []
         if not self.ffmpeg_path:
@@ -412,6 +412,8 @@ class MainWindow(QMainWindow):
             self.missing.append('gzip')
         if not self.compress_bzip2:
             self.missing.append('bzip2')
+        if not self.trimesh:
+            self.missing.append('trimesh')
 
         if self.missing:
             status = ', '.join(self.missing)
@@ -422,7 +424,6 @@ class MainWindow(QMainWindow):
                 self.dependenciesQL.setText(status)
 
     def load_settings(self, settings):
-
         self.mobile_ui = settings.value('mobile_ui', type=bool)
         self.overwrite_existing = settings.value('overwrite_existing', type=bool)
         self.default_output = settings.value('default_output', type=str)

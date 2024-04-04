@@ -26,6 +26,7 @@ import subprocess
 import time
 import string
 import threading
+import importlib.util
 
 from PyQt5.QtCore import pyqtSignal, QSize, Qt, QSettings
 from PyQt5.QtWidgets import (
@@ -59,6 +60,10 @@ def is_installed(program, use_wsl, wsl_only=False):
     """
 
     if program.startswith('wsl'): return program # do not resolve WSL paths
+
+    if program == 'trimesh':
+        is_installed = importlib.util.find_spec(program) is not None
+        return is_installed
 
     # wsl_only is used to not get "convert" on a windows system
     if wsl_only == False:
@@ -294,6 +299,13 @@ def get_all_conversions(settings, get_conv_for_ext = False,
         compression_exts[1] += extraformats_compression + ['[Folder]']
     supported_tmp.append(compression_exts)
 
+    model_exts = [[], []]
+    if 'trimesh' not in missing:
+        # TODO: trimesh can load/export far more types, add these
+        model_exts[0] += ['step']
+        model_exts[1] += ['stl']
+    supported_tmp.append(model_exts)
+
     # if the function is meant to return a converter for a in/output pair
     if get_conv_for_ext:
         if ext[0] in ffmpeg_conversions[0] and ext[1] in ffmpeg_conversions[1]:
@@ -312,6 +324,8 @@ def get_all_conversions(settings, get_conv_for_ext = False,
             return "soffice"
         elif ext[0] in compression_exts[0] and ext[1] in compression_exts[1]:
             return "compression"
+        elif ext[0] in model_exts[0] and ext[1] in compression_exts[1]:
+            return "trimesh"
         else:
             return "unsupported"
     else:
@@ -337,8 +351,8 @@ def get_extension(file_path):
 
     all_double = config.double_formats + (settings.value('extraformats_double') or [])
     if joined_ext in all_double:
-        return joined_ext
-    return first_ext
+        return joined_ext.lower()
+    return first_ext.lower()
 
 def get_combobox_content(self, list_of_files, all_supported_conversions,
                          common=[]):
@@ -346,6 +360,7 @@ def get_combobox_content(self, list_of_files, all_supported_conversions,
     for input_file in list_of_files:
         file_outputs = []
         input_file_ext = get_extension(input_file)
+        print(input_file_ext)
         for conv in all_supported_conversions:
             if input_file_ext in conv[0]:
                 # append to possible_outputs only once per file
