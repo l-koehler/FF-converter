@@ -31,7 +31,7 @@ in the Microsoft Store is [worse in some regards](https://docs.python.org/3/usin
 * squashfs-tools, zip, unzip, binutils, tar, gzip, bzip2 (Compressed files)  
 * trimesh (python package, used for 3D Models)  
   __If trimesh is installed, these dependencies are required__
-  - gmsh-sdk (python package)  
+  - gmsh (python package)  
 
 On Linux, use your distributions Package manager to install these.  
 On Windows, either get .exe files and place them on the $PATH , use [scoop](https://scoop.sh),  
