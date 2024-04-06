@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: ffconverter
-Version: 2.2.0
+Version: 2.4.0
 Summary: File Format Converter with Qt GUI
 Home-page: https://github.com/l-koehler/FF-converter
 Author: Ilias Stamatis
@@ -10,11 +10,13 @@ Maintainer-email: lorenz.koehler@posteo.de
 License: GNU GPL3
 Keywords: convert,file format,extension,audio,video,images,documents,ffmpeg,imagemagick,unoconv,pandoc
 Platform: Linux
+Platform: Windows
 Classifier: Programming Language :: Python
 Classifier: Programming Language :: Python :: 3 :: Only
 Classifier: License :: OSI Approved :: GNU General Public License (GPL)
 Classifier: License :: OSI Approved :: GNU General Public License v3 (GPLv3)
 Classifier: Operating System :: POSIX :: Linux
+Classifier: Operating System :: Microsoft :: Windows
 Classifier: Development Status :: 5 - Production/Stable
 Classifier: Environment :: X11 Applications :: Qt
 Classifier: Natural Language :: English

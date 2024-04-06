@@ -664,6 +664,11 @@ def main():
     app.setOrganizationDomain(ffmc.__url__)
     app.setApplicationName('FF Multi Converter')
     app.setWindowIcon(QIcon(':/ffconverter.png'))
+    try:
+        # Qt 5.7+ needed
+        app.setDesktopFileName("ffconverter")
+    except AttributeError:
+        print("Using PyQt below 5.7, cannot set Wayland Icon!")
 
     locale = QLocale.system().name()
 
