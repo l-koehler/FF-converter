@@ -1,3 +1,13 @@
+Version 2.4.0
+-------------
+
+* Added trimesh/gmsh to support 3D-Models (close #11)
+
+* Fixed crash when using drag-and-drop (close #12)
+
+* When set to only show common file types, still show uncommon ones
+  if no common types are available
+
 Version 2.3.2
 -------------
 
