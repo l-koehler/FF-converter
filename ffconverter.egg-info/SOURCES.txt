@@ -23,6 +23,7 @@ ffconverter/utils.py
 ffconverter.egg-info/PKG-INFO
 ffconverter.egg-info/SOURCES.txt
 ffconverter.egg-info/dependency_links.txt
+ffconverter.egg-info/requires.txt
 ffconverter.egg-info/top_level.txt
 locale/ffconverter.pro
 locale/ffconverter_bg.ts

@@ -18,6 +18,11 @@ else:
 setup(
     name = ffconverter.__name__,
     packages = [ffconverter.__name__],
+    install_requires=[
+          'pyqt5',
+          'trimesh',
+          'gmsh'
+      ],
     scripts = ['bin/ffconverter'],
     data_files = data_files,
     version = ffconverter.__version__,

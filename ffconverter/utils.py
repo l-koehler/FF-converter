@@ -61,8 +61,11 @@ def is_installed(program, use_wsl, wsl_only=False):
 
     if program.startswith('wsl'): return program # do not resolve WSL paths
 
+    # python packages
     if program == 'trimesh':
-        is_installed = importlib.util.find_spec(program) is not None
+        is_installed = False
+        if importlib.util.find_spec(program) is not None:
+            is_installed = importlib.util.find_spec(program).loader is not None
         return is_installed
 
     # wsl_only is used to not get "convert" on a windows system

@@ -36,11 +36,13 @@ Python packages:
 
 * trimesh _AND_ gmsh (python packages, used for 3D Models)  
 
+These should be installed automatically when using pip/pipx,  
+but if you don't need to convert 3D Models you can remove these.  
 
-On Linux, use your distributions Package manager to install these.  
-On Windows, either get .exe files and place them on the $PATH , use [scoop](https://scoop.sh),  
-or (for everything but ffmpeg) install the dependencies in WSL.  
-You could also try other third-party package managers  
+On Linux, use your distributions Package manager to install the System  
+packages. On Windows, either get .exe files and place them on the $PATH,  
+use [scoop](https://scoop.sh), or (for everything but ffmpeg) install the  
+dependencies in WSL. You could also try other third-party package managers  
 or even the Microsoft Store, the program only needs the command  
 (e.g. `unoconv`) to be available on the CMD.  
 

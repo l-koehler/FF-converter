@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: ffconverter
-Version: 2.4.0
+Version: 2.4.1
 Summary: File Format Converter with Qt GUI
 Home-page: https://github.com/l-koehler/FF-converter
 Author: Ilias Stamatis
@@ -45,6 +45,9 @@ Classifier: Topic :: Multimedia :: Sound/Audio :: Conversion
 Classifier: Topic :: Utilities
 License-File: COPYING
 License-File: AUTHORS
+Requires-Dist: pyqt5
+Requires-Dist: trimesh
+Requires-Dist: gmsh
 
 
 FF Converter
