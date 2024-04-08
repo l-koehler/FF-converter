@@ -1,3 +1,14 @@
+Version 2.4.3
+-------------
+
+* Move trimesh/gmsh to optional dependencies
+
+* Add missing 3D Formats
+
+* Add instructions for ARM users on how to install (compile) GMSH
+
+* Add proper handling of unexpected missing gmsh
+
 Version 2.4.2
 -------------
 

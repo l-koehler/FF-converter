@@ -50,7 +50,7 @@ def duration_in_seconds(duration):
     hours, mins, secs = [int(i) for i in duration.split(':')]
     return secs + (hours * 3600) + (mins * 60)
 
-def is_installed(program, use_wsl, wsl_only=False):
+def is_installed(program, use_wsl, wsl_only=False, is_import=False):
     """
     If program is a program name, returns the absolute path to this program if
     included in the PATH enviromental variable, else empty string.
@@ -62,7 +62,7 @@ def is_installed(program, use_wsl, wsl_only=False):
     if program.startswith('wsl'): return program # do not resolve WSL paths
 
     # python packages
-    if program == 'trimesh':
+    if is_import:
         is_installed = False
         if importlib.util.find_spec(program) is not None:
             is_installed = importlib.util.find_spec(program).loader is not None
@@ -304,9 +304,12 @@ def get_all_conversions(settings, get_conv_for_ext = False,
 
     model_exts = [[], []]
     if 'trimesh' not in missing:
-        # TODO: trimesh can load/export far more types, add these
-        model_exts[0] += ['step']
-        model_exts[1] += ['stl']
+        model_exts[0] += ['stl', 'stl_ascii', 'off', 'ply', 'obj', 'glb', '3mf', '3dxml', 'gtlf']
+        model_exts[1] += ['stl', 'ply', 'off', 'obj', 'glb', 'gtlf', 'dae']
+        if 'gmsh' not in missing:
+            model_exts[0] += ['brep', 'step', 'iges', 'inp', 'bdf']
+            model_exts[1] += ['inp', 'bdf']
+
     supported_tmp.append(model_exts)
 
     # if the function is meant to return a converter for a in/output pair

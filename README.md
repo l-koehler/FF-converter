@@ -59,6 +59,30 @@ If a optional dependency is installed after the program, you might
 need to restart the program twice to ensure the cache gets overwritten.  
 If this does not work, delete the cache (Preferences -> Delete Cache).  
 
+#### Troubleshooting (ARM CPUs)
+For converting 3D Models, the python packages `trimesh` and `gmsh` are  
+required. Sadly, `gmsh` is not available on PyPi for ARM devices. You can  
+compile it yourself by using the script below.  
+__WARNING: You won't be able to uninstall gmsh using pip__  
+and any scripts using it must first run `sys.path.append('/usr/local/lib')`.  
+This will take a while. I only have a rapidly overheating phone  
+for testing ARM, so I am not that sure about compile time on other  
+devices, but expect *upwards of 2 hours compile time*.  
+```bash
+git clone https://gitlab.onelab.info/gmsh/gmsh.git # 200+ MiB size
+mkdir ./gmsh/build
+cd ./gmsh/build
+
+# You can probably replace `gcc` and `g++` with any other C/C++ Compiler.
+CC=gcc CXX=g++ cmake -DENABLE_BUILD_DYNAMIC=1 ..
+make
+sudo make install
+
+# optional, you no longer need the git repo
+cd ../..
+rm -r ./gmsh
+```
+
 #### Troubleshooting (Linux)
 On some distros ("externally managed environments", like Arch and Debian),  
 `pip` will not work. In this case, you should use `pipx`.  

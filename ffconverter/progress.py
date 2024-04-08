@@ -627,9 +627,20 @@ class Progress(QDialog):
         from_file = from_file.replace('"', '').replace('\\', '')
         to_file   =   to_file.replace('"', '').replace('\\', '')
         
-        needs_gmsh = utils.get_extension(from_file) in ['iges', 'stp', 'step', 'brep']
+        # these formats require gmsh in addition to trimesh
+        needs_gmsh = utils.get_extension(from_file) in ['brep', 'step', 'iges', 'inp', 'bdf'] or utils.get_extension(to_file) in ['inp', 'bdf']
+        # check that GMSH is installed, append to sys.path if needed
+        if needs_gmsh and not utils.is_installed('gmsh', False, is_import=True):
+            self.update_text_edit_signal.emit("Would fail to load GMSH, retrying with /usr/local/lib\n")
+            if not '/usr/local/lib' in sys.path:
+                sys.path.append('/usr/local/lib')
+            # retry with the new sys.path
+            if not utils.is_installed('gmsh', False, is_import=True):
+                self.update_text_edit_signal.emit("Unable to locate GMSH, please install it. (using PyPi/pip)\n")
+                return False
+
         try:
-            if utils.get_extension(from_file) in ['iges', 'stp', 'step', 'brep']:
+            if needs_gmsh:
                 self.update_text_edit_signal.emit(f"Loading file from {from_file} using trimesh.gmsh\n")
                 mesh = trimesh.Trimesh(**trimesh.interfaces.gmsh.load_gmsh(file_name=from_file))
             else:

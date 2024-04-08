@@ -387,7 +387,8 @@ class MainWindow(QMainWindow):
         self.compress_ar = utils.is_installed('ar', use_wsl)
         self.compress_gzip = utils.is_installed('gzip', use_wsl)
         self.compress_bzip2 = utils.is_installed('bzip2', use_wsl)
-        self.trimesh = utils.is_installed('trimesh', use_wsl)
+        self.trimesh = utils.is_installed('trimesh', False, is_import=True)
+        self.gmsh = utils.is_installed('gmsh', False, is_import=True)
 
         self.missing = []
         if not self.ffmpeg_path:
@@ -412,8 +413,11 @@ class MainWindow(QMainWindow):
             self.missing.append('gzip')
         if not self.compress_bzip2:
             self.missing.append('bzip2')
+        # if trimesh is missing, we won't use gmsh anyways
         if not self.trimesh:
             self.missing.append('trimesh')
+        if not self.trimesh and not self.gmsh:
+            self.missing.append('and gmsh')
 
         if self.missing:
             status = ', '.join(self.missing)
