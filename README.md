@@ -24,6 +24,11 @@ in the Microsoft Store is [worse in some regards](https://docs.python.org/3/usin
 #### Optional dependencies:
 Without these some conversions will not work.  
 
+Python packages:  
+
+* trimesh (python package, used for 3D Models)  
+* gmsh (python package, requires trimesh, used for more 3D Models)  
+
 System Packages:  
 
 * ffmpeg (Audio and Video)  
@@ -31,13 +36,6 @@ System Packages:
 * unoconv (Office formats)  
 * pandoc (Markdown)  
 * squashfs-tools, zip, unzip, binutils, tar, gzip, bzip2 (Compressed files)  
-
-Python packages:  
-
-* trimesh _AND_ gmsh (python packages, used for 3D Models)  
-
-These should be installed automatically when using pip/pipx,  
-but if you don't need to convert 3D Models you can remove these.  
 
 On Linux, use your distributions Package manager to install the System  
 packages. On Windows, either get .exe files and place them on the $PATH,  
