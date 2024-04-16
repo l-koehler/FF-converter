@@ -227,28 +227,23 @@ def get_all_conversions(settings, get_conv_for_ext = False,
             line_args = line.split()
             # if the line is empty or does not start with all-caps (EXTENSION)
             uppercase_chars = string.ascii_uppercase + '*-'
-            if len(line_args) < 3 or set(line_args[0]) <= set(uppercase_chars):
+            if len(line_args) < 3 or set(line_args[0]) > set(uppercase_chars):
                 continue
-            file_format, module, rw_status = line_args[:3]
+            file_format, module, rw_status = line_args[:3] # yayyyy the silly :33
             file_format = file_format.lower().replace('*', '')
             if module in ['BRAILLE', 'TXT']:
                 continue
-            if "r" in rw_status:
+            if "r" in rw_status and file_format not in list('rw+') and module != 'PDF':
                 # the program will break trying to read some PDFs
-                if module not in ['PDF']:
-                    in_formats.append(file_format)
-            if "w" in rw_status:
+                in_formats.append(file_format)
+            if "w" in rw_status and file_format not in list('rw+'):
                 out_formats.append(file_format)
-        # for formats like PNG, the output will be PNG00 .. PNG64.
-        if 'png00' in in_formats and 'png' not in in_formats:
-            in_formats.append('png')
-        if 'png00' in out_formats and 'png' not in out_formats:
-            out_formats.append('png')
         magick_conversions = [in_formats + extraformats_image,
                               out_formats + extraformats_image]
         supported_tmp.append(magick_conversions)
     else:
         magick_conversions = [[], []]
+    print(magick_conversions)
 
     # libreoffice exts
     # cant actually get those right now, so have some predefined lists instead
