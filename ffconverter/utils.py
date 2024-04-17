@@ -249,7 +249,6 @@ def get_all_conversions(settings, get_conv_for_ext = False,
         supported_tmp.append(magick_conversions)
     else:
         magick_conversions = [[], []]
-    print(magick_conversions)
 
     # libreoffice exts
     # cant actually get those right now, so have some predefined lists instead
