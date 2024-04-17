@@ -83,7 +83,13 @@ def is_installed(program, use_wsl, wsl_only=False, is_import=False):
         # imagemagick 6 uses 'convert', version 7 uses 'magick'
         # 'convert' is reserved for fat-to-ntfs conversion in windows
         if program == 'magick' and os.name != 'nt':
-            return is_installed('convert', False)
+            for path in path_env:
+                fpath = os.path.join(path, 'convert')
+                fpath_ls = [fpath, fpath+'.sh']
+                for fpath in fpath_ls:
+                    if os.path.isfile(fpath) and os.access(fpath, os.X_OK):
+                        return fpath
+            return ''
 
     # only if nothing was found on the regular system, check WSL
     if use_wsl == True:
