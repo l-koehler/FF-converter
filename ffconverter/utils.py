@@ -337,35 +337,35 @@ def get_all_conversions(settings, get_conv_for_ext = False,
     else:
         return supported_tmp
 
-def get_extension(file_path):
+def get_extension(file_path, all_supported_conversions):
     """
     Given a file path (or name, the file isn't opened),
     return a extension without leading dot.
     It the extension is in config.double_formats, the double format
     will be returned (e.g. 'tar.gz').
     """
+    supported_input = [a for b in [i[0] for i in all_supported_conversions] for a in b]
 
     # if there are quotation marks around the file path, remove them
     settings = QSettings()
+    file_path = file_path.replace('"', '')
+    file_name = os.path.basename(file_path)
 
-    file_path = file_path.replace("\"", "")
-
-    remainder, first_ext = os.path.splitext(file_path)
-    first_ext = first_ext[1:]
-    second_ext = os.path.splitext(remainder)[-1][1:] # '' if only one ext there
-    joined_ext = second_ext + '.' + first_ext
-
-    all_double = config.double_formats + (settings.value('extraformats_double') or [])
-    if joined_ext in all_double:
-        return joined_ext.lower()
-    return first_ext.lower()
+    name_seg = file_name.split('.')
+    results = []
+    for i in range(len(name_seg)-1):
+        results.append('.'.join(name_seg[i+1:]))
+    for option in results:
+        if option in supported_input:
+            return option
+    return results[-1]
 
 def get_combobox_content(self, list_of_files, all_supported_conversions,
                          common=[]):
     possible_outputs = []
     for input_file in list_of_files:
         file_outputs = []
-        input_file_ext = get_extension(input_file)
+        input_file_ext = get_extension(input_file, all_supported_conversions)
         for conv in all_supported_conversions:
             if input_file_ext in conv[0]:
                 # append to possible_outputs only once per file
@@ -439,7 +439,7 @@ def find_presets_file(fname, lookup_dirs, lookup_virtenv):
 
 def create_paths_list(
         files_list, ext_to, prefix, suffix, output, orig_dir,
-        overwrite_existing
+        overwrite_existing, all_supported_conversions
         ):
     """
     Create and return a list with dicts.
@@ -469,7 +469,7 @@ def create_paths_list(
     for _file in files_list:
         _dir, name = os.path.split(_file)
         # name[:-len('.'+ext_from)] is the name without extension
-        ext_from = get_extension(name)
+        ext_from = get_extension(name, all_supported_conversions)
         y = prefix + name[:-len('.'+ext_from)] + suffix + ext_to
 
         if orig_dir:

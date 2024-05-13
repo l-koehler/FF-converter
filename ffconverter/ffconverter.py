@@ -619,7 +619,7 @@ class MainWindow(QMainWindow):
             _list = utils.create_paths_list(
                     self.fnames, ext_to, self.prefix, self.suffix,
                     self.toQLE.text(), self.origQCB.isChecked(),
-                    self.overwrite_existing
+                    self.overwrite_existing, self.all_supported_conversions
                     )
             dialog = progress.Progress(
                     _list, tab, self.deleteQCB.isChecked(), self)

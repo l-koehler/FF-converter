@@ -260,13 +260,13 @@ class Progress(QDialog):
                 params = (from_file, to_file)
             elif self._type == "Compression":
                 conv_func = self.convert_compression
-                params = (from_file, to_file)
+                params = (from_file, to_file, self.parent.all_supported_conversions)
             elif self._type == "Documents":
                 conv_func = self.convert_document
-                params = (from_file, to_file)
+                params = (from_file, to_file, self.parent.all_supported_conversions)
             else:
                 conv_func = self.convert_dynamic
-                params = (from_file, to_file, converter)
+                params = (from_file, to_file, converter, self.parent.all_supported_conversions)
 
             try:
                 if conv_func(*params):
@@ -288,8 +288,8 @@ class Progress(QDialog):
         force_no_thread = False
         # trimesh doesn't work with threads
         if self._type not in ['AudioVideo', 'Images', 'Markdown', 'Compression', 'Documents']:
-            from_file_ext = utils.get_extension(from_file)
-            to_file_ext = utils.get_extension(to_file)
+            from_file_ext = utils.get_extension(from_file, self.parent.all_supported_conversions)
+            to_file_ext = utils.get_extension(to_file, self.parent.all_supported_conversions)
             converter = utils.get_all_conversions(self.parent.settings, 
                                                 get_conv_for_ext=True,
                                                 ext=[from_file_ext,to_file_ext],
@@ -415,7 +415,7 @@ class Progress(QDialog):
 
         return return_code == 0
 
-    def convert_document(self, from_file, to_file):
+    def convert_document(self, from_file, to_file, all_supported_conversions):
         """
         Create the unoconv command and execute it using the subprocess module.
 
@@ -426,7 +426,7 @@ class Progress(QDialog):
         """
         # note: from_file and to_file names are inside quotation marks
         use_wsl = self.parent.settings.value('use_wsl', type=bool)
-        to_file_ext = utils.get_extension(to_file)
+        to_file_ext = utils.get_extension(to_file, all_supported_conversions)
         command, from_file, to_file = utils.wsl_adjust(use_wsl, 'unoconv', from_file, to_file)
         cmd = f'{command} -f {to_file_ext} -o {to_file} {from_file}'
         self.update_text_edit_signal.emit(cmd + '\n')
@@ -485,12 +485,12 @@ class Progress(QDialog):
 
         return return_code == 0
 
-    def convert_compression(self, from_file, to_file):
+    def convert_compression(self, from_file, to_file, all_supported_conversions):
         """
         Use tar/ar/squashfs-tools/(un)zip to convert compressed files.
         """
-        from_file_ext = utils.get_extension(from_file)
-        to_file_ext = utils.get_extension(to_file)
+        from_file_ext = utils.get_extension(from_file, all_supported_conversions)
+        to_file_ext = utils.get_extension(to_file, all_supported_conversions)
         use_wsl = self.parent.settings.value('use_wsl', type=bool)
 
         # Start by decompressing
@@ -620,7 +620,7 @@ class Progress(QDialog):
             pass
         return return_code == 0
 
-    def convert_model(self, from_file, to_file):
+    def convert_model(self, from_file, to_file, all_supported_conversions):
         # can't be imported at the start because its a optional dependency
         import trimesh
         # python library doesn't need escaped paths, we can undo that
@@ -628,7 +628,7 @@ class Progress(QDialog):
         to_file   =   to_file.replace('"', '').replace('\\', '')
         
         # these formats require gmsh in addition to trimesh
-        needs_gmsh = utils.get_extension(from_file) in ['brep', 'step', 'iges', 'inp', 'bdf'] or utils.get_extension(to_file) in ['inp', 'bdf']
+        needs_gmsh = utils.get_extension(from_file, all_supported_conversions) in ['brep', 'step', 'iges', 'inp', 'bdf'] or utils.get_extension(to_file) in ['inp', 'bdf']
         # check that GMSH is installed, append to sys.path if needed
         if needs_gmsh and not utils.is_installed('gmsh', False, is_import=True):
             self.update_text_edit_signal.emit("Would fail to load GMSH, retrying with /usr/local/lib\n")
@@ -653,7 +653,7 @@ class Progress(QDialog):
             return False
         return True
 
-    def convert_dynamic(self, from_file, to_file, converter):
+    def convert_dynamic(self, from_file, to_file, converter, all_supported_conversions):
         if converter == "ffmpeg":
             return self.convert_video(from_file, to_file, "")
         elif converter == "pandoc":
@@ -661,11 +661,11 @@ class Progress(QDialog):
         elif converter == "magick":
             return self.convert_image(from_file, to_file, "", "", "")
         elif converter == "soffice":
-            return self.convert_document(from_file, to_file)
+            return self.convert_document(from_file, to_file, all_supported_conversions)
         elif converter == "compression":
-            return self.convert_compression(from_file, to_file)
+            return self.convert_compression(from_file, to_file, all_supported_conversions)
         elif converter == "trimesh":
-            return self.convert_model(from_file, to_file)
+            return self.convert_model(from_file, to_file, all_supported_conversions)
         elif converter == "unsupported":
             print("Error: Did not find suitable converter for dynamic conversion!")
         else:
