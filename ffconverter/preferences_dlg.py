@@ -59,12 +59,10 @@ class Preferences(QDialog):
         # set elements here
         commonformatsQL = QLabel(self.tr('Add "common" formats:'))
         self.commonformatsQPTE = QPlainTextEdit()
-        doubleformatsQL = QLabel(self.tr('Add double-extensions:'))
-        self.doubleformatsQPTE = QPlainTextEdit()
 
         other_grid = utils.add_to_grid(
-                [commonformatsQL, doubleformatsQL],
-                [self.commonformatsQPTE, self.doubleformatsQPTE])
+                [commonformatsQL],
+                [self.commonformatsQPTE])
         other_layout = utils.add_to_layout('h', other_grid, None)
 
         self.mobile_uiQChB = QCheckBox(self.tr("Use (smaller) mobile UI"))
@@ -244,7 +242,6 @@ class Preferences(QDialog):
         self.extraformatsdocumentQPTE.setPlainText("\n".join(extraformats_document))
         self.extraformatsmarkdownQPTE.setPlainText("\n".join(extraformats_markdown))
         self.commonformatsQPTE.setPlainText("\n".join(extraformats_common))
-        self.doubleformatsQPTE.setPlainText("\n".join(extraformats_double))
         if os.name == 'nt':
             use_wsl = settings.value('use_wsl', type=bool)
             self.use_wslQChB.setChecked(use_wsl)
@@ -312,8 +309,6 @@ class Preferences(QDialog):
                 self.extraformatsmarkdownQPTE, config.markdown_formats)
         extraformats_common = self.plaintext_to_list(
                 self.commonformatsQPTE, config.common_formats)
-        extraformats_double = self.plaintext_to_list(
-                self.doubleformatsQPTE, config.double_formats)
         settings = QSettings()
 
         # WSL is irrelevant for everything but Windows, so should be false.
@@ -346,7 +341,6 @@ class Preferences(QDialog):
         settings.setValue('extraformats_document', sorted(extraformats_document))
         settings.setValue('extraformats_markdown', sorted(extraformats_markdown))
         settings.setValue('extraformats_common', sorted(extraformats_common))
-        settings.setValue('extraformats_double', sorted(extraformats_double))
         settings.setValue('use_wsl', use_wsl)
 
         if ui_change:
