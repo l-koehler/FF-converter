@@ -1,3 +1,20 @@
+Version 2.4.6
+-------------
+
+* Change ffmpeg format detection, in particular fix .opus not being detected in some cases
+
+Version 2.4.5
+-------------
+
+* Remove leftover print()
+
+* Remove broken recursion when checking for imagemagick
+
+Version 2.4.4
+-------------
+
+* Fix imagemagick format detection
+
 Version 2.4.3
 -------------
 

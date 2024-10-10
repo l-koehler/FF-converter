@@ -90,6 +90,6 @@ Features:
  - Multilingual - over 20 languages.
 
 Requires: python3, pyqt5
-Optionally requires: ffmpeg, imagemagick, unoconv, pandoc, tar, ar, zip, squashfs-tools
+Optionally requires: ffmpeg, imagemagick, unoconv, pandoc, tar, ar, zip, squashfs-tools, trimesh, (gmsh on non-ARM)
 """
 )

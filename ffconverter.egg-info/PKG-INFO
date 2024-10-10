@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: ffconverter
-Version: 2.4.3
+Version: 2.4.6
 Summary: File Format Converter with Qt GUI
 Home-page: https://github.com/l-koehler/FF-converter
 Author: Ilias Stamatis
@@ -43,12 +43,9 @@ Classifier: Intended Audience :: End Users/Desktop
 Classifier: Topic :: Multimedia :: Video :: Conversion
 Classifier: Topic :: Multimedia :: Sound/Audio :: Conversion
 Classifier: Topic :: Utilities
+Provides-Extra: trimesh
 License-File: COPYING
 License-File: AUTHORS
-Requires-Dist: pyqt5
-Provides-Extra: trimesh
-Requires-Dist: trimesh; extra == "trimesh"
-Requires-Dist: gmsh; extra == "trimesh"
 
 
 FF Converter
@@ -66,4 +63,4 @@ Features:
  - Multilingual - over 20 languages.
 
 Requires: python3, pyqt5
-Optionally requires: ffmpeg, imagemagick, unoconv, pandoc, tar, ar, zip, squashfs-tools
+Optionally requires: ffmpeg, imagemagick, unoconv, pandoc, tar, ar, zip, squashfs-tools, trimesh, (gmsh on non-ARM)
