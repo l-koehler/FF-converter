@@ -417,7 +417,7 @@ class MainWindow(QMainWindow):
         if not self.trimesh:
             self.missing.append('trimesh')
         if not self.trimesh and not self.gmsh:
-            self.missing.append('and gmsh')
+            self.missing[-1] += " and gmsh"
 
         if self.missing:
             status = ', '.join(self.missing)
