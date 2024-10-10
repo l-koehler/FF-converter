@@ -161,14 +161,41 @@ def get_all_conversions(settings, get_conv_for_ext = False,
     """
     supported_tmp = []
 
-    # poll ffmpeg
+    # poll ffmpeg [TODO]
     if 'ffmpeg' not in missing:
         extraformats_video = (settings.value('extraformats_video') or [])
-        completed_process = subprocess.run(['ffmpeg', '-formats'],
+        fmt_proc = subprocess.run(['ffmpeg', '-formats'],
                                     capture_output=True, text=True)
-        ffmpeg_stdout = completed_process.stdout
+        # neither formats nor codecs really indicate what containers are supported
+        # but allow some reasonable guesses (if something is a FORMAT we add it to the respective row)
+        # if [FORMAT] is only mux but [CODEC] is decode, we add it to both etc
+        cod_proc = subprocess.run(['ffmpeg', '-codecs'],
+                                    capture_output=True, text=True)
+        
+        fmt_stdout = fmt_proc.stdout
+        
+        # this part parses supported codecs to improve detection somewhat
+        cod_txt = cod_proc.stdout.splitlines()
+        l_args = []
+        for txt_line in cod_txt:
+            l_args.append(txt_line.split())
+        writing = False
+        l_args_fil = []
+        for codec_line in l_args:
+            if writing:
+                l_args_fil.append(codec_line)
+            if codec_line[0] == '-------':
+                writing = True
+        encodable=[]
+        decodable  =[]
+        for codec_line in l_args_fil:
+            if 'D' in codec_line[0]:
+                encodable.append(codec_line[1])
+            if 'E' in codec_line[0]:
+                decodable.append(codec_line[1])
+        
         ffmpeg_input, ffmpeg_output = [], []
-        ffmpeg_stdout_lines = ffmpeg_stdout.splitlines()
+        ffmpeg_stdout_lines = fmt_stdout.splitlines()
         for line in ffmpeg_stdout_lines:
             line_args = line.split()
             action = line_args[0]
@@ -182,8 +209,12 @@ def get_all_conversions(settings, get_conv_for_ext = False,
             extension = line_args[1].split(',')
             if 'D' in action:
                 ffmpeg_input += extension
-            if 'E' in action:
+                if extension[0] in decodable or f"lib{extension[0]}" in decodable:
+                    ffmpeg_output += extension
+            if 'E' in action and extension not in ffmpeg_output:
                 ffmpeg_output += extension
+                if (extension[0] in encodable or f"lib{extension[0]}" in encodable) and extension not in ffmpeg_input:
+                    ffmpeg_input += extension
         ffmpeg_conversions = [ffmpeg_input + extraformats_video,
                               ffmpeg_output + extraformats_video]
         supported_tmp.append(ffmpeg_conversions)
