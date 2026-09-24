@@ -28,7 +28,7 @@ import string
 import threading
 import importlib.util
 
-from PyQt5.QtCore import pyqtSignal, QSize, Qt, QSettings
+from PyQt5.QtCore import pyqtSignal, QSize, Qt
 from PyQt5.QtWidgets import (
         QAction, QLayout, QLineEdit, QListWidget, QListWidgetItem, QMenu,
         QSpacerItem, QWidget, QHBoxLayout, QVBoxLayout, QGridLayout
@@ -37,8 +37,13 @@ from ffconverter import config
 
 class ThreadWithReturn(threading.Thread):
     def __init__(self, group=None, target=None, name=None, args=(), kwargs={}, *, daemon=None):
+        self.result = None
+        self.error = None
         def function():
-            self.result = target(*args, **kwargs)
+            try:
+                self.result = target(*args, **kwargs)
+            except Exception as error:
+                self.error = error
         super().__init__(group=group, target=function, name=name, daemon=daemon)
 
 def duration_in_seconds(duration):
@@ -164,13 +169,27 @@ def get_all_conversions(settings, get_conv_for_ext = False,
     # poll ffmpeg [TODO]
     if 'ffmpeg' not in missing:
         extraformats_video = (settings.value('extraformats_video') or [])
-        fmt_proc = subprocess.run(['ffmpeg', '-formats'],
-                                    capture_output=True, text=True)
-        # neither formats nor codecs really indicate what containers are supported
-        # but allow some reasonable guesses (if something is a FORMAT we add it to the respective row)
-        # if [FORMAT] is only mux but [CODEC] is decode, we add it to both etc
-        cod_proc = subprocess.run(['ffmpeg', '-codecs'],
-                                    capture_output=True, text=True)
+        # use the path stored in the settings, it may point to WSL
+        ffmpeg_path = settings.value('ffmpeg_path', type=str) or 'ffmpeg'
+        if ffmpeg_path.startswith('wsl'):
+            # a wsl path has to be split into its arguments
+            ffmpeg_command = ffmpeg_path.split()
+        else:
+            ffmpeg_command = [ffmpeg_path]
+        try:
+            fmt_proc = subprocess.run(ffmpeg_command + ['-formats'],
+                                        capture_output=True, text=True)
+            # neither formats nor codecs really indicate what containers are supported
+            # but allow some reasonable guesses (if something is a FORMAT we add it to the respective row)
+            # if [FORMAT] is only mux but [CODEC] is decode, we add it to both etc
+            cod_proc = subprocess.run(ffmpeg_command + ['-codecs'],
+                                        capture_output=True, text=True)
+        except FileNotFoundError:
+            # the stored path is stale, fall back to a lookup on PATH
+            fmt_proc = subprocess.run(['ffmpeg', '-formats'],
+                                        capture_output=True, text=True)
+            cod_proc = subprocess.run(['ffmpeg', '-codecs'],
+                                        capture_output=True, text=True)
         
         fmt_stdout = fmt_proc.stdout
         
@@ -374,11 +393,11 @@ def get_extension(file_path, all_supported_conversions):
     return a extension without leading dot.
     It the extension is in config.double_formats, the double format
     will be returned (e.g. 'tar.gz').
+    Files without an extension return an empty string.
     """
     supported_input = [a for b in [i[0] for i in all_supported_conversions] for a in b]
 
     # if there are quotation marks around the file path, remove them
-    settings = QSettings()
     file_path = file_path.replace('"', '')
     file_name = os.path.basename(file_path)
 
@@ -389,6 +408,9 @@ def get_extension(file_path, all_supported_conversions):
     for option in results:
         if option in supported_input:
             return option
+    if not results:
+        # no dots in the file name, no extension to return
+        return ''
     return results[-1]
 
 def get_combobox_content(self, list_of_files, all_supported_conversions,
@@ -499,9 +521,11 @@ def create_paths_list(
 
     for _file in files_list:
         _dir, name = os.path.split(_file)
-        # name[:-len('.'+ext_from)] is the name without extension
         ext_from = get_extension(name, all_supported_conversions)
-        y = prefix + name[:-len('.'+ext_from)] + suffix + ext_to
+        if ext_from:
+            # name[:-len('.'+ext_from)] is the name without extension
+            name = name[:-len('.'+ext_from)]
+        y = prefix + name + suffix + ext_to
 
         if orig_dir:
             y = _dir + '/' + y

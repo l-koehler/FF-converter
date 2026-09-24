@@ -75,24 +75,27 @@ class MainWindow(QMainWindow):
         def threaded_conversion_check(self):
             self.cache_refreshed = False # set to true to skip cache_refresh
             # return all_supported_conversions
+            supported_conversions = None
             if os.path.exists(config.cache_file) and not self.disable_cache:
                 import ast, configparser
                 parser = configparser.ConfigParser()
-                # load settings
-                parser.read(config.cache_file)
-                self.missing = parser['CACHE']['missing']
-                self.missing = ast.literal_eval(self.missing)
-                supported_conversions = parser['CACHE']['conversions']
-                supported_conversions = ast.literal_eval(supported_conversions)
-                # load self.missing
-                if self.missing:
+                try:
+                    # load settings
+                    parser.read(config.cache_file)
+                    self.missing = ast.literal_eval(parser['CACHE']['missing'])
+                    supported_conversions = ast.literal_eval(
+                            parser['CACHE']['conversions'])
+                except (configparser.Error, KeyError, ValueError, SyntaxError):
+                    # an unreadable cache is as good as no cache, regenerate it
+                    supported_conversions = None
+                if supported_conversions is not None and self.missing:
                     status = ', '.join(self.missing)
                     status = self.tr('Missing dependencies:') + ' ' + status
                     if mobile_ui:
                         print(status)
                     else:
                         self.dependenciesQL.setText(status)
-            else:
+            if supported_conversions is None:
                 # generate self.missing and supported_conversions
                 self.check_for_dependencies()
                 supported_conversions = utils.get_all_conversions(self.settings,
@@ -102,7 +105,7 @@ class MainWindow(QMainWindow):
                     self.cache_refreshed = True
                     # if the cache directory is missing, generate it
                     if not os.path.exists(config.cache_dir):
-                        os.mkdir(config.cache_dir)
+                        os.makedirs(config.cache_dir)
                     # write config file and set cache_refreshed so that
                     # cache_rewrite won't run again. write here instead
                     # of in cache_rewrite because supported_conversions
@@ -130,6 +133,9 @@ class MainWindow(QMainWindow):
                 # do not overwrite the cache with the possibly damaged result
                 exit(0)
             import configparser
+            # if the cache directory is missing, generate it
+            if not os.path.exists(config.cache_dir):
+                os.makedirs(config.cache_dir)
             parser = configparser.ConfigParser()
             # write config file
             parser['CACHE'] = {}
@@ -205,8 +211,7 @@ class MainWindow(QMainWindow):
             widget.setLayout(final_layout)
             self.setCentralWidget(widget)
             # return early, full UI will not be created
-            conversion_check_thread.join()
-            self.all_supported_conversions = conversion_check_thread.result
+            self.join_conversion_check(conversion_check_thread)
             # start the rewrite, never join it
             if not self.cache_refreshed:
                 cache_rewrite_thread = utils.ThreadWithReturn(target=threaded_cache_rewrite, args=(self,))
@@ -349,14 +354,27 @@ class MainWindow(QMainWindow):
 
         # get all supported conversions from the thread started before the UI creation
         # most of the time is still spent waiting for the thread
-        conversion_check_thread.join()
-        self.all_supported_conversions = conversion_check_thread.result
+        self.join_conversion_check(conversion_check_thread)
         # start the rewrite, never join it
         if not self.cache_refreshed:
             cache_rewrite_thread = utils.ThreadWithReturn(target=threaded_cache_rewrite, args=(self,))
             cache_rewrite_thread.start()
 
         self.filesList_update()
+
+    def join_conversion_check(self, thread):
+        """
+        Join the conversion check thread and store the supported conversions.
+        If the check failed, the dependencies are checked again on the main
+        thread and no conversions are offered.
+        """
+        thread.join()
+        if thread.error is not None:
+            logging.error('Conversion check failed: {0}'.format(thread.error))
+            self.all_supported_conversions = []
+            self.check_for_dependencies()
+        else:
+            self.all_supported_conversions = thread.result
 
     def parse_cla(self):
         """Parse command line arguments."""

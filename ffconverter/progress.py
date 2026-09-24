@@ -628,7 +628,7 @@ class Progress(QDialog):
         to_file   =   to_file.replace('"', '').replace('\\', '')
         
         # these formats require gmsh in addition to trimesh
-        needs_gmsh = utils.get_extension(from_file, all_supported_conversions) in ['brep', 'step', 'iges', 'inp', 'bdf'] or utils.get_extension(to_file) in ['inp', 'bdf']
+        needs_gmsh = utils.get_extension(from_file, all_supported_conversions) in ['brep', 'step', 'iges', 'inp', 'bdf'] or utils.get_extension(to_file, all_supported_conversions) in ['inp', 'bdf']
         # check that GMSH is installed, append to sys.path if needed
         if needs_gmsh and not utils.is_installed('gmsh', False, is_import=True):
             self.update_text_edit_signal.emit("Would fail to load GMSH, retrying with /usr/local/lib\n")
