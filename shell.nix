@@ -15,6 +15,7 @@ pkgs.mkShell {
     binutils
     python3Packages.trimesh
     python3Packages.pytest
+    python3Packages.build
     qt5.qtbase
     # optional, needed for some document stuff
     # libreoffice unoconv
