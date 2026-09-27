@@ -176,6 +176,7 @@ def get_all_conversions(settings, get_conv_for_ext = False,
             ffmpeg_command = ffmpeg_path.split()
         else:
             ffmpeg_command = [ffmpeg_path]
+        fmt_proc = cod_proc = None
         try:
             fmt_proc = subprocess.run(ffmpeg_command + ['-formats'],
                                         capture_output=True, text=True)
@@ -186,117 +187,136 @@ def get_all_conversions(settings, get_conv_for_ext = False,
                                         capture_output=True, text=True)
         except FileNotFoundError:
             # the stored path is stale, fall back to a lookup on PATH
-            fmt_proc = subprocess.run(['ffmpeg', '-formats'],
-                                        capture_output=True, text=True)
-            cod_proc = subprocess.run(['ffmpeg', '-codecs'],
-                                        capture_output=True, text=True)
-        
-        fmt_stdout = fmt_proc.stdout
-        
-        # this part parses supported codecs to improve detection somewhat
-        cod_txt = cod_proc.stdout.splitlines()
-        l_args = []
-        for txt_line in cod_txt:
-            l_args.append(txt_line.split())
-        writing = False
-        l_args_fil = []
-        for codec_line in l_args:
-            if writing:
-                l_args_fil.append(codec_line)
-            if codec_line[0] == '-------':
-                writing = True
-        encodable=[]
-        decodable  =[]
-        for codec_line in l_args_fil:
-            if 'D' in codec_line[0]:
-                encodable.append(codec_line[1])
-            if 'E' in codec_line[0]:
-                decodable.append(codec_line[1])
-        
-        ffmpeg_input, ffmpeg_output = [], []
-        ffmpeg_stdout_lines = fmt_stdout.splitlines()
-        for line in ffmpeg_stdout_lines:
-            line_args = line.split()
-            action = line_args[0]
-            # dont run on the header lines
-            pattern = r'^\s*(DE|D|E)\s+(\S+)'
-            match = re.match(pattern, line)
-            if not match:
-                continue
+            try:
+                fmt_proc = subprocess.run(['ffmpeg', '-formats'],
+                                            capture_output=True, text=True)
+                cod_proc = subprocess.run(['ffmpeg', '-codecs'],
+                                            capture_output=True, text=True)
+            except FileNotFoundError:
+                pass # ffmpeg could not be found at all
+        if fmt_proc is None or cod_proc is None:
+            # ffmpeg is missing, treat it as unsupported
+            ffmpeg_conversions = [[], []]
+        else:
+            fmt_stdout = fmt_proc.stdout
 
-            # line_args[1] can be "ext" or "ext1,ext2", so a split is neccesary
-            extension = line_args[1].split(',')
-            if 'D' in action:
-                ffmpeg_input += extension
-                if extension[0] in decodable or f"lib{extension[0]}" in decodable:
-                    ffmpeg_output += extension
-            if 'E' in action and extension not in ffmpeg_output:
-                ffmpeg_output += extension
-                if (extension[0] in encodable or f"lib{extension[0]}" in encodable) and extension not in ffmpeg_input:
+            # this part parses supported codecs to improve detection somewhat
+            cod_txt = cod_proc.stdout.splitlines()
+            l_args = []
+            for txt_line in cod_txt:
+                l_args.append(txt_line.split())
+            writing = False
+            l_args_fil = []
+            for codec_line in l_args:
+                if writing:
+                    l_args_fil.append(codec_line)
+                if codec_line[0] == '-------':
+                    writing = True
+            encodable=[]
+            decodable  =[]
+            for codec_line in l_args_fil:
+                if 'D' in codec_line[0]:
+                    encodable.append(codec_line[1])
+                if 'E' in codec_line[0]:
+                    decodable.append(codec_line[1])
+
+            ffmpeg_input, ffmpeg_output = [], []
+            ffmpeg_stdout_lines = fmt_stdout.splitlines()
+            for line in ffmpeg_stdout_lines:
+                line_args = line.split()
+                action = line_args[0]
+                # dont run on the header lines
+                pattern = r'^\s*(DE|D|E)\s+(\S+)'
+                match = re.match(pattern, line)
+                if not match:
+                    continue
+
+                # line_args[1] can be "ext" or "ext1,ext2", so a split is neccesary
+                extension = line_args[1].split(',')
+                if 'D' in action:
                     ffmpeg_input += extension
-        ffmpeg_conversions = [ffmpeg_input + extraformats_video,
-                              ffmpeg_output + extraformats_video]
-        supported_tmp.append(ffmpeg_conversions)
+                    if extension[0] in decodable or f"lib{extension[0]}" in decodable:
+                        ffmpeg_output += extension
+                if 'E' in action and extension not in ffmpeg_output:
+                    ffmpeg_output += extension
+                    if (extension[0] in encodable or f"lib{extension[0]}" in encodable) and extension not in ffmpeg_input:
+                        ffmpeg_input += extension
+            ffmpeg_conversions = [ffmpeg_input + extraformats_video,
+                                  ffmpeg_output + extraformats_video]
+            supported_tmp.append(ffmpeg_conversions)
     else:
         ffmpeg_conversions = [[], []]
 
     # poll pandoc
     if 'pandoc' not in missing:
         extraformats_markdown = (settings.value('extraformats_markdown') or [])
-        completed_process = subprocess.run(['pandoc', '--list-input-formats'],
-                                        capture_output=True, text=True)
-        in_formats = completed_process.stdout
-        in_format_list = in_formats.split('\n')
-        if 'markdown' in in_format_list:
-            in_format_list.append('md')
-        completed_process = subprocess.run(['pandoc', '--list-output-formats'],
-                                        capture_output=True, text=True)
-        out_formats = completed_process.stdout
-        out_format_list = out_formats.split('\n')
-        if 'markdown' in out_format_list:
-            out_format_list.append('md')
-        pandoc_conversions = [in_format_list + extraformats_markdown,
-                              out_format_list + extraformats_markdown]
-        supported_tmp.append(pandoc_conversions)
+        try:
+            completed_process = subprocess.run(['pandoc', '--list-input-formats'],
+                                            capture_output=True, text=True)
+            in_formats = completed_process.stdout
+            in_format_list = in_formats.split('\n')
+            if 'markdown' in in_format_list:
+                in_format_list.append('md')
+            completed_process = subprocess.run(['pandoc', '--list-output-formats'],
+                                            capture_output=True, text=True)
+            out_formats = completed_process.stdout
+            out_format_list = out_formats.split('\n')
+            if 'markdown' in out_format_list:
+                out_format_list.append('md')
+        except FileNotFoundError:
+            # pandoc could not be found
+            pandoc_conversions = [[], []]
+        else:
+            pandoc_conversions = [in_format_list + extraformats_markdown,
+                                  out_format_list + extraformats_markdown]
+            supported_tmp.append(pandoc_conversions)
     else:
         pandoc_conversions = [[], []]
 
     # poll magick
     if 'imagemagick' not in missing:
         extraformats_image = (settings.value('extraformats_image') or [])
+        completed_process = None
         try:
             completed_process = subprocess.run(['magick', 'identify', '-list',
                                                 'format'],
                                             capture_output=True, text=True)
         except FileNotFoundError:
             # retry with convert
-            if use_wsl:
-                cmd = ['wsl', '--', 'convert', 'identify', '-list', 'format']
-            else:
-                cmd = ['convert', 'identify', '-list', 'format']
-            completed_process = subprocess.run(cmd, capture_output=True, text=True)
-        magick_formats = completed_process.stdout
-        magick_format_list = magick_formats.split('\n')
-        in_formats = []
-        out_formats = []
-        for line in magick_format_list:
-            line_args = line.split()
-            # if the line is empty or does not start with all-caps (EXTENSION)
-            uppercase_chars = string.ascii_uppercase + '*-'
-            if len(line_args) < 3 or set(line_args[0]) > set(uppercase_chars):
-                continue
-            file_format, module, rw_status = line_args[:3] # yayyyy the silly :33
-            file_format = file_format.lower().replace('*', '')
-            if module in ['BRAILLE', 'TXT']:
-                continue
-            if "r" in rw_status and file_format not in list('rw+') and module != 'PDF':
-                # the program will break trying to read some PDFs
-                in_formats.append(file_format)
-            if "w" in rw_status and file_format not in list('rw+'):
-                out_formats.append(file_format)
-        magick_conversions = [in_formats + extraformats_image,
-                              out_formats + extraformats_image]
-        supported_tmp.append(magick_conversions)
+            try:
+                if use_wsl:
+                    cmd = ['wsl', '--', 'convert', 'identify', '-list', 'format']
+                else:
+                    cmd = ['convert', 'identify', '-list', 'format']
+                completed_process = subprocess.run(cmd, capture_output=True, text=True)
+            except FileNotFoundError:
+                pass # convert could not be found either
+        if completed_process is None:
+            # imagemagick is missing, treat it as unsupported
+            magick_conversions = [[], []]
+        else:
+            magick_formats = completed_process.stdout
+            magick_format_list = magick_formats.split('\n')
+            in_formats = []
+            out_formats = []
+            for line in magick_format_list:
+                line_args = line.split()
+                # if the line is empty or does not start with all-caps (EXTENSION)
+                uppercase_chars = string.ascii_uppercase + '*-'
+                if len(line_args) < 3 or set(line_args[0]) > set(uppercase_chars):
+                    continue
+                file_format, module, rw_status = line_args[:3] # yayyyy the silly :33
+                file_format = file_format.lower().replace('*', '')
+                if module in ['BRAILLE', 'TXT']:
+                    continue
+                if "r" in rw_status and file_format not in list('rw+') and module != 'PDF':
+                    # the program will break trying to read some PDFs
+                    in_formats.append(file_format)
+                if "w" in rw_status and file_format not in list('rw+'):
+                    out_formats.append(file_format)
+            magick_conversions = [in_formats + extraformats_image,
+                                  out_formats + extraformats_image]
+            supported_tmp.append(magick_conversions)
     else:
         magick_conversions = [[], []]
 
@@ -455,7 +475,9 @@ def start_office_listener():
     # the office listener remains open even after program's termination
     # the listener starts at port 2003 (default:2002) to allow for easier kill
     p = subprocess.Popen(shlex.split("unoconv --listener --port 2003"))
-    while p.poll() is not None:
+    # wait up to 10s while the listener is starting, stop early if it exits
+    start_time = time.time()
+    while p.poll() is None and time.time() - start_time < 10:
         time.sleep(0.1)
     time.sleep(1) # wait for listener to setup correctly
 

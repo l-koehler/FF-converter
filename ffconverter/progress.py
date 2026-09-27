@@ -70,6 +70,7 @@ class Progress(QDialog):
         self.ok = 0
         self.error = 0
         self.running = True
+        self._procs = []
 
         self.nowQL = QLabel(self.tr('In progress: '))
         self.nowQPBar = QProgressBar()
@@ -214,8 +215,14 @@ class Progress(QDialog):
         if reply == QMessageBox.Yes:
             if self._type == 'AudioVideo':
                 self.process.kill()
+            for proc in self._procs:
+                try:
+                    proc.terminate()
+                except OSError:
+                    pass
             self.running = False
-            self.thread.join()
+            if hasattr(self, 'thread'):
+                self.thread.join()
             QDialog.reject(self)
         if reply == QMessageBox.Cancel:
             self.running = True
@@ -327,6 +334,7 @@ class Progress(QDialog):
                 stderr=subprocess.STDOUT,
                 stdout=subprocess.PIPE
                 )
+        self._procs.append(self.process)
 
         final_output = myline = ''
         reader = io.TextIOWrapper(self.process.stdout, encoding='utf8')
@@ -338,7 +346,10 @@ class Progress(QDialog):
             if out in ('\r', '\n'):
                 m = re.search("Duration: ([0-9:.]+)", myline)
                 if m:
-                    total = utils.duration_in_seconds(m.group(1))
+                    try:
+                        total = utils.duration_in_seconds(m.group(1))
+                    except ValueError:
+                        pass
                 n = re.search("time=([0-9:]+)", myline)
                 # time can be of format 'time=hh:mm:ss.ts' or 'time=ss.ts'
                 # depending on ffmpeg version
@@ -395,13 +406,11 @@ class Progress(QDialog):
                 stderr=subprocess.STDOUT,
                 stdout=subprocess.PIPE
                 )
-        child.wait()
+        self._procs.append(child)
 
-
-
-        reader = io.TextIOWrapper(child.stdout, encoding='utf8')
-        final_output = reader.read()
-        self.update_text_edit_signal.emit(final_output+'\n\n')
+        output = child.communicate()[0].decode('utf8', errors='replace')
+        final_output = output
+        self.update_text_edit_signal.emit(output+'\n\n')
 
         return_code = child.poll()
 
@@ -435,11 +444,11 @@ class Progress(QDialog):
                 stderr=subprocess.STDOUT,
                 stdout=subprocess.PIPE
                 )
-        child.wait()
+        self._procs.append(child)
 
-        reader = io.TextIOWrapper(child.stdout, encoding='utf8')
-        final_output = reader.read()
-        self.update_text_edit_signal.emit(final_output+'\n\n')
+        output = child.communicate()[0].decode('utf8', errors='replace')
+        final_output = output
+        self.update_text_edit_signal.emit(output+'\n\n')
 
         return_code = child.poll()
 
@@ -467,11 +476,11 @@ class Progress(QDialog):
                 stderr=subprocess.STDOUT,
                 stdout=subprocess.PIPE
                 )
-        child.wait()
+        self._procs.append(child)
 
-        reader = io.TextIOWrapper(child.stdout, encoding='utf8')
-        final_output = reader.read()
-        self.update_text_edit_signal.emit(final_output+'\n\n')
+        output = child.communicate()[0].decode('utf8', errors='replace')
+        final_output = output
+        self.update_text_edit_signal.emit(output+'\n\n')
 
         return_code = child.poll()
 
@@ -494,17 +503,15 @@ class Progress(QDialog):
         use_wsl = self.parent.settings.value('use_wsl', type=bool)
 
         # Start by decompressing
-        decompress_dir = config.tmp_dir
+        # use a unique subdir so we never touch a shared directory's contents
+        # also create parent dirs (C:/temp may not exist on Windows)
+        import uuid
+        decompress_dir = os.path.join(config.tmp_dir, str(uuid.uuid4()))
         if to_file_ext == "[Folder]":
             decompress_dir = to_file.replace(".[Folder]","").replace("\"","")
-
-        try:
-            os.mkdir(decompress_dir)
-        except FileExistsError:
-            # tmp_dir already exists, empty it
-            shutil.rmtree(decompress_dir)
-            os.mkdir(decompress_dir)
-            pass
+            os.makedirs(decompress_dir, exist_ok=True)
+        else:
+            os.makedirs(decompress_dir)
 
         if from_file_ext in ['deb', 'a', 'ar', 'o', 'so']:
             command, cmd_from_file, cmd_decompress_dir = utils.wsl_adjust(use_wsl, 'ar', from_file, decompress_dir)
@@ -524,11 +531,11 @@ class Progress(QDialog):
                 stderr=subprocess.STDOUT,
                 stdout=subprocess.PIPE
                 )
-        child.wait()
+        self._procs.append(child)
 
-        reader = io.TextIOWrapper(child.stdout, encoding='utf8')
-        final_output = reader.read()
-        self.update_text_edit_signal.emit(final_output+'\n\n')
+        output = child.communicate()[0].decode('utf8', errors='replace')
+        final_output = output
+        self.update_text_edit_signal.emit(output+'\n\n')
 
         return_code = child.poll()
 
@@ -546,23 +553,26 @@ class Progress(QDialog):
         # Now, recompress the files in decompress_dir
         if to_file_ext in ['ar', 'a']:
             # ar can only 'add' single files to archives. so iterate over all
+            overall_success = True
             for fpath in Path(decompress_dir).rglob('*.*'):
                 if os.path.isfile(fpath):
-                    command, to_file, fpath = utils.wsl_adjust(use_wsl, 'ar', to_file, fpath)
-                    cmd = f'{command} cr {to_file} \"{fpath}\"'
+                    command, to_file, fpath = utils.wsl_adjust(use_wsl, 'ar', to_file, str(fpath))
+                    cmd = f'{command} r {to_file} \"{fpath}\"'
                     self.update_text_edit_signal.emit(cmd + '\n')
                     child = subprocess.Popen(
                             shlex.split(cmd),
                             stderr=subprocess.STDOUT,
                             stdout=subprocess.PIPE
                             )
-                    child.wait()
+                    self._procs.append(child)
 
-                    reader = io.TextIOWrapper(child.stdout, encoding='utf8')
-                    final_output = reader.read()
-                    self.update_text_edit_signal.emit(final_output+'\n\n')
+                    output = child.communicate()[0].decode('utf8', errors='replace')
+                    final_output = output
+                    self.update_text_edit_signal.emit(output+'\n\n')
 
                     return_code = child.poll()
+                    if return_code != 0:
+                        overall_success = False
 
                     log_data = {
                             'command' : cmd,
@@ -571,9 +581,8 @@ class Progress(QDialog):
                             }
                     log_lvl = logging.info if return_code==0 else logging.error
                     log_lvl(final_output, extra=log_data)
-
-                    shutil.rmtree(decompress_dir)
-                    return return_code == 0
+            shutil.rmtree(decompress_dir)
+            return overall_success
         elif to_file_ext in ['sqfs', 'squashfs']:
             command, cmd_to_file, cmd_decompress_dir = utils.wsl_adjust(use_wsl, 'mksquashfs', to_file, decompress_dir)
             cmd = f'{command} {cmd_decompress_dir} {cmd_to_file}'
@@ -588,7 +597,7 @@ class Progress(QDialog):
             cmd = f'{command} -cvf {cmd_to_file} --directory={cmd_decompress_dir} .'
         elif to_file_ext in ['[Folder]']:
             # nothing to do, decompress was enough
-            pass
+            return True
         elif to_file_ext in ['tar.bz2']:
             command, cmd_to_file, cmd_decompress_dir = utils.wsl_adjust(use_wsl, 'tar', to_file, decompress_dir)
             cmd = f'{command} -cvjSf {cmd_to_file} --directory={cmd_decompress_dir} .'
@@ -599,11 +608,11 @@ class Progress(QDialog):
                 stderr=subprocess.STDOUT,
                 stdout=subprocess.PIPE
                 )
-        child.wait()
+        self._procs.append(child)
 
-        reader = io.TextIOWrapper(child.stdout, encoding='utf8')
-        final_output = reader.read()
-        self.update_text_edit_signal.emit(final_output+'\n\n')
+        output = child.communicate()[0].decode('utf8', errors='replace')
+        final_output = output
+        self.update_text_edit_signal.emit(output+'\n\n')
 
         return_code = child.poll()
 
@@ -615,9 +624,7 @@ class Progress(QDialog):
         log_lvl = logging.info if return_code == 0 else logging.error
         log_lvl(final_output, extra=log_data)
 
-        if to_file_ext not in ['[Folder]']:
-            shutil.rmtree(decompress_dir)
-            pass
+        shutil.rmtree(decompress_dir)
         return return_code == 0
 
     def convert_model(self, from_file, to_file, all_supported_conversions):
