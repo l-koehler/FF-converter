@@ -629,7 +629,8 @@ class MainWindow(QMainWindow):
         if self.mobile_ui:
             _list = utils.create_paths_list(
                     self.fnames, ext_to, self.prefix, self.suffix,
-                    self.toQLE.text(), False, self.overwrite_existing
+                    self.toQLE.text(), False, self.overwrite_existing,
+                    self.all_supported_conversions
                     )
             dialog = progress.Progress(
                     _list, tab, False, self)
