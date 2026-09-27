@@ -509,8 +509,12 @@ def find_presets_file(fname, lookup_dirs, lookup_virtenv):
         if os.path.exists(_file):
             return _file
 
-    # when program is not installed or running from test_dialogs.py
-    return os.path.dirname(os.path.realpath(__file__)) + '/../share/' + fname
+    # shipped as package data (wheel installs, dev runs, tests)
+    import importlib.resources
+    try:
+        return str(importlib.resources.files('ffconverter') / fname)
+    except (ModuleNotFoundError, FileNotFoundError):
+        return ''
 
 def create_paths_list(
         files_list, ext_to, prefix, suffix, output, orig_dir,

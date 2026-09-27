@@ -33,7 +33,10 @@ from PyQt5.QtWidgets import (
         QToolButton, QWidget, QComboBox
         )
 
-import ffconverter as ffmc
+from . import (
+        __name__ as ffmc_name, __version__, __url__, __author__,
+        __author_email__, __license__
+        )
 from ffconverter import utils
 from ffconverter import config
 from ffconverter import about_dlg
@@ -666,11 +669,11 @@ class MainWindow(QMainWindow):
                  <p>Copyright &copy; 2011-2016 {3}
                  <br>License: {4}
                  <p>Python {5} - Qt {6} - PyQt {7} on {8}'''\
-                 .format(ffmc.__version__, msg, ffmc.__url__, ffmc.__author__,
-                         ffmc.__license__, platform.python_version()[:5],
+                 .format(__version__, msg, __url__, __author__,
+                         __license__, platform.python_version()[:5],
                          QT_VERSION_STR, PYQT_VERSION_STR, platform.system())
         image = ':/ffconverter.png'
-        authors = '{0} <{1}>\n\n'.format(ffmc.__author__, ffmc.__author_email__)
+        authors = '{0} <{1}>\n\n'.format(__author__, __author_email__)
         authors += 'Contributors:\nPanagiotis Mavrogiorgos'
         translators = []
         for i in config.translators:
@@ -683,8 +686,8 @@ class MainWindow(QMainWindow):
 
 def main():
     app = QApplication([i.encode('utf-8') for i in sys.argv])
-    app.setOrganizationName(ffmc.__name__)
-    app.setOrganizationDomain(ffmc.__url__)
+    app.setOrganizationName(ffmc_name)
+    app.setOrganizationDomain(__url__)
     app.setApplicationName('FF Multi Converter')
     app.setWindowIcon(QIcon(':/ffconverter.png'))
     try:

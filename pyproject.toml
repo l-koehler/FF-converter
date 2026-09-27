@@ -1,0 +1,83 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ffconverter"
+description = "File Format Converter with Qt GUI"
+readme = "README.md"
+license = "GPL-3.0-or-later"
+license-files = ["COPYING"]
+requires-python = ">=3.9"
+authors = [
+    { name = "Ilias Stamatis", email = "stamatis.iliass@gmail.com" },
+]
+maintainers = [
+    { name = "l-koehler", email = "laura@posteo.de" },
+]
+keywords = [
+    "convert", "file format", "extension", "audio", "video", "images",
+    "documents", "ffmpeg", "imagemagick", "unoconv", "pandoc",
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: Microsoft :: Windows",
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: X11 Applications :: Qt",
+    "Natural Language :: English",
+    "Natural Language :: Bulgarian",
+    "Natural Language :: Catalan",
+    "Natural Language :: Chinese (Simplified)",
+    "Natural Language :: Chinese (Traditional)",
+    "Natural Language :: Czech",
+    "Natural Language :: French",
+    "Natural Language :: German",
+    "Natural Language :: Greek",
+    "Natural Language :: Hungarian",
+    "Natural Language :: Italian",
+    "Natural Language :: Malay",
+    "Natural Language :: Polish",
+    "Natural Language :: Portuguese",
+    "Natural Language :: Portuguese (Brazilian)",
+    "Natural Language :: Romanian",
+    "Natural Language :: Russian",
+    "Natural Language :: Spanish",
+    "Natural Language :: Turkish",
+    "Natural Language :: Vietnamese",
+    "Intended Audience :: End Users/Desktop",
+    "Topic :: Multimedia :: Video :: Conversion",
+    "Topic :: Multimedia :: Sound/Audio :: Conversion",
+    "Topic :: Utilities",
+]
+dependencies = ["PyQt5"]
+dynamic = ["version"]
+
+[project.optional-dependencies]
+# gmsh only ships prebuilt wheels for some platforms, see README
+models = [
+    "trimesh",
+    'gmsh; platform_system == "Darwin" or (platform_system == "Linux" and platform_machine == "x86_64") or (platform_system == "Windows" and platform_machine == "AMD64")',
+]
+
+[project.urls]
+Homepage = "https://github.com/l-koehler/FF-converter"
+Issues = "https://github.com/l-koehler/FF-converter/issues"
+
+[project.gui-scripts]
+ffconverter = "ffconverter.ffconverter:main"
+
+[tool.setuptools]
+packages = ["ffconverter"]
+
+[tool.setuptools.package-data]
+ffconverter = ["presets.xml"]
+
+[tool.setuptools.data-files]
+"share/applications" = ["share/ffconverter.desktop"]
+"share/pixmaps" = ["share/ffconverter.png"]
+"share/man/man1" = ["man/ffconverter.1.gz"]
+
+[tool.setuptools.dynamic]
+version = { attr = "ffconverter.__version__" }
