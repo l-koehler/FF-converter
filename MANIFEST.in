@@ -1,8 +1,7 @@
-include AUTHORS COPYING ChangeLog TRANSLATORS launcher resources.qrc
-include bin/ffconverter
-include test/*
-include share/*
-include man/*
-include locale/*
-exclude locale/*.qm
+include AUTHORS COPYING ChangeLog TRANSLATORS
+include share/ffconverter.desktop share/ffconverter.png
+include man/ffconverter.1.gz
+recursive-include locale *.ts *.pro
+recursive-exclude locale *.qm
 recursive-exclude ffconverter *.pyc
+exclude ffconverter/presets.xml.bak

@@ -3,17 +3,17 @@ This is a fork of the original https://github.com/ilstam/FF-Multi-Converter.
 The original is [no longer developed](https://github.com/ilstam/FF-Multi-Converter/issues/61#issuecomment-467869122).  
   
 This program is a simple graphical application which enables you to convert  
-between all popular formats, by utilizing and combining other programs.  
+between most popular file formats, by utilizing and combining other programs.  
 To simply convert files, just click the Add button, add your file(s) and  
 select a format in the dropdown list, then click Convert.  
 For Videos, Music and Images, there are additional  
 options, for example flipping the image or selecting codecs, in the tabs.  
 
 Both Linux and Windows are supported and tested.  
-MacOS should work, but I don't have a Mac, so I can't test that.
+MacOS should work, but I can't test that.  
 
 #### Dependencies:
-* python3  
+* python3 (3.9 or newer)  
 * pyqt5  
 
 On Linux, use your distributions package manager or pip to install these.  
@@ -28,6 +28,18 @@ Python packages:
 
 * trimesh (python package, used for 3D Models)  
 * gmsh (python package, requires trimesh, used for more 3D Models)  
+
+Install them with the `models` extra:  
+
+```sh
+pip install "ffconverter[models]"
+```
+
+`gmsh` publishes prebuilt wheels only for x86-64 Linux/macOS, ARM macOS  
+and Windows x64 (on Linux the wheel additionally needs a recent enough  
+glibc). On platforms without a wheel (notably Linux ARM) it is skipped  
+automatically; if you need gmsh-backed conversions there, build it  
+manually, see the ARM section below.  
 
 System Packages:  
 
@@ -52,20 +64,23 @@ Install the `ffconverter` package from PyPI.
 pip install ffconverter
 ```
 
+If you need 3D model conversion, install the optional Python dependencies
+as well:
+
+```sh
+pip install "ffconverter[models]"
+```
+
 #### Troubleshooting
 If a optional dependency is installed after the program, you might  
 need to restart the program twice to ensure the cache gets overwritten.  
 If this does not work, delete the cache (Preferences -> Delete Cache).  
 
-#### Troubleshooting (ARM CPUs)
+#### Troubleshooting (Linux ARM CPUs)
 For converting 3D Models, the python packages `trimesh` and `gmsh` are  
-required. Sadly, `gmsh` is not available on PyPi for ARM devices. You can  
-compile it yourself by using the script below.  
-__WARNING: You won't be able to uninstall gmsh using pip__  
-and any scripts using it must first run `sys.path.append('/usr/local/lib')`.  
-This will take a while. I only have a rapidly overheating phone  
-for testing ARM, so I am not that sure about compile time on other  
-devices, but expect *upwards of 2 hours compile time*.  
+required. `gmsh` has no prebuilt wheel for Linux ARM, so the `models`  
+extra installs `trimesh` only there. You can compile `gmsh` yourself using the script below.  
+Compiling this might take a while, depending on your device.  
 ```bash
 git clone https://gitlab.onelab.info/gmsh/gmsh.git # 200+ MiB size
 mkdir ./gmsh/build
@@ -88,26 +103,20 @@ On some distros ("externally managed environments", like Arch and Debian),
 ```sh
 sudo PIPX_HOME=/usr/local/pipx PIPX_BIN_DIR=/usr/local/bin pipx install --system-site-packages ffconverter
 sudo ln -sf /usr/local/pipx/venvs/ffconverter/share/applications/ffconverter.desktop /usr/local/share/applications/ffconverter.desktop
-sudo ln -sf /usr/local/pipx/venvs/ffconverter/share/pixmaps/ffconverter.png /usr/local/share/icons/ffconverter.png
+sudo ln -sf /usr/local/pipx/venvs/ffconverter/share/pixmaps/ffconverter.png /usr/local/share/pixmaps/ffconverter.png
 ```
 
-The last two commands are needed to add the program to your installed  
-applications, but the `ffconverter` command should be available without them.  
+`pip` places the `.desktop` file, icon and man page inside the environment's  
+`share/` directory (`.../venvs/ffconverter/share/`). The last two commands  
+link them into the system-wide locations so the program appears in your  
+application menu, but the `ffconverter` command works without them.  
+`pipx` does not integrate desktop menus on its own.  
 
 #### Troubleshooting (Windows)
-If you want the program on your Desktop, create a new Shortcut  
-and enter this as the path:  
-
-```sh
-"C:\Program Files\Python310\pythonw.exe" -c "from ffconverter import ffconverter as ff; ff.main()"
-```
-
-You may need to replace the path to pythonw.exe with the correct path  
-for your system. You can get this path by running this CMD Command:  
-
-```sh
-where pythonw
-```
+The `ffconverter` command is installed as a windowed launcher, so no console  
+window appears. If you want the program on your Desktop, create a new  
+Shortcut and use the launcher's path (run `where ffconverter` to get it).  
+Wrap the printed path in quotes if it contains spaces.  
 
 #### Uninstall
 Simply run:  
