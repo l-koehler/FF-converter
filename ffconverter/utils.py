@@ -21,9 +21,7 @@ Various useful functions.
 import os
 import re
 import sys
-import shlex
 import subprocess
-import time
 import string
 import threading
 import importlib.util
@@ -122,18 +120,6 @@ def wsl_adjust(use_wsl, command, path1="", path2=""):
     command = command.replace("\"", "")
     full_command = is_installed(command, use_wsl)
 
-    def adjust_path(path, force_unix_paths):
-        # unquote path
-        # also always replace backslashes, windows can handle regular ones
-        path = path.replace('\"', '').replace('\\', '/')
-        # replace D:/whatever with /mnt/d/whatever for WSL commands
-        if force_unix_paths:
-            drive_letter = path[0]
-            wsl_path = path[2:] # remove drive letter
-            wsl_path = '\"/mnt/' + drive_letter.lower() + wsl_path + '\"'
-            return wsl_path
-        return path
-
     # properly quote command, just in case there are spaces or stuff in the path
     force_unix_paths = False
     if full_command.startswith('wsl -- '):
@@ -143,9 +129,37 @@ def wsl_adjust(use_wsl, command, path1="", path2=""):
         full_command = '\"' + full_command + '\"'
 
     return_list = [full_command.replace('\\', '/'),
-        adjust_path(path1, force_unix_paths),
-        adjust_path(path2, force_unix_paths)]
+        wsl_path(path1, force_unix_paths, quote=force_unix_paths),
+        wsl_path(path2, force_unix_paths, quote=force_unix_paths)]
     return return_list
+
+def wsl_path(path, force_unix=False, quote=True):
+    """
+    Prepare a single filesystem path for use in an external command.
+
+    Quotes are stripped and backslashes are replaced with slashes (windows
+    can handle regular slashes). If force_unix is true, the path is turned into
+    a WSL path (/mnt/...), which is required when the command is run through
+    WSL. With quote=True the path is wrapped in quotation marks.
+    """
+    path = path.replace('"', '').replace('\\', '/')
+    if force_unix and path and not path.startswith('/'):
+        path = '/mnt/' + path[0].lower() + path[2:]
+    if quote:
+        return '"' + path + '"'
+    return path
+
+def get_document_filter(from_file_ext, to_file_ext):
+    """
+    Return the exported filter name for a document conversion, or an empty
+    string when libreoffice can pick the default filter for the target.
+    The filter depends on the category libreoffice imports the file as
+    (see config.document_input_categories and config.document_filters).
+    """
+    category = config.document_input_categories.get(from_file_ext)
+    if category is None:
+        return ''
+    return config.document_filters.get(category, {}).get(to_file_ext, '')
 
 def get_all_conversions(settings, get_conv_for_ext = False,
                         ext = ["",""], missing = [], use_wsl = False):
@@ -322,16 +336,16 @@ def get_all_conversions(settings, get_conv_for_ext = False,
 
     # libreoffice exts
     # cant actually get those right now, so have some predefined lists instead
-    if 'unoconv' not in missing:
+    if 'libreoffice' not in missing:
         extraformats_document = (settings.value('extraformats_document') or [])
         calc  = [['csv', 'xls', 'xml', 'xlsx', 'ods', 'sdc'] + extraformats_document,
-                ['csv', 'html', 'xls', 'xml', 'ods', 'sdc', 'xhtml'] + extraformats_document]
-        img   = [['eps', 'emf', 'gif', 'jpg', 'odd', 'png', 'tiff', 'bmp', 'webp'] + extraformats_document,
-                ['eps', 'emf', 'gif', 'html', 'jpg', 'odd', 'pdf', 'png', 'svg', 'tiff', 'bmp', 'xhtml', 'webp'] + extraformats_document]
+                ['csv', 'html', 'xls', 'xml', 'ods', 'xhtml'] + extraformats_document]
+        img   = [['eps', 'emf', 'gif', 'jpg', 'odg', 'png', 'tiff', 'bmp', 'webp', 'pdf'] + extraformats_document,
+                ['eps', 'emf', 'gif', 'html', 'jpg', 'odg', 'pdf', 'png', 'svg', 'tiff', 'bmp', 'xhtml', 'webp'] + extraformats_document]
         slide = [['odp', 'ppt', 'pptx', 'sda'] + extraformats_document,
                 ['eps', 'gif', 'html', 'swf', 'odp', 'ppt', 'pdf', 'svg', 'sda', 'xml'] + extraformats_document]
-        text  = [['xml', 'html', 'doc', 'docx', 'odt', 'txt', 'rtf', 'sdw', 'pdf'] + extraformats_document,
-                ['bib', 'xml', 'html', 'ltx', 'doc', 'odt', 'txt', 'pdf', 'rtf', 'sdw'] + extraformats_document]
+        text  = [['xml', 'html', 'doc', 'docx', 'odt', 'txt', 'rtf', 'sdw'] + extraformats_document,
+                ['xml', 'html', 'doc', 'odt', 'txt', 'pdf', 'rtf'] + extraformats_document]
         supported_tmp.append(calc)
         supported_tmp.append(img)
         supported_tmp.append(slide)
@@ -465,21 +479,6 @@ def get_combobox_content(self, list_of_files, all_supported_conversions,
         # remove all uncommon formats from the list
         valid_outputs[:] = [ext for ext in valid_outputs if ext in common]
     return valid_outputs
-
-def start_office_listener():
-    """
-    Start a openoffice/libreoffice listener.
-    We need an open office listener in order to make convertions with unoconv.
-    """
-    # note: we cannot kill the listener with p.kill() as it is a spawned process
-    # the office listener remains open even after program's termination
-    # the listener starts at port 2003 (default:2002) to allow for easier kill
-    p = subprocess.Popen(shlex.split("unoconv --listener --port 2003"))
-    # wait up to 10s while the listener is starting, stop early if it exits
-    start_time = time.time()
-    while p.poll() is None and time.time() - start_time < 10:
-        time.sleep(0.1)
-    time.sleep(1) # wait for listener to setup correctly
 
 def find_presets_file(fname, lookup_dirs, lookup_virtenv):
     """

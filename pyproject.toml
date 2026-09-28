@@ -13,11 +13,11 @@ authors = [
     { name = "Ilias Stamatis", email = "stamatis.iliass@gmail.com" },
 ]
 maintainers = [
-    { name = "l-koehler", email = "laura@posteo.de" },
+    { name = "l-koehler", email = "laura@fish.zip" },
 ]
 keywords = [
     "convert", "file format", "extension", "audio", "video", "images",
-    "documents", "ffmpeg", "imagemagick", "unoconv", "pandoc",
+    "documents", "ffmpeg", "imagemagick", "libreoffice", "pandoc",
 ]
 classifiers = [
     "Programming Language :: Python :: 3",

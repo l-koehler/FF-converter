@@ -24,7 +24,10 @@ import shlex
 import shutil
 import logging
 import sys
+import uuid
 from pathlib import Path
+from urllib.parse import urljoin
+from urllib.request import pathname2url
 
 from PyQt5.QtCore import pyqtSignal, QTimer
 from PyQt5.QtGui import QTextCursor
@@ -35,6 +38,23 @@ from PyQt5.QtWidgets import (
 
 from ffconverter import utils
 from ffconverter import config
+
+
+def kill_process_tree(child):
+    """
+    Kill a child process together with the processes it spawned.
+
+    LibreOffice forks helper processes, so killing only the direct child can
+    leave orphans behind. The child is started in its own session (see
+    convert_document), so on POSIX it can be killed as a process group.
+    """
+    if os.name != 'nt':
+        try:
+            os.killpg(os.getpgid(child.pid), signal.SIGKILL)
+            return
+        except (ProcessLookupError, PermissionError, OSError):
+            pass
+    child.kill()
 
 
 class Progress(QDialog):
@@ -426,31 +446,96 @@ class Progress(QDialog):
 
     def convert_document(self, from_file, to_file, all_supported_conversions):
         """
-        Create the unoconv command and execute it using the subprocess module.
-
-        Emit the corresponding signal in order an outputQTE to be updated
-        with unoconv's output. Finally, save log information.
+        Create a libreoffice (soffice) headless command and run it.
+        Also emits the signals for outputQTE to update.
 
         Return True if conversion succeed, else False.
         """
         # note: from_file and to_file names are inside quotation marks
         use_wsl = self.parent.settings.value('use_wsl', type=bool)
+        from_file_ext = utils.get_extension(from_file, all_supported_conversions)
         to_file_ext = utils.get_extension(to_file, all_supported_conversions)
-        command, from_file, to_file = utils.wsl_adjust(use_wsl, 'unoconv', from_file, to_file)
-        cmd = f'{command} -f {to_file_ext} -o {to_file} {from_file}'
+        filter_name = utils.get_document_filter(from_file_ext, to_file_ext)
+        target = filter_name if filter_name else to_file_ext
+
+        # libreoffice always derives the output name from the input file and
+        # cannot write to arbitrary file names, so convert into a temporary
+        # directory and move the result to the requested path afterwards.
+        tmp_dir = os.path.join(config.tmp_dir, str(uuid.uuid4()))
+        lo_profile = os.path.join(tmp_dir, 'profile')
+        os.makedirs(tmp_dir, exist_ok=True)
+
+        # soffice is treated as an alias of libreoffice, prefer it when present.
+        lo_cmd = (self.parent.libreoffice or
+                  utils.is_installed('soffice', use_wsl) or
+                  utils.is_installed('libreoffice', use_wsl))
+        force_unix = lo_cmd.startswith('wsl -- ')
+        # keep the command as a single argument, the resolved path may contain
+        # spaces (e.g. C:\Program Files\...)
+        if force_unix:
+            lo_args = ['wsl', '--', lo_cmd[7:]]
+        else:
+            lo_args = [lo_cmd]
+        profile_uri = urljoin('file://',
+                pathname2url(utils.wsl_path(lo_profile, force_unix, quote=False)))
+        args = lo_args + [
+                '--headless',
+                '-env:UserInstallation=' + profile_uri,
+                '--convert-to', target,
+                utils.wsl_path(from_file, force_unix, quote=False),
+                '--outdir', utils.wsl_path(tmp_dir, force_unix, quote=False),
+                ]
+        cmd = ' '.join(shlex.quote(part) for part in args)
         self.update_text_edit_signal.emit(cmd + '\n')
-        child = subprocess.Popen(
-                shlex.split(cmd),
-                stderr=subprocess.STDOUT,
-                stdout=subprocess.PIPE
-                )
-        self._procs.append(child)
 
-        output = child.communicate()[0].decode('utf8', errors='replace')
-        final_output = output
-        self.update_text_edit_signal.emit(output+'\n\n')
+        final_output = ''
+        return_code = 1
+        timed_out = False
+        child = None
+        try:
+            child = subprocess.Popen(
+                    args,
+                    stderr=subprocess.STDOUT,
+                    stdout=subprocess.PIPE,
+                    start_new_session=os.name != 'nt'
+                    )
+            self._procs.append(child)
+            try:
+                output = child.communicate(timeout=config.document_timeout)[0]
+            except subprocess.TimeoutExpired:
+                timed_out = True
+                kill_process_tree(child)
+                output = child.communicate()[0]
+            final_output = output.decode('utf8', errors='replace')
+            self.update_text_edit_signal.emit(final_output + '\n\n')
+            return_code = child.poll()
 
-        return_code = child.poll()
+            # move the produced file to the requested output path
+            produced = [os.path.join(tmp_dir, f)
+                        for f in os.listdir(tmp_dir)
+                        if os.path.isfile(os.path.join(tmp_dir, f))]
+            if return_code == 0 and not timed_out and produced:
+                matching = [p for p in produced
+                            if p.lower().endswith('.' + to_file_ext.lower())]
+                if matching:
+                    src = matching[0]
+                    to_path = to_file.replace('"', '')
+                    dest_dir = os.path.dirname(to_path)
+                    if dest_dir:
+                        os.makedirs(dest_dir, exist_ok=True)
+                    if os.path.exists(to_path):
+                        os.remove(to_path)
+                    shutil.move(src, to_path)
+                else:
+                    # conversion produced some stray temp files, but failed
+                    return_code = 1
+            elif not timed_out:
+                # no output file was produced
+                return_code = 1
+        finally:
+            if child is not None and child in self._procs:
+                self._procs.remove(child)
+            shutil.rmtree(tmp_dir, ignore_errors=True)
 
         log_data = {
                 'command' : cmd,

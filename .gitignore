@@ -6,3 +6,4 @@ ffconverter.egg-info/
 locale/*.qm
 *.pyc
 *.kate-swp
+TODO.local

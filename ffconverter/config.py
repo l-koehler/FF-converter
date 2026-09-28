@@ -87,6 +87,52 @@ document_formats = [
         'pdf', 'ppt', 'pptx', 'rtf', 'sdc', 'sdw', 'txt', 'xls', 'xlsx', 'xml'
         ]
 
+# timeout (seconds) for a single libreoffice/soffice invocation
+document_timeout = 120
+
+# Which document category an input extension belongs to.
+# LibreOffice's export filters depend on the type it picked on import (Calc/Draw/Impress/Writer),
+# so the category is needed to select the correct filter for an output.
+document_input_categories = {
+        # spreadsheets (Libreoffice Calc)
+        'csv': 'calc', 'xls': 'calc', 'xml': 'calc', 'xlsx': 'calc',
+        'ods': 'calc', 'sdc': 'calc',
+        # drawings/images (and PDFs for some reason) (Draw)
+        'eps': 'img', 'emf': 'img', 'gif': 'img', 'jpg': 'img', 'odg': 'img',
+        'png': 'img', 'tiff': 'img', 'bmp': 'img', 'webp': 'img',
+        'pdf': 'img',
+        # presentations (Impress)
+        'odp': 'slide', 'ppt': 'slide', 'pptx': 'slide', 'sda': 'slide',
+        # word processing (Writer)
+        'html': 'text', 'doc': 'text', 'docx': 'text', 'odt': 'text',
+        'txt': 'text', 'rtf': 'text', 'sdw': 'text',
+        }
+
+# Explicit export filters, per input category and output extension.
+# Only targets that would otherwise fail to find a filter need an entry,
+# everything else falls back to "--convert-to <ext>"
+# See https://help.libreoffice.org/latest/en-US/text/shared/guide/convertfilters.html
+document_filters = {
+        'calc': {
+            'csv':  'csv:Text - txt - csv (StarCalc):44,34,76,1',
+            'html': 'html:HTML (StarCalc)',
+            'xlsx': 'xlsx:Calc Office Open XML',
+            },
+        'img': {},
+        'slide': {
+            'html': 'html:impress_html_Export',
+            'pptx': 'pptx:Impress MS PowerPoint 2007 XML',
+            },
+        'text': {
+            'doc':  'doc:MS Word 97',
+            'docx': 'docx:MS Word 2007 XML',
+            'html': 'html:HTML (StarWriter)',
+            'odt':  'odt:writer8',
+            'rtf':  'rtf:Rich Text Format',
+            'xml':  'xml:MS Word 2003 XML',
+            },
+        }
+
 #-----markdown data
 
 markdown_formats = [

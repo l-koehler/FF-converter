@@ -16,9 +16,10 @@ pkgs.mkShell {
     python3Packages.trimesh
     python3Packages.pytest
     python3Packages.build
+    python3Packages.docutils # rst2man, to regenerate man/ffconverter.1.gz
     qt5.qtbase
     # optional, needed for some document stuff
-    # libreoffice unoconv
+    # libreoffice
   ];
   shellHook = ''
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${pkgs.lib.makeLibraryPath [

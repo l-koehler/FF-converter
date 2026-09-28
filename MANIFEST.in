@@ -1,6 +1,6 @@
 include AUTHORS COPYING ChangeLog TRANSLATORS
 include share/ffconverter.desktop share/ffconverter.png
-include man/ffconverter.1.gz
+include man/ffconverter.1.gz man/ffconverter.1.rst
 recursive-include locale *.ts *.pro
 recursive-exclude locale *.qm
 recursive-exclude ffconverter *.pyc

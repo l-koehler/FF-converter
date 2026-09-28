@@ -1,3 +1,16 @@
+Version 2.5.1
+-------------
+
+* Replace deprecated unoconv with libreoffice in headless mode (soffice)
+* Document conversions now use per-invocation filters and profiles
+* Update manpage
+
+Version 2.5.0
+-------------
+
+* Fix various bugs
+* Use up-to-date packaging
+
 Version 2.4.6
 -------------
 

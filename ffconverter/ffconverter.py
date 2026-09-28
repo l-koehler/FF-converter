@@ -58,7 +58,6 @@ class MainWindow(QMainWindow):
         super(MainWindow, self).__init__(parent)
 
         self.fnames = []  # list of file names to be converted
-        self.office_listener_started = False
 
         self.settings = QSettings()
 
@@ -398,13 +397,16 @@ class MainWindow(QMainWindow):
         if not utils.is_installed(self.ffmpeg_path, use_wsl):
             self.ffmpeg_path = utils.is_installed('ffmpeg', use_wsl)
             QSettings().setValue('ffmpeg_path', self.ffmpeg_path)
-        self.unoconv = utils.is_installed('unoconv', use_wsl)
+        # soffice is treated as an alias of libreoffice
+        self.libreoffice = (utils.is_installed('soffice', use_wsl) or
+                            utils.is_installed('libreoffice', use_wsl))
         self.imagemagick = utils.is_installed('magick', use_wsl)
         self.pandoc = utils.is_installed('pandoc', use_wsl)
         self.compress_zip = utils.is_installed('zip', use_wsl)
         self.compress_unzip = utils.is_installed('unzip', use_wsl)
         self.compress_tar = utils.is_installed('tar', use_wsl)
-        self.compress_squash = utils.is_installed('mksquashfs', use_wsl) and utils.is_installed('unsquashfs', use_wsl)
+        self.compress_squash = (utils.is_installed('mksquashfs', use_wsl) and
+                                utils.is_installed('unsquashfs', use_wsl))
         self.compress_ar = utils.is_installed('ar', use_wsl)
         self.compress_gzip = utils.is_installed('gzip', use_wsl)
         self.compress_bzip2 = utils.is_installed('bzip2', use_wsl)
@@ -414,8 +416,8 @@ class MainWindow(QMainWindow):
         self.missing = []
         if not self.ffmpeg_path:
             self.missing.append('ffmpeg')
-        if not self.unoconv:
-            self.missing.append('unoconv')
+        if not self.libreoffice:
+            self.missing.append('libreoffice')
         if not self.imagemagick:
             self.missing.append('imagemagick')
         if not self.pandoc:
@@ -624,10 +626,6 @@ class MainWindow(QMainWindow):
         else:
             tab = self.get_current_tab()
         ext_to = '.' + tab.extQCB.currentText()
-
-        if tab.name == 'All Formats' and not self.office_listener_started:
-            utils.start_office_listener()
-            self.office_listener_started = True
 
         if self.mobile_ui:
             _list = utils.create_paths_list(
